@@ -1,0 +1,3 @@
+patient id,age months,risk group,stage,efs months,event,mycn amplified,expr_mycn,expr_alk
+p1,12,low,2,30,0,0,1.2,2.0
+p2,24,high,4,12,1,1,2.6,1.1

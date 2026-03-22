@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ image_name }} | Plotly Viewer</title>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <style>
+    :root {
+      --bg: #0b1216;
+      --panel: #121b21;
+      --line: #24323c;
+      --text: #e4eef7;
+      --muted: #a2b6c5;
+      --accent: #58c6be;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at 5% 10%, #15222b 0%, transparent 35%), var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(10, 16, 21, 0.86);
+      backdrop-filter: blur(4px);
+    }
+    .title {
+      margin: 0;
+      font-size: 0.95rem;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      border: 1px solid var(--line);
+      background: #18232b;
+      color: var(--text);
+      padding: 7px 10px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.85rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .btn:hover {
+      border-color: var(--accent);
+    }
+    #plotly-image-view {
+      width: 100%;
+      height: calc(100vh - 56px);
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <p class="title">{{ image_name }}</p>
+    <div class="actions">
+      <a class="btn" href="{{ image_url }}" target="_blank" rel="noopener noreferrer">Open Raw PNG</a>
+      <button id="fullscreen-btn" class="btn" type="button">Fullscreen</button>
+      <button id="close-btn" class="btn" type="button">X Close</button>
+    </div>
+  </header>
+
+  <div id="plotly-image-view"></div>
+
+  <script>
+    const imageUrl = {{ image_url | tojson }};
+    const imageName = {{ image_name | tojson }};
+    const closeBtn = document.getElementById("close-btn");
+    const fullscreenBtn = document.getElementById("fullscreen-btn");
+
+    function updateFullscreenButtonLabel() {
+      fullscreenBtn.textContent = document.fullscreenElement ? "Exit Fullscreen" : "Fullscreen";
+    }
+
+    function closeViewer() {
+      if (window.opener && !window.opener.closed) {
+        window.close();
+        return;
+      }
+      if (window.history.length > 1) {
+        window.history.back();
+        return;
+      }
+      window.location.href = "/gallery";
+    }
+
+    closeBtn.addEventListener("click", closeViewer);
+    fullscreenBtn.addEventListener("click", async () => {
+      try {
+        if (!document.fullscreenElement) {
+          await document.documentElement.requestFullscreen();
+        } else {
+          await document.exitFullscreen();
+        }
+      } catch {
+        // Ignore fullscreen errors (browser/security context dependent).
+      } finally {
+        updateFullscreenButtonLabel();
+      }
+    });
+    document.addEventListener("fullscreenchange", updateFullscreenButtonLabel);
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeViewer();
+      }
+    });
+    updateFullscreenButtonLabel();
+
+    const image = new Image();
+    image.onload = async () => {
+      const width = Math.max(image.naturalWidth, 1);
+      const height = Math.max(image.naturalHeight, 1);
+
+      const data = [
+        {
+          x: [0, width],
+          y: [0, height],
+          mode: "markers",
+          marker: { size: 1, opacity: 0 },
+          hoverinfo: "skip",
+          showlegend: false,
+        },
+      ];
+
+      const layout = {
+        title: { text: imageName, font: { color: "#dce7f1", size: 16 } },
+        margin: { l: 20, r: 20, t: 50, b: 20 },
+        paper_bgcolor: "#0b1216",
+        plot_bgcolor: "#0b1216",
+        xaxis: {
+          range: [0, width],
+          visible: false,
+          constrain: "domain",
+          fixedrange: false,
+        },
+        yaxis: {
+          range: [height, 0],
+          visible: false,
+          scaleanchor: "x",
+          scaleratio: 1,
+          fixedrange: false,
+        },
+        images: [
+          {
+            source: imageUrl,
+            xref: "x",
+            yref: "y",
+            x: 0,
+            y: 0,
+            sizex: width,
+            sizey: height,
+            sizing: "stretch",
+            layer: "below",
+            opacity: 1,
+          },
+        ],
+      };
+
+      const config = {
+        responsive: true,
+        displaylogo: false,
+        scrollZoom: true,
+        toImageButtonOptions: {
+          format: "png",
+          filename: imageName.replace(/\.png$/i, "") + "_plotly_view",
+          scale: 1,
+        },
+      };
+
+      await Plotly.newPlot("plotly-image-view", data, layout, config);
+    };
+
+    image.onerror = async () => {
+      const data = [{ x: [0], y: [0], mode: "markers", marker: { opacity: 0 } }];
+      const layout = {
+        title: { text: "Failed to load image", font: { color: "#f29b8c" } },
+        paper_bgcolor: "#0b1216",
+        plot_bgcolor: "#0b1216",
+      };
+      await Plotly.newPlot("plotly-image-view", data, layout, { displaylogo: false });
+    };
+
+    image.src = imageUrl;
+  </script>
+</body>
+</html>

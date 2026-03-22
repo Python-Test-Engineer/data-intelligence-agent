@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Biomedical Analytics Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f2f4ef;
+      --ink: #102a28;
+      --muted: #3b5754;
+      --card: #ffffff;
+      --line: #c8d2cc;
+      --accent: #0f766e;
+      --accent-soft: #d9f4f1;
+      --warn: #ab3e1c;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: "Space Grotesk", sans-serif;
+      background:
+        radial-gradient(circle at 10% 0%, #d5ece9 0%, transparent 40%),
+        radial-gradient(circle at 95% 10%, #e8ecd3 0%, transparent 35%),
+        var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+    main {
+      width: min(1200px, 100% - 28px);
+      margin: 24px auto 40px;
+    }
+    .hero {
+      background: linear-gradient(130deg, #0b3f3a 0%, #0f766e 55%, #6ca587 100%);
+      color: #f0f8f8;
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 10px 28px rgba(10, 45, 43, 0.22);
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.4rem, 3vw, 2.1rem);
+      letter-spacing: 0.01em;
+    }
+    .hero p {
+      margin: 0;
+      font-size: 0.98rem;
+      opacity: 0.95;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: 0 5px 16px rgba(13, 38, 34, 0.08);
+    }
+    .stack {
+      display: grid;
+      gap: 12px;
+    }
+    h2 {
+      font-size: 1.05rem;
+      margin: 0 0 8px;
+    }
+    .small {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.4;
+    }
+    input[type="file"] {
+      width: 100%;
+      margin: 8px 0;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.86rem;
+      color: var(--ink);
+    }
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      padding: 10px 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    .btn-secondary {
+      background: #1f4a63;
+    }
+    .btn-secondary[disabled] {
+      background: #7d8d99;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    button:hover {
+      transform: translateY(-1px);
+      opacity: 0.95;
+    }
+    .status {
+      margin-top: 8px;
+      font-size: 0.84rem;
+      line-height: 1.4;
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--muted);
+      min-height: 38px;
+    }
+    .busy {
+      margin-top: 8px;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .busy.active {
+      display: inline-flex;
+    }
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid #b8cbc6;
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    .status.error {
+      color: var(--warn);
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(120px, 1fr));
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .stat {
+      background: var(--accent-soft);
+      border: 1px solid #b5dfd9;
+      border-radius: 10px;
+      padding: 9px;
+    }
+    .stat-label {
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #1b5953;
+    }
+    .stat-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-top: 3px;
+    }
+    .report {
+      background: #f7faf6;
+      border: 1px solid #d5e2d8;
+      border-radius: 10px;
+      padding: 10px;
+      white-space: pre-wrap;
+      max-height: 220px;
+      overflow: auto;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.76rem;
+      line-height: 1.4;
+    }
+    .gallery-grid {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 10px;
+    }
+    .tile {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 8px;
+      background: #fcfdfc;
+    }
+    .tile img {
+      width: 100%;
+      height: 138px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #d8e3dd;
+      display: block;
+    }
+    .meta {
+      margin: 7px 0 0;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    @media (max-width: 920px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      .stats {
+        grid-template-columns: repeat(2, minmax(120px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <h1>Biomedical FastAPI Frontend</h1>
+      <p>Upload a new dataset as <code>data/data.csv</code>, execute plan/spec generation, and review Plotly outputs from <code>output/images</code>.</p>
+    </section>
+
+    <section class="layout">
+      <aside class="stack">
+        <article class="card">
+          <h2>1) Upload CSV</h2>
+          <p class="small">This overwrites <code>data/data.csv</code>.</p>
+          <input id="csv-file" type="file" accept=".csv" />
+          <button id="upload-btn" type="button">Upload Dataset</button>
+          <div id="upload-status" class="status"></div>
+        </article>
+
+        <article class="card">
+          <h2>2) Execute Plan + Spec</h2>
+          <p class="small">Generates charts and report using current dataset.</p>
+          <button id="execute-btn" type="button">Run Full Pipeline</button>
+          <div id="pipeline-busy" class="busy"><span class="spinner"></span><span>Pipeline running...</span></div>
+          <div id="execute-status" class="status"></div>
+        </article>
+
+        <article class="card">
+          <h2>3) INSIGHTS</h2>
+          <p class="small">Creates per-image insight markdown files and a merged final insights HTML report.</p>
+          <button id="show-insights-btn" class="btn-secondary" type="button" disabled>SHOW FINAL INSIGHTS</button>
+          <div id="insights-status" class="status">Run the pipeline to generate insights.</div>
+        </article>
+      </aside>
+
+      <section class="stack">
+        <article class="card">
+          <h2>Dataset Summary</h2>
+          <div class="stats">
+            <div class="stat"><div class="stat-label">Rows</div><div class="stat-value" id="rows">-</div></div>
+            <div class="stat"><div class="stat-label">Columns</div><div class="stat-value" id="cols">-</div></div>
+            <div class="stat"><div class="stat-label">Missing Cells</div><div class="stat-value" id="missing">-</div></div>
+            <div class="stat"><div class="stat-label">Missing %</div><div class="stat-value" id="missing-pct">-</div></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h2>Report Preview</h2>
+          <div id="report" class="report">No report loaded.</div>
+        </article>
+
+        <article class="card">
+          <h2>PNG Dashboard (<code>output/images</code>)</h2>
+          <div class="gallery-grid" id="image-grid">
+            {% if images %}
+              {% for image in images %}
+                <div class="tile">
+                  <a href="/viewer/{{ image.name }}" target="_blank" rel="noopener noreferrer">
+                    <img src="{{ image.url }}" alt="{{ image.name }}" loading="lazy" />
+                  </a>
+                  <div class="meta">{{ image.name }} | {{ image.category }}</div>
+                </div>
+              {% endfor %}
+            {% else %}
+              <div class="small">No PNG images found. Run pipeline with PNG enabled.</div>
+            {% endif %}
+          </div>
+
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const uploadStatus = document.getElementById("upload-status");
+    const executeStatus = document.getElementById("execute-status");
+    const executeBtn = document.getElementById("execute-btn");
+    const pipelineBusy = document.getElementById("pipeline-busy");
+    const showInsightsBtn = document.getElementById("show-insights-btn");
+    const insightsStatus = document.getElementById("insights-status");
+
+    function setStatus(el, text, isError = false) {
+      el.textContent = text;
+      el.classList.toggle("error", isError);
+    }
+
+    function setPipelineRunning(isRunning) {
+      pipelineBusy.classList.toggle("active", isRunning);
+      executeBtn.disabled = isRunning;
+      executeBtn.style.opacity = isRunning ? "0.7" : "1";
+      executeBtn.style.cursor = isRunning ? "not-allowed" : "pointer";
+    }
+
+    async function refreshInsightsAvailability() {
+      try {
+        const response = await fetch("/output/insights/insights.html", { method: "HEAD" });
+        const available = response.ok;
+        showInsightsBtn.disabled = !available;
+        setStatus(
+          insightsStatus,
+          available
+            ? "Final insights are ready. Click SHOW FINAL INSIGHTS."
+            : "Run the pipeline to generate insights."
+        );
+      } catch {
+        showInsightsBtn.disabled = true;
+        setStatus(insightsStatus, "Run the pipeline to generate insights.");
+      }
+    }
+
+    async function refreshSummary() {
+      try {
+        const response = await fetch("/summary");
+        if (!response.ok) {
+          throw new Error(await response.text());
+        }
+        const summary = await response.json();
+        document.getElementById("rows").textContent = summary.row_count;
+        document.getElementById("cols").textContent = summary.column_count;
+        document.getElementById("missing").textContent = summary.missing_cells;
+        document.getElementById("missing-pct").textContent = `${summary.missing_pct}%`;
+      } catch {
+        document.getElementById("rows").textContent = "-";
+        document.getElementById("cols").textContent = "-";
+        document.getElementById("missing").textContent = "-";
+        document.getElementById("missing-pct").textContent = "-";
+      }
+    }
+
+    async function refreshReport() {
+      const reportEl = document.getElementById("report");
+      try {
+        const response = await fetch("/report");
+        if (!response.ok) {
+          reportEl.textContent = "Report not generated yet.";
+          return;
+        }
+        const report = await response.json();
+        reportEl.textContent = report.content;
+      } catch {
+        reportEl.textContent = "Report not available.";
+      }
+    }
+
+    function reloadPage() {
+      window.location.href = "/";
+    }
+
+    document.getElementById("upload-btn").addEventListener("click", async () => {
+      const fileInput = document.getElementById("csv-file");
+      if (!fileInput.files || fileInput.files.length === 0) {
+        setStatus(uploadStatus, "Select a CSV file first.", true);
+        return;
+      }
+      setStatus(uploadStatus, "Uploading and validating CSV...");
+      const formData = new FormData();
+      formData.append("file", fileInput.files[0]);
+      try {
+        const response = await fetch("/upload/csv", { method: "POST", body: formData });
+        const body = await response.json();
+        if (!response.ok) {
+          throw new Error(body.detail || "Upload failed.");
+        }
+        setStatus(uploadStatus, `${body.message} rows=${body.row_count}, cols=${body.column_count}`);
+        await refreshSummary();
+      } catch (error) {
+        setStatus(uploadStatus, String(error), true);
+      }
+    });
+
+    document.getElementById("execute-btn").addEventListener("click", async () => {
+      setPipelineRunning(true);
+      setStatus(executeStatus, "Running chart/report pipeline...");
+      try {
+        const response = await fetch("/execute", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ clean_output: true, write_png: true })
+        });
+        const body = await response.json();
+        if (!response.ok) {
+          throw new Error(body.detail || "Execution failed.");
+        }
+        setStatus(executeStatus, `${body.message} html=${body.html_charts}, png=${body.png_charts}`);
+        await refreshSummary();
+        await refreshReport();
+        await refreshInsightsAvailability();
+        setTimeout(reloadPage, 1000);
+      } catch (error) {
+        setStatus(executeStatus, String(error), true);
+      } finally {
+        setPipelineRunning(false);
+      }
+    });
+
+    showInsightsBtn.addEventListener("click", () => {
+      window.open("/output/insights/insights.html", "_blank", "noopener,noreferrer");
+    });
+
+    refreshSummary();
+    refreshReport();
+    refreshInsightsAvailability();
+  </script>
+</body>
+</html>
