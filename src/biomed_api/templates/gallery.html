@@ -6,77 +6,65 @@
   <title>Biomedical Analytics Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #f2f4ef;
-      --ink: #102a28;
-      --muted: #3b5754;
-      --card: #ffffff;
-      --line: #c8d2cc;
-      --accent: #0f766e;
-      --accent-soft: #d9f4f1;
-      --warn: #ab3e1c;
+      --bg: #f5f4ee;
+      --paper: #f8f7f2;
+      --surface: #f0eee6;
+      --card: #fcfbf8;
+      --ink: #111111;
+      --muted: #4a4945;
+      --line: #d8d4c8;
+      --accent: #141413;
+      --accent-soft: #ece8dc;
+      --warn: #8f2f20;
+      --radius-xl: 22px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
     }
     * {
       box-sizing: border-box;
     }
     body {
       margin: 0;
-      font-family: "Space Grotesk", sans-serif;
-      background:
-        radial-gradient(circle at 10% 0%, #d5ece9 0%, transparent 40%),
-        radial-gradient(circle at 95% 10%, #e8ecd3 0%, transparent 35%),
-        var(--bg);
+      font-family: "Inter", sans-serif;
+      background: linear-gradient(180deg, #f7f6f1 0%, var(--bg) 100%);
       color: var(--ink);
       min-height: 100vh;
     }
-    main {
-      width: min(1200px, 100% - 28px);
+    .site {
+      width: min(1080px, 100% - 36px);
       margin: 24px auto 40px;
     }
-    .hero {
-      background: linear-gradient(130deg, #0b3f3a 0%, #0f766e 55%, #6ca587 100%);
-      color: #f0f8f8;
-      border-radius: 16px;
-      padding: 22px;
-      box-shadow: 0 10px 28px rgba(10, 45, 43, 0.22);
-    }
-    h1 {
-      margin: 0 0 8px;
-      font-size: clamp(1.4rem, 3vw, 2.1rem);
-      letter-spacing: 0.01em;
-    }
-    .hero p {
-      margin: 0;
-      font-size: 0.98rem;
-      opacity: 0.95;
+    main {
+      margin-top: 0;
     }
     .layout {
       display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 14px;
-      margin-top: 14px;
+      grid-template-columns: 340px 1fr;
+      gap: 16px;
     }
     .card {
       background: var(--card);
       border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 14px;
-      box-shadow: 0 5px 16px rgba(13, 38, 34, 0.08);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      box-shadow: 0 6px 18px rgba(24, 22, 17, 0.05);
     }
     .stack {
       display: grid;
       gap: 12px;
     }
     h2 {
-      font-size: 1.05rem;
-      margin: 0 0 8px;
+      font-size: 1.02rem;
+      margin: 0 0 10px;
+      letter-spacing: -0.01em;
     }
     .small {
       margin: 0;
       color: var(--muted);
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       line-height: 1.4;
     }
     input[type="file"] {
@@ -93,32 +81,32 @@
       font-size: 0.82rem;
       color: var(--ink);
       border: 1px solid var(--line);
-      border-radius: 8px;
+      border-radius: 10px;
       padding: 8px;
       resize: vertical;
-      background: #f7faf6;
+      background: var(--paper);
       box-sizing: border-box;
     }
     textarea:focus {
       outline: none;
-      border-color: var(--accent);
+      border-color: #a8a49a;
     }
     button {
       width: 100%;
       border: 0;
       border-radius: 10px;
       background: var(--accent);
-      color: #fff;
+      color: #f4f2eb;
       padding: 10px 12px;
       font-weight: 600;
       cursor: pointer;
       transition: transform 0.15s ease, opacity 0.15s ease;
     }
     .btn-secondary {
-      background: #1f4a63;
+      background: #5a584f;
     }
     .btn-secondary[disabled] {
-      background: #7d8d99;
+      background: #8f8b80;
       cursor: not-allowed;
       opacity: 0.7;
     }
@@ -149,8 +137,8 @@
     .spinner {
       width: 14px;
       height: 14px;
-      border: 2px solid #b8cbc6;
-      border-top-color: var(--accent);
+      border: 2px solid #c8c5bc;
+      border-top-color: #1f1d1a;
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
     }
@@ -170,7 +158,7 @@
     }
     .stat {
       background: var(--accent-soft);
-      border: 1px solid #b5dfd9;
+      border: 1px solid #d8d4c8;
       border-radius: 10px;
       padding: 9px;
     }
@@ -178,7 +166,7 @@
       font-size: 0.74rem;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      color: #1b5953;
+      color: #54514a;
     }
     .stat-value {
       font-size: 1.25rem;
@@ -186,8 +174,8 @@
       margin-top: 3px;
     }
     .report {
-      background: #f7faf6;
-      border: 1px solid #d5e2d8;
+      background: var(--paper);
+      border: 1px solid #dfdbcf;
       border-radius: 10px;
       padding: 10px;
       white-space: pre-wrap;
@@ -207,14 +195,14 @@
       border: 1px solid var(--line);
       border-radius: 12px;
       padding: 8px;
-      background: #fcfdfc;
+      background: #faf8f2;
     }
     .tile img {
       width: 100%;
       height: 138px;
       object-fit: cover;
       border-radius: 8px;
-      border: 1px solid #d8e3dd;
+      border: 1px solid #dfdbcf;
       display: block;
     }
     .meta {
@@ -233,13 +221,9 @@
   </style>
 </head>
 <body>
-  <main>
-    <section class="hero">
-      <h1>Biomedical FastAPI Frontend</h1>
-      <p>Upload a new dataset as <code>data/data.csv</code>, execute plan/spec generation, and review Plotly outputs from <code>output/images</code>.</p>
-    </section>
-
-    <section class="layout">
+  <div class="site">
+    <main>
+      <section class="layout">
       <aside class="stack">
         <article class="card">
           <h2>1) Upload CSV</h2>
@@ -319,8 +303,9 @@
 
         </article>
       </section>
-    </section>
-  </main>
+      </section>
+    </main>
+  </div>
 
   <script>
     const uploadStatus = document.getElementById("upload-status");

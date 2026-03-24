@@ -5,6 +5,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 import anthropic
+from dotenv import load_dotenv
 
 from biomed_api.models.schemas import ChartArtifact
 
@@ -12,10 +13,14 @@ from biomed_api.models.schemas import ChartArtifact
 _HERE = Path(__file__).resolve().parents[3]  # project root
 OBJECTIVES_PATH = _HERE / "OBJECTIVES.md"
 RESPONSE_PATH = _HERE / "output" / "RESPONSE_TO_OBJECTIVES.md"
+DOTENV_PATH = _HERE / ".env"
 
-MODEL = "claude-opus-4-6"
-THINKING_BUDGET = 10_000   # tokens allocated to extended thinking
+load_dotenv(dotenv_path=DOTENV_PATH, override=False)
+
+MODEL = os.environ.get("OPENROUTER_MODEL", "openai/gpt-5.3-codex")
+THINKING_BUDGET = 10_000  # tokens allocated to extended thinking
 MAX_TOKENS = 16_000
+OPENROUTER_BASE_URL = "https://openrouter.ai/api"
 
 
 def _read(path: Path) -> str:
@@ -37,18 +42,18 @@ def generate_response_to_objectives(
     out_path = response_path or RESPONSE_PATH
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
-    api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+    api_key = os.environ.get("OPENROUTER_API_KEY", "")
     if not api_key:
         raise RuntimeError(
-            "ANTHROPIC_API_KEY is not set. "
+            "OPENROUTER_API_KEY is not set. "
             "Set it as an environment variable before starting the server."
         )
 
     objectives_text = _read(obj_path)
-    report_text     = _read(_HERE / "output" / "report.md")
-    insights_text   = _read(_HERE / "output" / "insights" / "insights.md")
-    chart_index     = _chart_index(chart_artifacts)
-    generated_at    = datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC")
+    report_text = _read(_HERE / "output" / "report.md")
+    insights_text = _read(_HERE / "output" / "insights" / "insights.md")
+    chart_index = _chart_index(chart_artifacts)
+    generated_at = datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC")
 
     system_prompt = """\
 You are a senior biomedical data scientist and oncology researcher with deep expertise in \
@@ -109,7 +114,10 @@ Be thorough. This is a research document, not a summary.\
 Please write the full detailed Response to Objectives document now.\
 """
 
-    client = anthropic.Anthropic(api_key=api_key)
+    client = anthropic.Anthropic(
+        api_key=api_key,
+        base_url=OPENROUTER_BASE_URL,
+    )
 
     response = client.messages.create(
         model=MODEL,
