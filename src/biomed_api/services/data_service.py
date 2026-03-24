@@ -82,6 +82,71 @@ def infer_schema(df: pd.DataFrame) -> list[dict[str, str | int | float]]:
     return profiles
 
 
+def infer_dataset_description(df: pd.DataFrame) -> str:
+    cols = set(c.lower() for c in df.columns)
+    all_cols = [c.lower() for c in df.columns]
+
+    expr_cols = [c for c in df.columns if c.lower().startswith("expr_")]
+    has_survival = bool({"efs_months", "os_months", "event", "os_event"} & cols)
+    has_expression = len(expr_cols) > 0
+    has_biomarkers = any(k in " ".join(all_cols) for k in ["ldh", "ferritin", "nse"])
+    has_genomics = bool({"ploidy", "del_1p", "gain_17q", "aberration_11q", "seg_chr_aberrations"} & cols)
+    has_treatment = bool({"treatment", "response_category", "histology"} & cols)
+    has_demographics = bool({"age_months", "age", "sex", "weight_kg"} & cols)
+    is_neuroblastoma = bool({"mycn_amplified", "risk_group", "stage"} & cols) or any("mycn" in c for c in all_cols)
+    is_oncology = is_neuroblastoma or bool({"tumor", "cancer", "stage", "risk_group"} & cols)
+
+    n, p = len(df), len(df.columns)
+
+    if is_neuroblastoma:
+        domain = "neuroblastoma oncology"
+    elif is_oncology:
+        domain = "oncology"
+    else:
+        domain = "biomedical"
+
+    parts = [f"This appears to be a **{domain}** dataset with **{n} patient records** and **{p} variables**."]
+
+    if is_neuroblastoma:
+        parts.append(
+            "The column structure is consistent with a neuroblastoma cohort — including INRG disease staging, "
+            "risk group stratification (low / intermediate / high), and MYCN amplification status."
+        )
+
+    if has_survival:
+        sv = [c for c in df.columns if c.lower() in {"efs_months", "os_months", "event", "os_event"}]
+        parts.append(
+            f"Survival endpoints are present ({', '.join(sv)}), making this suitable for "
+            "Kaplan-Meier, log-rank, and Cox proportional-hazards analyses."
+        )
+
+    if has_expression:
+        parts.append(
+            f"{len(expr_cols)} gene expression features (log₂-scale) are included, covering "
+            "oncogenes and tumour suppressors relevant to neuroblastoma biology."
+        )
+
+    if has_biomarkers:
+        bm = [c for c in df.columns if any(k in c.lower() for k in ["ldh", "ferritin", "nse"])]
+        parts.append(f"Serum biomarkers ({', '.join(bm)}) are available for prognostic and ROC analyses.")
+
+    if has_genomics:
+        parts.append(
+            "Genomic aberration flags (ploidy, chromosomal deletions/gains) support molecular subgrouping."
+        )
+
+    if has_demographics and has_treatment:
+        parts.append(
+            "Clinical metadata — demographics, treatment allocation, and response categories — "
+            "are available for multivariable modelling."
+        )
+
+    if not is_oncology and not has_survival and not has_expression:
+        parts.append("No recognised clinical outcome or expression columns were detected; domain-specific interpretation may require manual review.")
+
+    return " ".join(parts)
+
+
 def build_summary(df: pd.DataFrame) -> dict[str, object]:
     row_count = len(df)
     column_count = len(df.columns)
@@ -102,4 +167,5 @@ def build_summary(df: pd.DataFrame) -> dict[str, object]:
         "missing_pct": missing_pct,
         "columns": infer_schema(df),
         "key_distributions": distributions,
+        "description": infer_dataset_description(df),
     }

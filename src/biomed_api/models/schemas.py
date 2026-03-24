@@ -21,6 +21,7 @@ class SummaryResponse(BaseModel):
     missing_pct: float
     columns: list[ColumnProfile]
     key_distributions: dict[str, dict[str, int]]
+    description: str = ""
 
 
 class ChartArtifact(BaseModel):

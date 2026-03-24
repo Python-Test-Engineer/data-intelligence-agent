@@ -272,7 +272,7 @@
           <h2>4) Response to Objectives</h2>
           <p class="small">Summarise pipeline outputs against <code>OBJECTIVES.md</code> and download as <code>RESPONSE_TO_OBJECTIVES.md</code>.</p>
           <button id="response-btn" type="button" class="btn-secondary">Generate Response</button>
-          <div id="response-busy" class="busy"><span class="spinner"></span><span>Generating...</span></div>
+          <div id="response-busy" class="busy"><span class="spinner"></span><span>Opus thinking… this may take 30–60 s</span></div>
           <div id="response-status" class="status"></div>
           <button id="download-response-btn" class="btn-secondary" type="button" disabled style="margin-top:6px;">Download RESPONSE_TO_OBJECTIVES.md</button>
         </article>
@@ -288,11 +288,16 @@
             <div class="stat"><div class="stat-label">Missing Cells</div><div class="stat-value" id="missing">-</div></div>
             <div class="stat"><div class="stat-label">Missing %</div><div class="stat-value" id="missing-pct">-</div></div>
           </div>
+          <div id="dataset-description-wrap" style="display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:10px;">
+            <div style="font-size:0.74rem;text-transform:uppercase;letter-spacing:0.06em;color:#1b5953;margin-bottom:6px;">Dataset Interpretation</div>
+            <p id="dataset-description" style="margin:0;font-size:0.88rem;line-height:1.6;color:var(--ink);"></p>
+          </div>
         </article>
 
         <article class="card">
           <h2>Report Preview</h2>
-          <div id="report" class="report">No report loaded.</div>
+          <div id="report" class="report" style="display:none;"></div>
+          <p id="report-placeholder" class="small" style="margin:0;">Run the pipeline to generate a report.</p>
         </article>
 
         <article class="card">
@@ -341,17 +346,24 @@
       executeBtn.style.cursor = isRunning ? "not-allowed" : "pointer";
     }
 
+    function renderInlineMd(text) {
+      return text.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+                 .replace(/`(.+?)`/g, "<code>$1</code>");
+    }
+
     async function refreshSummary() {
       try {
         const response = await fetch("/summary");
-        if (!response.ok) {
-          throw new Error(await response.text());
-        }
+        if (!response.ok) throw new Error(await response.text());
         const summary = await response.json();
         document.getElementById("rows").textContent = summary.row_count;
         document.getElementById("cols").textContent = summary.column_count;
         document.getElementById("missing").textContent = summary.missing_cells;
         document.getElementById("missing-pct").textContent = `${summary.missing_pct}%`;
+        if (summary.description) {
+          document.getElementById("dataset-description").innerHTML = renderInlineMd(summary.description);
+          document.getElementById("dataset-description-wrap").style.display = "block";
+        }
       } catch {
         document.getElementById("rows").textContent = "-";
         document.getElementById("cols").textContent = "-";
@@ -362,17 +374,15 @@
 
     async function refreshReport() {
       const reportEl = document.getElementById("report");
+      const placeholder = document.getElementById("report-placeholder");
       try {
         const response = await fetch("/report");
-        if (!response.ok) {
-          reportEl.textContent = "Report not generated yet.";
-          return;
-        }
+        if (!response.ok) return;
         const report = await response.json();
         reportEl.textContent = report.content;
-      } catch {
-        reportEl.textContent = "Report not available.";
-      }
+        reportEl.style.display = "block";
+        placeholder.style.display = "none";
+      } catch { /* leave placeholder */ }
     }
 
     async function refreshImages() {
@@ -412,6 +422,7 @@
         }
         setStatus(uploadStatus, `${body.message} rows=${body.row_count}, cols=${body.column_count}`);
         await refreshSummary();
+        await refreshReport();
       } catch (error) {
         setStatus(uploadStatus, String(error), true);
       }

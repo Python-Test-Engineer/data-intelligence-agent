@@ -1,7 +1,14 @@
 {
   "permissions": {
     "allow": [
-      "Skill(update-config)"
+      "Skill(update-config)",
+      "Bash(ls C:/Users/mrcra/Desktop/codex_craig/*.md)",
+      "Bash(ls C:/Users/mrcra/Desktop/codex_craig/output/*.md)",
+      "Bash(uv add:*)",
+      "Bash(echo $ANTHROPIC_API_KEY)",
+      "Bash(ls C:/Users/mrcra/Desktop/codex_craig/.env*)",
+      "Read(//c/Users/mrcra/.claude/**)",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(list\\(d.get\\(''''env'''',{}\\).keys\\(\\)\\)\\)\")"
     ]
   }
 }

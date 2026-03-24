@@ -136,10 +136,12 @@ def get_objectives() -> ObjectivesResponse:
 
 
 @router.post("/generate/response-to-objectives", response_model=ResponseToObjectivesResponse)
-def generate_response_to_objectives_endpoint() -> ResponseToObjectivesResponse:
+async def generate_response_to_objectives_endpoint() -> ResponseToObjectivesResponse:
     try:
+        import asyncio
         artifacts = list_chart_artifacts()
-        out_path = generate_response_to_objectives(artifacts)
+        loop = asyncio.get_event_loop()
+        out_path = await loop.run_in_executor(None, generate_response_to_objectives, artifacts)
         objectives_count = len(
             [l for l in (OBJECTIVES_PATH.read_text(encoding="utf-8") if OBJECTIVES_PATH.exists() else "").splitlines()
              if l.strip().startswith("- ") or (l.strip() and l.strip()[0].isdigit())]
