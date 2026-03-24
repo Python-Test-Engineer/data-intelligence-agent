@@ -262,14 +262,6 @@
           <button id="download-response-btn" class="btn-secondary" type="button" disabled style="margin-top:6px;">Download RESPONSE_TO_OBJECTIVES.md</button>
         </article>
 
-        <article class="card">
-          <h2>5) Ask AI</h2>
-          <p class="small">Ask a question about the dataset or pipeline results.</p>
-          <textarea id="ask-text" rows="4" placeholder="e.g. What is the event rate for high-risk patients?"></textarea>
-          <button id="ask-btn" type="button">Ask AI</button>
-          <div id="ask-busy" class="busy"><span class="spinner"></span><span>Thinking…</span></div>
-          <div id="ask-status" class="status"></div>
-        </article>
 
       </aside>
 
@@ -294,18 +286,13 @@
           <p id="report-placeholder" class="small" style="margin:0;">Run the pipeline to generate a report.</p>
         </article>
 
-        <article class="card" id="qa-card" style="display:none;">
-          <h2>AI Q&amp;A</h2>
-          <div id="qa-thread" style="display:grid;gap:12px;"></div>
-        </article>
-
         <article class="card">
           <h2>PNG Dashboard (<code>output/images</code>)</h2>
           <div class="gallery-grid" id="image-grid">
             {% if images %}
               {% for image in images %}
                 <div class="tile">
-                  <a href="/viewer/{{ image.name }}" target="_blank" rel="noopener noreferrer">
+                  <a href="/viewer/{{ image.name }}" onclick="event.preventDefault(); window.open('/viewer/{{ image.name }}', '_blank')">
                     <img src="{{ image.url }}" alt="{{ image.name }}" loading="lazy" />
                   </a>
                   <div class="meta">{{ image.name }} | {{ image.category }}</div>
@@ -317,6 +304,21 @@
           </div>
 
         </article>
+
+        <article class="card">
+          <h2>5) Ask AI</h2>
+          <p class="small">Ask a question about the dataset or pipeline results.</p>
+          <textarea id="ask-text" rows="4" placeholder="e.g. What is the event rate for high-risk patients?"></textarea>
+          <button id="ask-btn" type="button">Ask AI</button>
+          <div id="ask-busy" class="busy"><span class="spinner"></span><span>Thinking…</span></div>
+          <div id="ask-status" class="status"></div>
+        </article>
+
+        <article class="card" id="qa-card" style="display:none;">
+          <h2>AI Q&amp;A</h2>
+          <div id="qa-thread" style="display:grid;gap:12px;"></div>
+        </article>
+
       </section>
       </section>
     </main>
@@ -403,7 +405,7 @@
         }
         grid.innerHTML = images.map(img => `
           <div class="tile">
-            <a href="/viewer/${img.name}" target="_blank" rel="noopener noreferrer">
+            <a href="/viewer/${img.name}" onclick="event.preventDefault(); window.open('/viewer/${img.name}', '_blank')">
               <img src="${img.url}" alt="${img.name}" loading="lazy" />
             </a>
             <div class="meta">${img.name} | ${img.category}</div>

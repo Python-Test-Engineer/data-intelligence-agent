@@ -125,6 +125,8 @@ Please write the full detailed Response to Objectives document now.\
         messages=[{"role": "user", "content": user_message}],
     )
 
+    if not response.content:
+        raise RuntimeError(f"Model returned no content (stop_reason={response.stop_reason!r}).")
     text_content = next(
         (block.text for block in response.content if block.type == "text"),
         "",

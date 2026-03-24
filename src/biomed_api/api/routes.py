@@ -338,7 +338,6 @@ def insights() -> InsightsResponse:
 async def ask_question(payload: AskRequest) -> AskResponse:
     import asyncio
     import os
-    import anthropic
 
     question = payload.question.strip()
     if not question:
@@ -376,16 +375,34 @@ async def ask_question(payload: AskRequest) -> AskResponse:
     )
     user_message = f"Context:\n{context_block}\n\nQuestion: {question}"
 
-    client = anthropic.Anthropic(api_key=api_key, base_url=OPENROUTER_BASE_URL)
-
     def _call() -> str:
-        response = client.messages.create(
-            model=OBJECTIVES_MODEL,
-            max_tokens=1024,
-            system=system_prompt,
-            messages=[{"role": "user", "content": user_message}],
+        import httpx
+
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+            "anthropic-version": "2023-06-01",
+        }
+        body = {
+            "model": OBJECTIVES_MODEL,
+            "max_tokens": 1024,
+            "system": system_prompt,
+            "messages": [{"role": "user", "content": user_message}],
+        }
+        resp = httpx.post(
+            f"{OPENROUTER_BASE_URL}/v1/messages",
+            json=body,
+            headers=headers,
+            timeout=60.0,
         )
-        return next((b.text for b in response.content if b.type == "text"), "")
+        data = resp.json()
+        if not resp.is_success:
+            err = data.get("error", {})
+            raise ValueError(f"OpenRouter error {resp.status_code}: {err.get('message', data)}")
+        content = data.get("content")
+        if not content:
+            raise ValueError(f"Model returned no content. Full response: {data}")
+        return next((b["text"] for b in content if b.get("type") == "text"), "")
 
     try:
         loop = asyncio.get_event_loop()

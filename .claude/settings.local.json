@@ -16,7 +16,9 @@
       "Bash(git commit:*)",
       "Bash(git push:*)",
       "Bash(git reset:*)",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "Bash(grep -r \"history\\\\|window.location\\\\|href\\\\|navigate\" /c/Users/mrcra/Desktop/codex_craig/src --include=*.html --include=*.py --include=*.js)",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\(''''hooks'''',{}\\), indent=2\\)\\)\")"
     ]
   }
 }
