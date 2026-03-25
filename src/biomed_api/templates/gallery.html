@@ -256,9 +256,10 @@
         <article class="card">
           <h2>4) Response to Objectives</h2>
           <p class="small">Summarise pipeline outputs against <code>OBJECTIVES.md</code> and download as <code>RESPONSE_TO_OBJECTIVES.md</code>.</p>
-          <button id="response-btn" type="button" class="btn-secondary">Generate Response</button>
+          <button id="response-btn" type="button" class="btn-secondary" disabled>Generate Response</button>
           <div id="response-busy" class="busy"><span class="spinner"></span><span>{{ objectives_model }} thinking… this may take 30–60 s</span></div>
           <div id="response-status" class="status"></div>
+          <button id="view-response-html-btn" class="btn-secondary" type="button" disabled style="margin-top:6px;">Open Response in Browser</button>
           <button id="download-response-btn" class="btn-secondary" type="button" disabled style="margin-top:6px;">Download RESPONSE_TO_OBJECTIVES.md</button>
         </article>
 
@@ -335,7 +336,10 @@
     const responseBtn = document.getElementById("response-btn");
     const responseBusy = document.getElementById("response-busy");
     const responseStatus = document.getElementById("response-status");
+    const viewResponseHtmlBtn = document.getElementById("view-response-html-btn");
     const downloadResponseBtn = document.getElementById("download-response-btn");
+    const qaCard = document.getElementById("qa-card");
+    const qaThread = document.getElementById("qa-thread");
 
     function setStatus(el, text, isError = false) {
       el.textContent = text;
@@ -438,7 +442,16 @@
           document.getElementById("dataset-description").innerHTML = renderInlineMd(body.description);
           document.getElementById("dataset-description-wrap").style.display = "block";
         }
-        await refreshReport();
+        // Clear all stale output from the previous dataset
+        document.getElementById("report").style.display = "none";
+        document.getElementById("report-placeholder").style.display = "";
+        document.getElementById("image-grid").innerHTML = '<div class="small">No PNG images found.</div>';
+        qaThread.innerHTML = "";
+        qaCard.style.display = "none";
+        viewInsightsBtn.disabled = true;
+        responseBtn.disabled = true;
+        viewResponseHtmlBtn.disabled = true;
+        downloadResponseBtn.disabled = true;
       } catch (error) {
         setStatus(uploadStatus, String(error), true);
       }
@@ -478,8 +491,9 @@
         if (!response.ok) {
           throw new Error(body.detail || "Execution failed.");
         }
-        setStatus(executeStatus, `${body.message} html=${body.html_charts}, png=${body.png_charts}`);
+        setStatus(executeStatus, `${body.message} charts=${body.png_charts}`);
         viewInsightsBtn.disabled = false;
+        responseBtn.disabled = false;
         await refreshReport();
         await refreshImages();
       } catch (error) {
@@ -496,6 +510,7 @@
     responseBtn.addEventListener("click", async () => {
       responseBusy.classList.add("active");
       responseBtn.disabled = true;
+      viewResponseHtmlBtn.disabled = true;
       downloadResponseBtn.disabled = true;
       setStatus(responseStatus, "Generating response to objectives...");
       try {
@@ -506,6 +521,7 @@
           responseStatus,
           `${body.message} (${body.objectives_found} objectives found) | model: ${body.model_used}`
         );
+        viewResponseHtmlBtn.disabled = false;
         downloadResponseBtn.disabled = false;
       } catch (error) {
         setStatus(responseStatus, String(error), true);
@@ -513,6 +529,10 @@
         responseBusy.classList.remove("active");
         responseBtn.disabled = false;
       }
+    });
+
+    viewResponseHtmlBtn.addEventListener("click", () => {
+      window.open("/output/RESPONSE_TO_OBJECTIVES.html", "_blank", "noopener,noreferrer");
     });
 
     downloadResponseBtn.addEventListener("click", () => {
@@ -551,6 +571,8 @@
       document.getElementById("dataset-description-wrap").style.display = "none";
       // Reset action buttons that require pipeline output
       viewInsightsBtn.disabled = true;
+      responseBtn.disabled = true;
+      viewResponseHtmlBtn.disabled = true;
       downloadResponseBtn.disabled = true;
     }
 
@@ -558,8 +580,6 @@
     const askBtn = document.getElementById("ask-btn");
     const askBusy = document.getElementById("ask-busy");
     const askStatus = document.getElementById("ask-status");
-    const qaCard = document.getElementById("qa-card");
-    const qaThread = document.getElementById("qa-thread");
 
     function appendQA(question, answer, modelUsed) {
       qaCard.style.display = "";
@@ -609,9 +629,44 @@
       }
     });
 
-    document.addEventListener("DOMContentLoaded", () => {
-      resetPageState();
-    });
+    async function loadObjectives() {
+      try {
+        const response = await fetch("/objectives");
+        if (!response.ok) return;
+        const data = await response.json();
+        if (data.content) {
+          document.getElementById("objectives-text").value = data.content;
+        }
+      } catch { /* ignore */ }
+    }
+
+    async function initPageState() {
+      // Restore whatever output already exists on disk
+      await refreshSummary();
+      await refreshReport();
+      await refreshImages();
+      await loadObjectives();
+
+      // Enable insights + response buttons if pipeline was previously run
+      try {
+        const res = await fetch("/insights");
+        if (res.ok) {
+          viewInsightsBtn.disabled = false;
+          responseBtn.disabled = false;
+        }
+      } catch { /* no insights yet */ }
+
+      // Enable response HTML/download buttons if HTML file exists
+      try {
+        const res = await fetch("/output/RESPONSE_TO_OBJECTIVES.html", { method: "HEAD" });
+        if (res.ok) {
+          viewResponseHtmlBtn.disabled = false;
+          downloadResponseBtn.disabled = false;
+        }
+      } catch { /* no response yet */ }
+    }
+
+    document.addEventListener("DOMContentLoaded", initPageState);
 
   </script>
 </body>

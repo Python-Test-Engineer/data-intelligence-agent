@@ -110,6 +110,7 @@ class ObjectivesResponse(BaseModel):
 class ResponseToObjectivesResponse(BaseModel):
     message: str
     path: str
+    html_path: str
     objectives_found: int
     model_used: str
 

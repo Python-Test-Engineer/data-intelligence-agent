@@ -256,9 +256,10 @@
         <article class="card">
           <h2>4) Response to Objectives</h2>
           <p class="small">Summarise pipeline outputs against <code>OBJECTIVES.md</code> and download as <code>RESPONSE_TO_OBJECTIVES.md</code>.</p>
-          <button id="response-btn" type="button" class="btn-secondary">Generate Response</button>
+          <button id="response-btn" type="button" class="btn-secondary" disabled>Generate Response</button>
           <div id="response-busy" class="busy"><span class="spinner"></span><span>{{ objectives_model }} thinking… this may take 30–60 s</span></div>
           <div id="response-status" class="status"></div>
+          <button id="view-response-html-btn" class="btn-secondary" type="button" disabled style="margin-top:6px;">Open Response in Browser</button>
           <button id="download-response-btn" class="btn-secondary" type="button" disabled style="margin-top:6px;">Download RESPONSE_TO_OBJECTIVES.md</button>
         </article>
 
@@ -333,6 +334,7 @@
     const responseBtn = document.getElementById("response-btn");
     const responseBusy = document.getElementById("response-busy");
     const responseStatus = document.getElementById("response-status");
+    const viewResponseHtmlBtn = document.getElementById("view-response-html-btn");
     const downloadResponseBtn = document.getElementById("download-response-btn");
 
     function setStatus(el, text, isError = false) {
@@ -443,6 +445,8 @@
         qaThread.innerHTML = "";
         qaCard.style.display = "none";
         viewInsightsBtn.disabled = true;
+        responseBtn.disabled = true;
+        viewResponseHtmlBtn.disabled = true;
         downloadResponseBtn.disabled = true;
       } catch (error) {
         setStatus(uploadStatus, String(error), true);
@@ -491,6 +495,7 @@
         }
         setStatus(executeStatus, `${body.message} charts=${body.png_charts}`);
         viewInsightsBtn.disabled = false;
+        responseBtn.disabled = false;
         await refreshReport();
         await refreshImages();
       } catch (error) {
@@ -507,6 +512,7 @@
     responseBtn.addEventListener("click", async () => {
       responseBusy.classList.add("active");
       responseBtn.disabled = true;
+      viewResponseHtmlBtn.disabled = true;
       downloadResponseBtn.disabled = true;
       setStatus(responseStatus, "Generating response to objectives...");
       try {
@@ -517,6 +523,7 @@
           responseStatus,
           `${body.message} (${body.objectives_found} objectives found) | model: ${body.model_used}`
         );
+        viewResponseHtmlBtn.disabled = false;
         downloadResponseBtn.disabled = false;
       } catch (error) {
         setStatus(responseStatus, String(error), true);
@@ -524,6 +531,10 @@
         responseBusy.classList.remove("active");
         responseBtn.disabled = false;
       }
+    });
+
+    viewResponseHtmlBtn.addEventListener("click", () => {
+      window.open("/output/RESPONSE_TO_OBJECTIVES.html", "_blank", "noopener,noreferrer");
     });
 
     downloadResponseBtn.addEventListener("click", () => {
@@ -557,6 +568,8 @@
       });
       document.getElementById("dataset-description-wrap").style.display = "none";
       viewInsightsBtn.disabled = true;
+      responseBtn.disabled = true;
+      viewResponseHtmlBtn.disabled = true;
       downloadResponseBtn.disabled = true;
     }
 
@@ -623,16 +636,22 @@
       await refreshImages();
       await loadObjectives();
 
-      // Enable insights button if insights file exists
+      // Enable insights + response buttons if pipeline was previously run
       try {
         const res = await fetch("/insights");
-        if (res.ok) viewInsightsBtn.disabled = false;
+        if (res.ok) {
+          viewInsightsBtn.disabled = false;
+          responseBtn.disabled = false;
+        }
       } catch { /* no insights yet */ }
 
-      // Enable download button if response file exists
+      // Enable response buttons if HTML file exists (both files are always created together)
       try {
-        const res = await fetch("/output/RESPONSE_TO_OBJECTIVES.md", { method: "HEAD" });
-        if (res.ok) downloadResponseBtn.disabled = false;
+        const res = await fetch("/output/RESPONSE_TO_OBJECTIVES.html", { method: "HEAD" });
+        if (res.ok) {
+          viewResponseHtmlBtn.disabled = false;
+          downloadResponseBtn.disabled = false;
+        }
       } catch { /* no response yet */ }
     }
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import shutil
 from io import BytesIO
 from pathlib import Path
 
@@ -41,10 +42,25 @@ from biomed_api.services.insight_service import generate_insights_bundle, read_f
 from biomed_api.services.objectives_service import MODEL as OBJECTIVES_MODEL
 from biomed_api.services.objectives_service import OPENROUTER_BASE_URL, generate_response_to_objectives
 from biomed_api.services.report_service import generate_report, read_report
+from biomed_api.services.dirty_service import save_dirty_report
 
 
 OBJECTIVES_PATH = DATA_PATH.parent.parent / "OBJECTIVES.md"
 router = APIRouter()
+
+
+def _clear_output() -> None:
+    """Delete all generated output so a fresh dataset starts clean."""
+    for folder in (OUTPUT_DIR / "images", OUTPUT_DIR / "insights"):
+        if folder.exists():
+            for child in folder.iterdir():
+                child.unlink() if child.is_file() else shutil.rmtree(child)
+    for fname in ("report.md", "dirty.csv", "dirty_rows.md", "RESPONSE_TO_OBJECTIVES.md", "RESPONSE_TO_OBJECTIVES.html"):
+        f = OUTPUT_DIR / fname
+        if f.exists():
+            f.unlink()
+
+
 templates = Jinja2Templates(directory=str(Path(__file__).resolve().parents[1] / "templates"))
 
 
@@ -109,6 +125,7 @@ async def upload_csv(file: UploadFile = File(...)) -> CsvUploadResponse:
 
         DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
         DATA_PATH.write_bytes(content)
+        _clear_output()
 
         df = load_dataset(DATA_PATH)
         summary = build_summary(df)
@@ -148,7 +165,7 @@ async def generate_response_to_objectives_endpoint() -> ResponseToObjectivesResp
         import asyncio
         artifacts = list_chart_artifacts()
         loop = asyncio.get_event_loop()
-        out_path = await loop.run_in_executor(None, generate_response_to_objectives, artifacts)
+        out_path, html_path = await loop.run_in_executor(None, generate_response_to_objectives, artifacts)
         objectives_count = len(
             [
                 line
@@ -161,6 +178,7 @@ async def generate_response_to_objectives_endpoint() -> ResponseToObjectivesResp
         return ResponseToObjectivesResponse(
             message="RESPONSE_TO_OBJECTIVES.md generated successfully.",
             path=str(out_path),
+            html_path=str(html_path),
             objectives_found=objectives_count,
             model_used=OBJECTIVES_MODEL,
         )
@@ -222,6 +240,7 @@ def execute_plan(payload: ExecutePlanRequest) -> ExecutePlanResponse:
             clean_output=payload.clean_output,
             write_png=payload.write_png,
         )
+        save_dirty_report(df)
         report_path = generate_report(df, artifacts)
         insights_md_path, insights_html_path, _ = generate_insights_bundle(df, artifacts)
         html_count = sum(1 for artifact in artifacts if artifact.format == "html")

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 from datetime import UTC, datetime
+from html import escape
 from pathlib import Path
 
 import anthropic
@@ -13,6 +14,7 @@ from csv_analyser.models.schemas import ChartArtifact
 _HERE = Path(__file__).resolve().parents[3]  # project root
 OBJECTIVES_PATH = _HERE / "OBJECTIVES.md"
 RESPONSE_PATH = _HERE / "output" / "RESPONSE_TO_OBJECTIVES.md"
+RESPONSE_HTML_PATH = _HERE / "output" / "RESPONSE_TO_OBJECTIVES.html"
 DOTENV_PATH = _HERE / ".env"
 
 load_dotenv(dotenv_path=DOTENV_PATH, override=False)
@@ -24,6 +26,70 @@ OPENROUTER_BASE_URL = "https://openrouter.ai/api"
 
 def _read(path: Path) -> str:
     return path.read_text(encoding="utf-8") if path.exists() else ""
+
+
+def _render_markdown_to_html(markdown_text: str) -> str:
+    lines = markdown_text.splitlines()
+    html_parts: list[str] = []
+    in_list = False
+
+    for raw_line in lines:
+        line = raw_line.strip()
+
+        if not line:
+            if in_list:
+                html_parts.append("</ul>")
+                in_list = False
+            continue
+
+        if line.startswith("---"):
+            if in_list:
+                html_parts.append("</ul>")
+                in_list = False
+            html_parts.append("<hr />")
+            continue
+
+        if line.startswith("### "):
+            if in_list:
+                html_parts.append("</ul>")
+                in_list = False
+            html_parts.append(f"<h3>{escape(line[4:])}</h3>")
+            continue
+
+        if line.startswith("## "):
+            if in_list:
+                html_parts.append("</ul>")
+                in_list = False
+            html_parts.append(f"<h2>{escape(line[3:])}</h2>")
+            continue
+
+        if line.startswith("# "):
+            if in_list:
+                html_parts.append("</ul>")
+                in_list = False
+            html_parts.append(f"<h1>{escape(line[2:])}</h1>")
+            continue
+
+        if line.startswith("- "):
+            if not in_list:
+                html_parts.append("<ul>")
+                in_list = True
+            html_parts.append(f"<li>{escape(line[2:])}</li>")
+            continue
+
+        if in_list:
+            html_parts.append("</ul>")
+            in_list = False
+
+        if line.startswith("_") and line.endswith("_") and len(line) > 2:
+            html_parts.append(f"<p><em>{escape(line[1:-1])}</em></p>")
+        else:
+            html_parts.append(f"<p>{escape(line)}</p>")
+
+    if in_list:
+        html_parts.append("</ul>")
+
+    return "\n".join(html_parts)
 
 
 def _chart_index(artifacts: list[ChartArtifact]) -> str:
@@ -147,5 +213,66 @@ Please write the full detailed Response to Objectives document now.\
         f"---\n\n"
         f"{objectives_block}"
     )
-    out_path.write_text(header + text_content, encoding="utf-8")
-    return out_path
+    full_md = header + text_content
+    out_path.write_text(full_md, encoding="utf-8")
+
+    html_path = out_path.with_suffix(".html")
+    html_body = _render_markdown_to_html(full_md)
+    html_page = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Response to Objectives</title>
+  <style>
+    body {{
+      margin: 0;
+      background: #f5f4ee;
+      color: #111111;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }}
+    main {{
+      width: min(980px, 100% - 28px);
+      margin: 24px auto 40px;
+      background: #fcfbf8;
+      border: 1px solid #d8d4c8;
+      border-radius: 14px;
+      padding: 24px 28px;
+    }}
+    h1 {{ color: #0f3a47; font-size: 1.55rem; margin-bottom: 4px; }}
+    h2 {{ color: #0f3a47; border-bottom: 1px solid #d8d4c8; padding-bottom: 4px; }}
+    h3 {{ color: #1f4a63; }}
+    p, li {{ line-height: 1.65; }}
+    ul {{ padding-left: 20px; }}
+    hr {{ border: none; border-top: 1px solid #d8d4c8; margin: 16px 0; }}
+    em {{ color: #4a4945; font-style: italic; }}
+    .toolbar {{
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 16px;
+    }}
+    .download-btn {{
+      display: inline-block;
+      text-decoration: none;
+      background: #1f4a63;
+      color: #ffffff;
+      padding: 9px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }}
+    .download-btn:hover {{ opacity: 0.92; }}
+  </style>
+</head>
+<body>
+  <main>
+    <div class="toolbar">
+      <a class="download-btn" href="RESPONSE_TO_OBJECTIVES.md" download="RESPONSE_TO_OBJECTIVES.md">Download Markdown</a>
+    </div>
+    {html_body}
+  </main>
+</body>
+</html>
+"""
+    html_path.write_text(html_page, encoding="utf-8")
+    return out_path, html_path

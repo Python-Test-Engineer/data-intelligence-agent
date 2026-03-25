@@ -55,7 +55,7 @@ def _clear_output() -> None:
         if folder.exists():
             for child in folder.iterdir():
                 child.unlink() if child.is_file() else shutil.rmtree(child)
-    for fname in ("report.md", "dirty.csv", "dirty_rows.md", "RESPONSE_TO_OBJECTIVES.md"):
+    for fname in ("report.md", "dirty.csv", "dirty_rows.md", "RESPONSE_TO_OBJECTIVES.md", "RESPONSE_TO_OBJECTIVES.html"):
         f = OUTPUT_DIR / fname
         if f.exists():
             f.unlink()
@@ -167,7 +167,7 @@ async def generate_response_to_objectives_endpoint() -> ResponseToObjectivesResp
         import asyncio
         artifacts = list_chart_artifacts()
         loop = asyncio.get_event_loop()
-        out_path = await loop.run_in_executor(None, generate_response_to_objectives, artifacts)
+        out_path, html_path = await loop.run_in_executor(None, generate_response_to_objectives, artifacts)
         objectives_count = len(
             [
                 line
@@ -180,6 +180,7 @@ async def generate_response_to_objectives_endpoint() -> ResponseToObjectivesResp
         return ResponseToObjectivesResponse(
             message="RESPONSE_TO_OBJECTIVES.md generated successfully.",
             path=str(out_path),
+            html_path=str(html_path),
             objectives_found=objectives_count,
             model_used=OBJECTIVES_MODEL,
         )
