@@ -1,0 +1,45 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat:*)",
+      "mcp__ide__executeCode",
+      "Bash(uv python:*)",
+      "Bash(uv init:*)",
+      "Bash(uv add:*)",
+      "Bash(uv run:*)",
+      "Bash(PYTHONUTF8=1 uv run:*)",
+      "Bash(awk NR==2 {print; exit}:*)",
+      "WebSearch",
+      "Bash(git:*)"
+    ]
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run python $CLAUDE_PROJECT_DIR/.claude/hooks/log_conversation.py"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run python $CLAUDE_PROJECT_DIR/.claude/hooks/log_session_end.py"
+          }
+        ]
+      }
+    ]
+  },
+  "outputStyle": ".claude/output-styles/markdown-focused.md",
+  "statusLine": {
+    "type": "command",
+    "command": "uv run .claude/statusline.py"
+  }
+}

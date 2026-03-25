@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CSV Analyser Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f5f4ee;
+      --paper: #f8f7f2;
+      --surface: #f0eee6;
+      --card: #fcfbf8;
+      --ink: #111111;
+      --muted: #4a4945;
+      --line: #d8d4c8;
+      --accent: #141413;
+      --accent-soft: #ece8dc;
+      --warn: #8f2f20;
+      --radius-xl: 22px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background: linear-gradient(180deg, #f7f6f1 0%, var(--bg) 100%);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+    .site {
+      width: min(1080px, 100% - 36px);
+      margin: 24px auto 40px;
+    }
+    main {
+      margin-top: 0;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 16px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      box-shadow: 0 6px 18px rgba(24, 22, 17, 0.05);
+    }
+    .stack {
+      display: grid;
+      gap: 12px;
+    }
+    h2 {
+      font-size: 1.02rem;
+      margin: 0 0 10px;
+      letter-spacing: -0.01em;
+    }
+    .small {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.4;
+    }
+    input[type="file"] {
+      width: 100%;
+      margin: 8px 0;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.86rem;
+      color: var(--ink);
+    }
+    textarea {
+      width: 100%;
+      margin: 8px 0 4px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.82rem;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 8px;
+      resize: vertical;
+      background: var(--paper);
+      box-sizing: border-box;
+    }
+    textarea:focus {
+      outline: none;
+      border-color: #a8a49a;
+    }
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #f4f2eb;
+      padding: 10px 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    .btn-secondary {
+      background: #5a584f;
+    }
+    .btn-secondary[disabled] {
+      background: #8f8b80;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    button:hover {
+      transform: translateY(-1px);
+      opacity: 0.95;
+    }
+    .status {
+      margin-top: 8px;
+      font-size: 0.84rem;
+      line-height: 1.4;
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--muted);
+      min-height: 38px;
+    }
+    .busy {
+      margin-top: 8px;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .busy.active {
+      display: inline-flex;
+    }
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid #c8c5bc;
+      border-top-color: #1f1d1a;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    .status.error {
+      color: var(--warn);
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(120px, 1fr));
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .stat {
+      background: var(--accent-soft);
+      border: 1px solid #d8d4c8;
+      border-radius: 10px;
+      padding: 9px;
+    }
+    .stat-label {
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #54514a;
+    }
+    .stat-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-top: 3px;
+    }
+    .report {
+      background: var(--paper);
+      border: 1px solid #dfdbcf;
+      border-radius: 10px;
+      padding: 10px;
+      white-space: pre-wrap;
+      max-height: 220px;
+      overflow: auto;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.76rem;
+      line-height: 1.4;
+    }
+    .gallery-grid {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 10px;
+    }
+    .tile {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 8px;
+      background: #faf8f2;
+    }
+    .tile img {
+      width: 100%;
+      height: 138px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #dfdbcf;
+      display: block;
+    }
+    .meta {
+      margin: 7px 0 0;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    @media (max-width: 920px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      .stats {
+        grid-template-columns: repeat(2, minmax(120px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="site">
+    <main>
+      <section class="layout">
+      <aside class="stack">
+        <article class="card">
+          <h2>1) Upload CSV</h2>
+          <p class="small">Upload any CSV file to analyse. Overwrites <code>data/data.csv</code>.</p>
+          <input id="csv-file" type="file" accept=".csv" />
+          <button id="upload-btn" type="button">Upload Dataset</button>
+          <div id="upload-status" class="status"></div>
+          <hr style="border:none;border-top:1px solid var(--line);margin:12px 0;" />
+          <label for="objectives-text" style="font-size:0.88rem;color:var(--muted);display:block;margin-bottom:4px;">Analysis Objectives (<code>OBJECTIVES.md</code>)</label>
+          <textarea id="objectives-text" rows="8" placeholder="Describe what you want to analyse. e.g. 1. Identify the top-selling products by revenue. 2. Find seasonal trends in monthly sales. This will be saved as OBJECTIVES.md."></textarea>
+          <button id="objectives-btn" type="button" class="btn-secondary">Save OBJECTIVES.md</button>
+          <div id="objectives-status" class="status"></div>
+        </article>
+
+        <article class="card">
+          <h2>2) Run Analysis Pipeline</h2>
+          <p class="small">Generates charts and a summary report from the uploaded dataset.</p>
+          <button id="execute-btn" type="button">Run Full Pipeline</button>
+          <div id="pipeline-busy" class="busy"><span class="spinner"></span><span>Pipeline running...</span></div>
+          <div id="execute-status" class="status"></div>
+        </article>
+
+        <article class="card">
+          <h2>3) Insights</h2>
+          <p class="small">Open the generated insights page in a new tab.</p>
+          <p class="small">LLM model: <code>{{ insights_model }}</code></p>
+          <button id="view-insights-btn" class="btn-secondary" type="button" disabled>View Insights</button>
+        </article>
+
+        <article class="card">
+          <h2>4) Response to Objectives</h2>
+          <p class="small">Summarise pipeline outputs against <code>OBJECTIVES.md</code> and download as <code>RESPONSE_TO_OBJECTIVES.md</code>.</p>
+          <button id="response-btn" type="button" class="btn-secondary">Generate Response</button>
+          <div id="response-busy" class="busy"><span class="spinner"></span><span>{{ objectives_model }} thinking… this may take 30–60 s</span></div>
+          <div id="response-status" class="status"></div>
+          <button id="download-response-btn" class="btn-secondary" type="button" disabled style="margin-top:6px;">Download RESPONSE_TO_OBJECTIVES.md</button>
+        </article>
+
+      </aside>
+
+      <section class="stack">
+        <article class="card">
+          <h2>Dataset Summary</h2>
+          <div class="stats">
+            <div class="stat"><div class="stat-label">Rows</div><div class="stat-value" id="rows">-</div></div>
+            <div class="stat"><div class="stat-label">Columns</div><div class="stat-value" id="cols">-</div></div>
+            <div class="stat"><div class="stat-label">Missing Cells</div><div class="stat-value" id="missing">-</div></div>
+            <div class="stat"><div class="stat-label">Missing %</div><div class="stat-value" id="missing-pct">-</div></div>
+          </div>
+          <div id="dataset-description-wrap" style="display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:10px;">
+            <div style="font-size:0.74rem;text-transform:uppercase;letter-spacing:0.06em;color:#3a5a4a;margin-bottom:6px;">Dataset Interpretation</div>
+            <p id="dataset-description" style="margin:0;font-size:0.88rem;line-height:1.6;color:var(--ink);"></p>
+          </div>
+        </article>
+
+        <article class="card">
+          <h2>Report Preview</h2>
+          <div id="report" class="report" style="display:none;"></div>
+          <p id="report-placeholder" class="small" style="margin:0;">Run the pipeline to generate a report.</p>
+        </article>
+
+        <article class="card">
+          <h2>Chart Dashboard (<code>output/images</code>)</h2>
+          <div class="gallery-grid" id="image-grid">
+            {% if images %}
+              {% for image in images %}
+                <div class="tile">
+                  <a href="/viewer/{{ image.name }}" onclick="event.preventDefault(); window.open('/viewer/{{ image.name }}', '_blank')">
+                    <img src="{{ image.url }}" alt="{{ image.name }}" loading="lazy" />
+                  </a>
+                  <div class="meta">{{ image.name }} | {{ image.category }}</div>
+                </div>
+              {% endfor %}
+            {% else %}
+              <div class="small">No charts generated yet.</div>
+            {% endif %}
+          </div>
+        </article>
+
+        <article class="card">
+          <h2>5) Ask AI</h2>
+          <p class="small">Ask a question about your dataset or analysis results.</p>
+          <p class="small">LLM model: <code>{{ objectives_model }}</code></p>
+          <textarea id="ask-text" rows="4" placeholder="e.g. Which product category has the highest revenue? What are the top cities by sales? Are there any seasonal trends?"></textarea>
+          <button id="ask-btn" type="button">Ask AI</button>
+          <div id="ask-busy" class="busy"><span class="spinner"></span><span>Thinking…</span></div>
+          <div id="ask-status" class="status"></div>
+        </article>
+
+        <article class="card" id="qa-card" style="display:none;">
+          <h2>AI Q&amp;A</h2>
+          <div id="qa-thread" style="display:grid;gap:12px;"></div>
+        </article>
+
+      </section>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const uploadStatus = document.getElementById("upload-status");
+    const objectivesStatus = document.getElementById("objectives-status");
+    const executeStatus = document.getElementById("execute-status");
+    const executeBtn = document.getElementById("execute-btn");
+    const pipelineBusy = document.getElementById("pipeline-busy");
+    const viewInsightsBtn = document.getElementById("view-insights-btn");
+    const responseBtn = document.getElementById("response-btn");
+    const responseBusy = document.getElementById("response-busy");
+    const responseStatus = document.getElementById("response-status");
+    const downloadResponseBtn = document.getElementById("download-response-btn");
+
+    function setStatus(el, text, isError = false) {
+      el.textContent = text;
+      el.classList.toggle("error", isError);
+    }
+
+    function setPipelineRunning(isRunning) {
+      pipelineBusy.classList.toggle("active", isRunning);
+      executeBtn.disabled = isRunning;
+      executeBtn.style.opacity = isRunning ? "0.7" : "1";
+      executeBtn.style.cursor = isRunning ? "not-allowed" : "pointer";
+    }
+
+    function formatPct(val) {
+      if (val === 0) return "0";
+      if (val >= 10) return val.toFixed(1);
+      return parseFloat(val.toPrecision(2)).toString();
+    }
+
+    function renderInlineMd(text) {
+      return text.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+                 .replace(/`(.+?)`/g, "<code>$1</code>");
+    }
+
+    async function refreshSummary() {
+      try {
+        const response = await fetch("/summary");
+        if (!response.ok) throw new Error(await response.text());
+        const summary = await response.json();
+        document.getElementById("rows").textContent = summary.row_count;
+        document.getElementById("cols").textContent = summary.column_count;
+        document.getElementById("missing").textContent = summary.missing_cells;
+        document.getElementById("missing-pct").textContent = `${formatPct(summary.missing_pct)}%`;
+        if (summary.description) {
+          document.getElementById("dataset-description").innerHTML = renderInlineMd(summary.description);
+          document.getElementById("dataset-description-wrap").style.display = "block";
+        }
+      } catch {
+        document.getElementById("rows").textContent = "-";
+        document.getElementById("cols").textContent = "-";
+        document.getElementById("missing").textContent = "-";
+        document.getElementById("missing-pct").textContent = "-";
+      }
+    }
+
+    async function refreshReport() {
+      const reportEl = document.getElementById("report");
+      const placeholder = document.getElementById("report-placeholder");
+      try {
+        const response = await fetch("/report");
+        if (!response.ok) return;
+        const report = await response.json();
+        reportEl.textContent = report.content;
+        reportEl.style.display = "block";
+        placeholder.style.display = "none";
+      } catch { /* leave placeholder */ }
+    }
+
+    async function refreshImages() {
+      const grid = document.getElementById("image-grid");
+      try {
+        const res = await fetch("/output-images");
+        if (!res.ok) return;
+        const images = await res.json();
+        if (!images.length) {
+          grid.innerHTML = '<div class="small">No charts generated yet.</div>';
+          return;
+        }
+        grid.innerHTML = images.map(img => `
+          <div class="tile">
+            <a href="/viewer/${img.name}" onclick="event.preventDefault(); window.open('/viewer/${img.name}', '_blank')">
+              <img src="${img.url}" alt="${img.name}" loading="lazy" />
+            </a>
+            <div class="meta">${img.name} | ${img.category}</div>
+          </div>`).join("");
+      } catch { /* leave grid as-is */ }
+    }
+
+    document.getElementById("upload-btn").addEventListener("click", async () => {
+      const fileInput = document.getElementById("csv-file");
+      if (!fileInput.files || fileInput.files.length === 0) {
+        setStatus(uploadStatus, "Select a CSV file first.", true);
+        return;
+      }
+      setStatus(uploadStatus, "Uploading and validating CSV...");
+      const formData = new FormData();
+      formData.append("file", fileInput.files[0]);
+      try {
+        const response = await fetch("/upload/csv", { method: "POST", body: formData });
+        const body = await response.json();
+        if (!response.ok) {
+          throw new Error(body.detail || "Upload failed.");
+        }
+        setStatus(uploadStatus, `${body.message} rows=${body.row_count}, cols=${body.column_count}`);
+        document.getElementById("rows").textContent = body.row_count;
+        document.getElementById("cols").textContent = body.column_count;
+        document.getElementById("missing").textContent = body.missing_cells;
+        document.getElementById("missing-pct").textContent = `${formatPct(body.missing_pct)}%`;
+        if (body.description) {
+          document.getElementById("dataset-description").innerHTML = renderInlineMd(body.description);
+          document.getElementById("dataset-description-wrap").style.display = "block";
+        }
+        await refreshReport();
+      } catch (error) {
+        setStatus(uploadStatus, String(error), true);
+      }
+    });
+
+    document.getElementById("objectives-btn").addEventListener("click", async () => {
+      const content = document.getElementById("objectives-text").value;
+      if (!content.trim()) {
+        setStatus(objectivesStatus, "Text box is empty.", true);
+        return;
+      }
+      setStatus(objectivesStatus, "Saving OBJECTIVES.md...");
+      try {
+        const response = await fetch("/upload/objectives", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content }),
+        });
+        const body = await response.json();
+        if (!response.ok) throw new Error(body.detail || "Save failed.");
+        setStatus(objectivesStatus, body.message);
+      } catch (error) {
+        setStatus(objectivesStatus, String(error), true);
+      }
+    });
+
+    document.getElementById("execute-btn").addEventListener("click", async () => {
+      setPipelineRunning(true);
+      setStatus(executeStatus, "Running analysis pipeline...");
+      try {
+        const response = await fetch("/execute", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ clean_output: true, write_png: true })
+        });
+        const body = await response.json();
+        if (!response.ok) {
+          throw new Error(body.detail || "Execution failed.");
+        }
+        setStatus(executeStatus, `${body.message} charts=${body.png_charts}`);
+        viewInsightsBtn.disabled = false;
+        await refreshReport();
+        await refreshImages();
+      } catch (error) {
+        setStatus(executeStatus, String(error), true);
+      } finally {
+        setPipelineRunning(false);
+      }
+    });
+
+    viewInsightsBtn.addEventListener("click", () => {
+      window.open("/output/insights/insights.html", "_blank", "noopener,noreferrer");
+    });
+
+    responseBtn.addEventListener("click", async () => {
+      responseBusy.classList.add("active");
+      responseBtn.disabled = true;
+      downloadResponseBtn.disabled = true;
+      setStatus(responseStatus, "Generating response to objectives...");
+      try {
+        const res = await fetch("/generate/response-to-objectives", { method: "POST" });
+        const body = await res.json();
+        if (!res.ok) throw new Error(body.detail || "Generation failed.");
+        setStatus(
+          responseStatus,
+          `${body.message} (${body.objectives_found} objectives found) | model: ${body.model_used}`
+        );
+        downloadResponseBtn.disabled = false;
+      } catch (error) {
+        setStatus(responseStatus, String(error), true);
+      } finally {
+        responseBusy.classList.remove("active");
+        responseBtn.disabled = false;
+      }
+    });
+
+    downloadResponseBtn.addEventListener("click", () => {
+      window.location.href = "/response-to-objectives/download";
+    });
+
+    async function loadObjectives() {
+      try {
+        const response = await fetch("/objectives");
+        if (!response.ok) return;
+        const data = await response.json();
+        if (data.content) {
+          document.getElementById("objectives-text").value = data.content;
+        }
+      } catch { /* ignore */ }
+    }
+
+    function resetPageState() {
+      setStatus(uploadStatus, "");
+      setStatus(objectivesStatus, "");
+      setStatus(executeStatus, "");
+      setStatus(responseStatus, "");
+      const reportEl = document.getElementById("report");
+      const placeholder = document.getElementById("report-placeholder");
+      reportEl.textContent = "";
+      reportEl.style.display = "none";
+      placeholder.style.display = "";
+      document.getElementById("image-grid").innerHTML = '<div class="small">No charts generated yet.</div>';
+      ["rows", "cols", "missing", "missing-pct"].forEach(id => {
+        document.getElementById(id).textContent = "-";
+      });
+      document.getElementById("dataset-description-wrap").style.display = "none";
+      viewInsightsBtn.disabled = true;
+      downloadResponseBtn.disabled = true;
+    }
+
+    // --- Section 5: Ask AI ---
+    const askBtn = document.getElementById("ask-btn");
+    const askBusy = document.getElementById("ask-busy");
+    const askStatus = document.getElementById("ask-status");
+    const qaCard = document.getElementById("qa-card");
+    const qaThread = document.getElementById("qa-thread");
+
+    function appendQA(question, answer, modelUsed) {
+      qaCard.style.display = "";
+      const entry = document.createElement("div");
+      entry.style.cssText = "border-top:1px solid var(--line);padding-top:10px;";
+      entry.innerHTML = `
+        <div style="font-size:0.74rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:4px;">Question</div>
+        <p style="margin:0 0 8px;font-size:0.9rem;font-weight:600;">${escapeHtml(question)}</p>
+        <div style="font-size:0.74rem;text-transform:uppercase;letter-spacing:0.06em;color:#3a5a4a;margin-bottom:4px;">Answer <span style="text-transform:none;font-weight:400;color:var(--muted);">· ${escapeHtml(modelUsed)}</span></div>
+        <p style="margin:0;font-size:0.88rem;line-height:1.6;white-space:pre-wrap;">${escapeHtml(answer)}</p>`;
+      qaThread.appendChild(entry);
+      qaCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    }
+
+    document.getElementById("ask-text").addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) askBtn.click();
+    });
+
+    askBtn.addEventListener("click", async () => {
+      const question = document.getElementById("ask-text").value.trim();
+      if (!question) {
+        setStatus(askStatus, "Enter a question first.", true);
+        return;
+      }
+      askBusy.classList.add("active");
+      askBtn.disabled = true;
+      setStatus(askStatus, "");
+      try {
+        const res = await fetch("/ask", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question }),
+        });
+        const body = await res.json();
+        if (!res.ok) throw new Error(body.detail || "Request failed.");
+        appendQA(body.question, body.answer, body.model_used);
+        document.getElementById("ask-text").value = "";
+      } catch (error) {
+        setStatus(askStatus, String(error), true);
+      } finally {
+        askBusy.classList.remove("active");
+        askBtn.disabled = false;
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      resetPageState();
+      refreshSummary();
+      loadObjectives();
+    });
+
+  </script>
+</body>
+</html>

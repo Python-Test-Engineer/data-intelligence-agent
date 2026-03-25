@@ -1,9 +1,8 @@
 # Biomedical Cohort Findings
 
 ## Cohort Snapshot
-- Patients: 479
-- Median age (months): 441.0
-- Variables: 23152
+- Patients: 500
+- Variables: 13
 
 ## Outcome Stratification
 ### Event rate by risk group
@@ -15,8 +14,7 @@
 - No biomarker-EFS association table available.
 
 ## Chart Index
-- biomarker_expression_summary.png (biomarker)
-- biomarker_correlation_heatmap.png (biomarker)
+- No chart artifacts were found at report generation time.
 
 ## Caveats
 - This report is exploratory and non-causal; observed associations should not be interpreted as treatment effects.

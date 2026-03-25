@@ -1,4 +1,6 @@
-# Manual Run
+# Start commands
+
+##  Bio Med Manual Run
 
 1. Open a terminal in this folder.
 2. Install dependencies:
