@@ -1,3 +1,3 @@
 event_id,session_id,timestamp,event_type,turn_index,llm_round,model,prompt_tokens,completion_tokens,stop_reason,response_text_preview,tool_use_count,tool_name,tool_use_id,tool_args_summary,result_preview,is_error_result,file_path,bytes_written,lines_written,write_operation,exec_type,exec_success,exec_exit_code,exec_duration_ms,exec_output_preview,validation_errors,code_preview,web_query,web_url,web_result_count,message_text_preview,slash_command_name,file_ref_count,conversation_length,error_message,error_traceback
-1fe45aa2-9489-48e1-81ac-c255262d7e83,6a9a6ea3-8a51-4a3c-a628-0db2de6a121e,2026-03-26T07:58:12.904209+00:00,SESSION_START,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-ef93f752-7d94-4a0c-9a07-c9da46219ae2,6a9a6ea3-8a51-4a3c-a628-0db2de6a121e,2026-03-26T07:58:12.904235+00:00,SESSION_END,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+76d26b9f-c7b1-401d-8ed7-5987eb78c25f,81151c7c-9862-4e1f-b5d1-b4fb44c9c003,2026-03-26T12:32:19.663669+00:00,SESSION_START,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+8185b4c3-9662-4d5a-affa-40fff9a3ddb1,81151c7c-9862-4e1f-b5d1-b4fb44c9c003,2026-03-26T12:32:19.663711+00:00,SESSION_END,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

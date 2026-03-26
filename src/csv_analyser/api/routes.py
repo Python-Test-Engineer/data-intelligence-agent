@@ -49,7 +49,6 @@ from csv_analyser.services.objectives_service import (
 from csv_analyser.services.report_service import generate_report, read_report
 from csv_analyser.services.dirty_service import save_dirty_report
 from csv_analyser.services.sql_service import (
-    create_sqlite_db,
     generate_sql_catalog,
     get_sql_catalog_entries,
     run_query_against_db,
@@ -141,10 +140,6 @@ async def upload_csv(file: UploadFile = File(...)) -> CsvUploadResponse:
         _clear_output()
 
         df = load_dataset(DATA_PATH)
-        try:
-            create_sqlite_db(df, DATA_PATH)
-        except Exception:
-            pass  # non-fatal; DB will be recreated on next pipeline run
         summary = build_summary(df)
         return CsvUploadResponse(
             message="CSV uploaded successfully and saved as data/data.csv.",

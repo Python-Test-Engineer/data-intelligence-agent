@@ -52,7 +52,12 @@
       "Bash(echo \"EXIT: $?\")",
       "Bash(grep -r \"Ask AI\\\\|/ask\\\\|ask_ai\" /c/Users/mrcra/Desktop/data-intelligence-agent/src --include=*.py)",
       "Bash(find /c/Users/mrcra/Desktop/data-intelligence-agent -type f \\\\\\(-name *skill* -o -name *ask* \\\\\\))",
-      "Bash(find /c/Users/mrcra/Desktop/data-intelligence-agent -maxdepth 3 -type f \\\\\\(-name *.md \\\\\\) -not -path .venv*)"
+      "Bash(find /c/Users/mrcra/Desktop/data-intelligence-agent -maxdepth 3 -type f \\\\\\(-name *.md \\\\\\) -not -path .venv*)",
+      "Skill(sql-test)",
+      "Bash(find . -path */output/sql/*.md -type f)",
+      "Bash(cd:*)",
+      "Bash(uv:*)",
+      "Bash(powershell.exe -Command \"Get-Process | Where-Object { \\\\$_.Path -like '*data-intelligence-agent*' -or \\\\$_.Name -like '*uvicorn*' -or \\\\$_.Name -like '*python*' } | Select-Object Id, Name, Path\")"
     ]
   }
 }

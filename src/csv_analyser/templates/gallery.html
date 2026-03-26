@@ -311,7 +311,7 @@
           <p class="small">Ask a question about your dataset or analysis results.</p>
           <p class="small">LLM model: <code>{{ objectives_model }}</code></p>
           <textarea id="ask-text" rows="4" placeholder="e.g. Which product category has the highest revenue? What are the top cities by sales? Are there any seasonal trends?"></textarea>
-          <button id="ask-btn" type="button">Ask AI</button>
+          <button id="ask-btn" type="button" disabled>Ask AI</button>
           <div id="ask-busy" class="busy"><span class="spinner"></span><span>Thinking…</span></div>
           <div id="ask-status" class="status"></div>
         </article>
@@ -452,6 +452,7 @@
         viewResponseHtmlBtn.disabled = true;
         downloadResponseHtmlBtn.disabled = true;
         downloadResponseBtn.disabled = true;
+        askBtn.disabled = true;
       } catch (error) {
         setStatus(uploadStatus, String(error), true);
       }
@@ -500,6 +501,7 @@
         setStatus(executeStatus, `${body.message} charts=${body.png_charts}`);
         viewInsightsBtn.disabled = false;
         responseBtn.disabled = false;
+        askBtn.disabled = false;
         await refreshReport();
         await refreshImages();
       } catch (error) {
@@ -580,6 +582,7 @@
       responseBtn.disabled = true;
       viewResponseHtmlBtn.disabled = true;
       downloadResponseBtn.disabled = true;
+      askBtn.disabled = true;
     }
 
     // --- Section 5: Ask AI ---
@@ -651,6 +654,7 @@
         if (res.ok) {
           viewInsightsBtn.disabled = false;
           responseBtn.disabled = false;
+          askBtn.disabled = false;
         }
       } catch { /* no insights yet */ }
 

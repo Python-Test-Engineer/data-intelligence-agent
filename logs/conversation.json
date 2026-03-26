@@ -1,0 +1,13 @@
+[
+  {
+    "session_id": "79ceaf00-9aaa-4a58-b10e-7a0742e85a07",
+    "start_time": "2026-03-26T12:29:07.426672+00:00",
+    "messages": [
+      {
+        "type": "user",
+        "timestamp": "2026-03-26T12:29:07.426729+00:00",
+        "content": "/show-convo"
+      }
+    ]
+  }
+]

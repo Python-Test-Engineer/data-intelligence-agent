@@ -1,16 +1,13 @@
 ---
-description: "Examine a CSV and generate a categorised list of useful SQL query titles in natural language. Usage: /sql-titles <csv_file>"
+description: "Examine a CSV and generate a categorised list of useful SQL query titles in natural language. Usage: /sql-titles [csv_file]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-argument-hint: "data/sales_data_100.csv"
+argument-hint: "data/data.csv"
 ---
-
-**Argument required:** `<csv_file>`
-Example: `/sql-titles data/sales_data_100.csv`
 
 Parse `$ARGUMENTS`:
 - `CSV_FILE` — first token (path to the CSV file)
 
-If missing: glob `data/*.csv`, list available files, and ask the user to pick one.
+If missing or empty: default to `data/data.csv`. If `data/data.csv` does not exist, glob `data/*.csv`, list available files, and ask the user to pick one.
 
 ---
 
@@ -133,5 +130,5 @@ Number queries **continuously** across all sections (do not restart at 1 per sec
 Tell the user:
 - Total number of query titles written
 - Sections included
-- Path to the output file
+- Path to the output file (`output/sql/sql_title.md`)
 - Any data quality issues spotted during inspection

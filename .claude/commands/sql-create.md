@@ -1,6 +1,6 @@
 ---
-description: "Read a sql_title.md file and generate SQL for every query title in it, saving to output/sql/sql_queries_<table>.md. Usage: /sql-create <sql_titles_file> [output_filename]"
-allowed-tools: Read, Glob, Grep, Write, Edit, Bash
+description: "Read a sql_title.md file and generate SQL for every query title in it, save to output/sql/sql_queries_<table>.md, then run /sql-test all to embed results inline. Usage: /sql-create <sql_titles_file> [output_filename]"
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash, Skill
 argument-hint: "output/sql/sql_title.md"
 ---
 
@@ -141,7 +141,17 @@ Write the complete file in one operation using the **Write** tool.
 
 ---
 
-## Step 5 — Confirm
+## Step 5 — Run /sql-test all
+
+Immediately after writing the file, run `/sql-test all` without waiting to be asked.
+
+This will execute every query against `output/sql/data.db`, write the standalone
+`_plus_results.md` file, and merge status + result rows inline into `OUTPUT_PATH` so the
+final file contains queries, descriptions, pass/fail status, and output all in one place.
+
+---
+
+## Step 6 — Confirm
 
 Tell the user:
 
@@ -149,6 +159,7 @@ Tell the user:
 Generated : <N> SQL queries
 Table     : <TABLE_NAME>
 Saved to  : <OUTPUT_PATH>
+Tested    : <passed> passed · <failed> failed · <skipped> skipped
 ```
 
 Then list each section name and the count of queries in it, e.g.:

@@ -256,7 +256,6 @@ def generate_sql_catalog(df: pd.DataFrame, csv_path: Path | None = None) -> tupl
 
     entries = _entries(df, table)
     SQL_DIR.mkdir(parents=True, exist_ok=True)
-    create_sqlite_db(df, src)
 
     # ── sql_title.md ──────────────────────────────────────────────────────────
     title_lines: list[str] = [
@@ -316,20 +315,6 @@ def generate_sql_catalog(df: pd.DataFrame, csv_path: Path | None = None) -> tupl
     return title_path, queries_path
 
 
-DB_PATH = SQL_DIR / "data.db"
-
-
-def create_sqlite_db(df: pd.DataFrame, csv_path: Path | None = None) -> Path:
-    """Write the DataFrame to output/sql/data.db as a SQLite table."""
-    import sqlite3
-
-    src = csv_path or DATA_PATH
-    table = _table_name(src)
-    SQL_DIR.mkdir(parents=True, exist_ok=True)
-    with sqlite3.connect(DB_PATH) as conn:
-        df.to_sql(table, conn, if_exists="replace", index=False)
-    return DB_PATH
-
 
 def get_sql_catalog_entries() -> list[dict[str, str]]:
     """Parse sql_queries_*.md and return list of {title, description, sql, args} dicts."""
@@ -376,17 +361,21 @@ def get_sql_catalog_entries() -> list[dict[str, str]]:
 
 
 def run_query_against_db(sql: str, params: dict[str, str] | None = None, limit: int = 30) -> list[dict]:
-    """Execute SQL against data.db and return up to `limit` rows as list of dicts."""
+    """Execute SQL against an in-memory SQLite loaded from the source CSV."""
     import sqlite3
 
-    if not DB_PATH.exists():
-        raise FileNotFoundError("data.db not found — upload a CSV first.")
+    if not DATA_PATH.exists():
+        raise FileNotFoundError("data.csv not found — upload a CSV first.")
+
+    table = _table_name(DATA_PATH)
+    df = pd.read_csv(DATA_PATH)
+    con = sqlite3.connect(":memory:")
+    df.to_sql(table, con, if_exists="replace", index=False)
 
     sql_core = sql.rstrip().rstrip(";")
     if "limit" not in sql_core.lower():
         sql_core += f"\nLIMIT {limit}"
 
-    with sqlite3.connect(DB_PATH) as conn:
-        conn.row_factory = sqlite3.Row
-        cursor = conn.execute(sql_core, params or {})
-        return [dict(row) for row in cursor.fetchall()]
+    con.row_factory = sqlite3.Row
+    cursor = con.execute(sql_core, params or {})
+    return [dict(row) for row in cursor.fetchall()]

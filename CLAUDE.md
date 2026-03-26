@@ -62,6 +62,7 @@ this exact order — **without waiting to be asked**:
 
 1. Run `/sql-titles data/data.csv`
 2. Run `/sql-create output/sql/sql_title.md`
+3. Run `/sql-test all`
 
 Do not skip these steps. Do not ask for confirmation. Run them immediately after charts are
 generated.
