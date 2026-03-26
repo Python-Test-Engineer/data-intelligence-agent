@@ -1,1 +1,1 @@
-Gain insight into this dataset to help mcure it
+Gain insights into what makes our business profitable and where we can make changes to increase profits

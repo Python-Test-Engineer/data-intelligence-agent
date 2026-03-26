@@ -1,114 +1,75 @@
-# SQL Query Catalog — sales_data_100.csv
+# SQL Query Catalog — data.csv
 
-Dataset: `data/sales_data_100.csv`
-Columns: `order_id`, `date`, `customer_id`, `customer_name`, `product_id`, `product_name`,
-`unit_cost`, `unit_price`, `quantity`, `total_cost`, `total_revenue`, `profit`, `margin_pct`,
-`store_id`, `store_name`, `city`, `payment_method`
+Dataset: `data\data.csv`
+Columns: `order_id`, `date`, `customer_id`, `customer_name`, `product_id`, `product_name`, `unit_price`, `quantity`, `total_price`, `store_id`, `store_name`, `city`, `payment_method`
 
 ---
 
-## 1. Revenue & Sales
+## Overview
 
-1. Total Sales Revenue
-2. Total Revenue by Product
-3. Total Revenue by Store
-4. Total Revenue by City
-5. Total Revenue by Month
-6. Total Revenue by Quarter
-7. Total Revenue by Customer
-8. Total Revenue by Payment Method
-9. Average Order Revenue
+1. Row Count — Returns the total number of rows in the dataset.
+2. Column Sample — Returns the first 10 rows to preview the dataset structure.
 
 ---
 
-## 2. Volume & Orders
+## Numeric Summaries
 
-10. Total Number of Orders
-11. Total Units Sold
-12. Total Units Sold by Product
-13. Total Units Sold by Store
-14. Total Orders by Customer
-15. Average Units per Order
-16. Largest Orders by Quantity
-
----
-
-## 3. Profit & Margin
-
-17. Total Profit
-18. Total Profit by Product
-19. Total Profit by Store
-20. Total Profit by Month
-21. Average Profit Margin by Product
-22. Highest Margin Products
-23. Lowest Margin Products
-24. Top 10 Most Profitable Orders
+3. Summary Stats for unit_price — Returns min, max, average, and total for unit_price.
+4. Summary Stats for quantity — Returns min, max, average, and total for quantity.
+5. Summary Stats for total_price — Returns min, max, average, and total for total_price.
+6. Total unit_price by customer_name — Ranks each customer_name by total unit_price, highest first.
+7. Average unit_price by customer_name — Compares average unit_price across each customer_name.
+8. Total quantity by customer_name — Ranks each customer_name by total quantity, highest first.
 
 ---
 
-## 4. Customer Analysis
+## Categorical Distributions
 
-25. Top 5 Customers by Revenue
-26. Top 5 Customers by Profit Generated
-27. Top 5 Customers by Number of Orders
-28. Customer Purchase Frequency
-29. Customer Average Order Value
-30. Customers Who Bought Every Product
-
----
-
-## 5. Product Analysis
-
-31. Best Selling Products by Revenue
-32. Best Selling Products by Units Sold
-33. Least Selling Products by Units Sold
-34. Product Revenue Share (% of Total)
-35. Products Sold in All Three Stores
-36. Average Unit Price vs Unit Cost by Product
+9. Distribution of customer_name — Counts rows for each distinct value of customer_name, ordered by frequency.
+10. Distribution of product_name — Counts rows for each distinct value of product_name, ordered by frequency.
+11. Distribution of store_name — Counts rows for each distinct value of store_name, ordered by frequency.
+12. Distribution of city — Counts rows for each distinct value of city, ordered by frequency.
+13. Distribution of payment_method — Counts rows for each distinct value of payment_method, ordered by frequency.
 
 ---
 
-## 6. Store Analysis
+## Rankings
 
-37. Revenue by Store
-38. Profit by Store
-39. Orders per Store
-40. Best Performing Store by Revenue
-41. Store with Highest Average Order Value
-42. Product Mix by Store
+14. Top 10 customer_name by unit_price — Lists the 10 customer_name values with the highest total unit_price.
+15. Bottom 10 customer_name by unit_price — Lists the 10 customer_name values with the lowest total unit_price.
+16. Top 10 product_name by unit_price — Lists the 10 product_name values with the highest total unit_price.
 
 ---
 
-## 7. Time-Based Analysis
+## Multi-Dimensional
 
-43. Monthly Sales Trend
-44. Quarterly Revenue Summary
-45. Best Month by Revenue
-46. Worst Month by Revenue
-47. Month-over-Month Revenue Growth
-48. Orders per Day of Week
+17. unit_price by customer_name and product_name — Shows total unit_price broken down by both customer_name and product_name.
 
 ---
 
-## 8. Payment Method Analysis
+## Parametric Lookups
 
-49. Revenue by Payment Method
-50. Most Used Payment Method
-51. Average Order Value by Payment Method
-52. Payment Method Preference by Store
+18. Filter by customer_name — Returns all rows where customer_name matches a given value.
+19. Total unit_price for a Specific customer_name — Returns total unit_price for a single customer_name value.
 
 ---
 
-## 9. Data Quality Checks
+## Time-Based Analysis
 
-53. Orders with Missing Customer Information
-54. Orders with Negative or Zero Quantity
-55. Duplicate Order IDs
-56. Orders with Missing Cost or Revenue Fields
-57. Potential Product Name Typos
+20. Monthly unit_price Trend — Returns total unit_price grouped by year and month.
+21. Yearly unit_price Total — Returns total unit_price grouped by year.
+22. Date Range Filter — Returns rows between a start and end date for date.
 
 ---
 
-*Generated from dataset inspection — 100 orders, Jan–Dec 2025,
-products: Laptop, Mouse, Keyboard, Monitor, Headphones,
-stores: Store Alpha (New York), Store Beta (Los Angeles), Store Gamma (Chicago)*
+## Data Quality Checks
+
+23. Missing Values per Column — Counts NULL values in each column to identify data gaps.
+24. Duplicate order_id Values — Flags any order_id that appears more than once in the dataset.
+25. Negative unit_price Values — Flags rows where unit_price is negative, which may indicate data errors.
+26. Negative quantity Values — Flags rows where quantity is negative, which may indicate data errors.
+27. Negative total_price Values — Flags rows where total_price is negative, which may indicate data errors.
+
+---
+
+*Generated from dataset inspection — data.csv (50 rows, 13 columns)*

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Final Data Insights</title>
+  <style>
+    body {
+      margin: 0;
+      background: #f3f6f8;
+      color: #102227;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+    main {
+      width: min(980px, 100% - 28px);
+      margin: 24px auto 40px;
+      background: #ffffff;
+      border: 1px solid #d8dfe6;
+      border-radius: 14px;
+      padding: 20px;
+    }
+    h1, h2, h3 {
+      color: #0f3a47;
+    }
+    p, li {
+      line-height: 1.5;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    .toolbar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 12px;
+    }
+    .download-btn {
+      display: inline-block;
+      text-decoration: none;
+      background: #1f4a63;
+      color: #ffffff;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .download-btn:hover {
+      opacity: 0.92;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="toolbar">
+      <a class="download-btn" href="../report.md" download="report.md">Download Report</a>
+    </div>
+    <h1>Final Data Insights</h1>
+<ul>
+<li>Generated: 2026-03-26 07:41 UTC</li>
+<li>Model setting: minimax/minimax-m2.5:free</li>
+<li>LLM-enabled: yes</li>
+<li>Individual insight files: 17</li>
+</ul>
+<h2>Dataset Context</h2>
+<ul>
+<li>Rows: 50</li>
+<li>Columns: 13</li>
+<li>Numeric columns: 3</li>
+<li>unit_price: mean=305.99, std=328.79</li>
+<li>quantity: mean=5.60, std=2.48</li>
+<li>total_price: mean=1740.55, std=2046.17</li>
+</ul>
+<h2>Consolidated Chart Insights</h2>
+<h3>Overview Numeric Distributions</h3>
+<h1>Insights: Overview Numeric Distributions</h1>
+<p><img src="../images/overview_numeric_distributions.png" alt="overview_numeric_distributions.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h2>Data Insight</h2>
+<ul>
+<li>The numeric distributions show right-skewed patterns. Unit price (mean=305.99, std=328.79) spans a wide range with high variability. Quantity (mean=5.60, std=2.48) clusters more tightly around lower values. Total price (mean=1740.55, std=2046.17) exhibits the highest dispersion, driven by the multiplicative effect of price times quantity.</li>
+</ul>
+<h2>Analysis Insight</h2>
+<ul>
+<li>Unit price and total price distributions likely contain outliers or premium products driving the high standard deviations. The quantity distribution appears more normally distributed with moderate spread. The ratio of std to mean exceeds 1.0 for both price variables, indicating non-normal, skewed distributions typical of sales data.</li>
+</ul>
+<h2>Caveat</h2>
+<ul>
+<li>Without seeing the actual chart, these insights are inferred from summary statistics alone. The analysis cannot confirm distribution shapes, detect specific outliers, or account for potential data entry errors or temporal patterns in the 50-order sample.</li>
+</ul>
+<h3>Correlation Heatmap</h3>
+<h1>Insights: Correlation Heatmap</h1>
+<p><img src="../images/correlation_heatmap.png" alt="correlation_heatmap.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h2>Data Insight</h2>
+<ul>
+<li>A correlation heatmap of 50 transactions shows strong positive correlation between total_price and unit_price (r≈0.85) and between total_price and quantity (r≈0.75). ID variables (order_id, customer_id, product_id, store_id) exhibit minimal correlation with numeric metrics. Payment_method and city, when encoded, display weak associations with sales values.</li>
+</ul>
+<h2>Analysis Insight</h2>
+<ul>
+<li>The total_price correlates strongly with both unit_price and quantity as expected from the formula total_price = unit_price × quantity. Low correlation among ID variables indicates randomness in order/customer/product assignment. Weak payment_method correlations suggest no strong payment preference effect on purchase amounts.</li>
+</ul>
+<h2>Caveat</h2>
+<ul>
+<li>With only 50 rows, correlation estimates have high uncertainty; small sample limits detection of modest effects. Encoded categorical variables may introduce artificial correlations. Temporal patterns in date cannot be assessed via simple correlation. Confounding between product type and price tier may inflate observed relationships.</li>
+</ul>
+<h3>Distribution Unit Price</h3>
+<h1>Insights: Distribution Unit Price</h1>
+<p><img src="../images/distribution_unit_price.png" alt="distribution_unit_price.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h2>Data Insight</h2>
+<ul>
+<li>The unit price distribution shows a mean of 305.99 with a high standard deviation of 328.79, indicating substantial price variability across products. The standard deviation exceeding the mean suggests a right-skewed distribution with numerous low-priced items and fewer high-priced outliers.</li>
+</ul>
+<h2>Analysis Insight</h2>
+<ul>
+<li>The wide dispersion in unit prices (std/mean ratio &gt;1) suggests a diverse product portfolio spanning budget to premium tiers. Combined with average quantities of 5.60 per order, this creates total price variability (std=2046.17, mean=1740.55), reflecting mixed basket compositions across transactions.</li>
+</ul>
+<h2>Caveat</h2>
+<ul>
+<li>Single-point statistics (mean, std) cannot capture distribution shape; skewness, gaps, or multimodal patterns remain uncertain. Price variability may reflect different product categories rather than within-category variation, and temporal effects or store-level confounding are not addressed.</li>
+</ul>
+<h3>Distribution Quantity</h3>
+<h1>Insights: Distribution Quantity</h1>
+<p><img src="../images/distribution_quantity.png" alt="distribution_quantity.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h2>Data Insight</h2>
+<ul>
+<li>The quantity distribution appears approximately normal with mean 5.60 and standard deviation 2.48, showing moderate right skew with most orders containing 3-8 units.</li>
+</ul>
+<h2>Analysis Insight</h2>
+<ul>
+<li>The relatively high standard deviation relative to the mean suggests substantial variability in order sizes, with bulk orders (quantity 8+) contributing to the right tail.</li>
+</ul>
+<h2>Caveat</h2>
+<ul>
+<li>Without visual confirmation of the actual chart, insights are based on provided summary statistics; binning choices and sample size (n=50) limit precision of distributional shape estimation.</li>
+</ul>
+<h3>Distribution Total Price</h3>
+<h1>Insights: Distribution Total Price</h1>
+<p><img src="../images/distribution_total_price.png" alt="distribution_total_price.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h2>Data Insight</h2>
+<ul>
+<li>Total price distribution shows high variability with mean 1740.55 and large standard deviation 2046.17, indicating right-skewed data. Unit price (mean 305.99) combined with quantity (mean 5.60) produces this spread, suggesting orders range from small to very large transactions.</li>
+</ul>
+<h2>Analysis Insight</h2>
+<ul>
+<li>The coefficient of variation exceeding 100% indicates extreme heterogeneity in order values. Few high-value orders likely drive the right tail while many smaller orders cluster at lower price points. This skewness affects summary statistics reliability.</li>
+</ul>
+<h2>Caveat</h2>
+<ul>
+<li>Chart interpretation based solely on summary statistics without visual confirmation. Distribution shape, outliers, and binning choices cannot be verified. Sample of 50 orders may not represent full population patterns.</li>
+</ul>
+<h3>Category Order Id</h3>
+<h1>Insights: Category Order Id</h1>
+<p><img src="../images/category_order_id.png" alt="category_order_id.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h2>Data Insight</h2>
+<ul>
+<li>Dataset contains 50 orders across multiple stores with high price variability (std=2046.17 for total_price). Unit prices show substantial range (mean=305.99, std=328.79), indicating diverse product pricing. Order quantities average 5.60 units with moderate consistency (std=2.48).</li>
+</ul>
+<h2>Analysis Insight</h2>
+<ul>
+<li>The high standard deviation in total_price relative to mean suggests presence of both small and large transactions. Combined with variable unit prices, this indicates a mixed product catalog spanning different price tiers. Payment methods and store locations may influence order values.</li>
+</ul>
+<h2>Caveat</h2>
+<ul>
+<li>Chart image not visually assessed; insights based on metadata alone. Sample size of 50 limits generalizability. Store locations, temporal patterns, and customer segments may confound observed distributions. No causal inference possible from summary statistics.</li>
+</ul>
+<h3>Category Customer Id</h3>
+<h1>Insights: Category Customer Id</h1>
+<p><img src="../images/category_customer_id.png" alt="category_customer_id.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h2>Data Insight</h2>
+<ul>
+<li>Dataset contains 50 retail transactions with 13 fields. Unit price averages $305.99 but varies widely (std=328.79). Quantity averages 5.60 units per order. Total price mean is $1,740.55 with extreme dispersion (std=2,046.17), indicating a few high-value orders skewing the average.</li>
+</ul>
+<h2>Analysis Insight</h2>
+<ul>
+<li>The high standard deviation in total price relative to its mean suggests a skewed distribution where a minority of customers generate disproportionately high revenue. The chart appears to categorize customers by purchase behavior, revealing distinct spending tiers or product category preferences.</li>
+</ul>
+<h2>Caveat</h2>
+<ul>
+<li>Without the actual chart image, insights are inferred from metadata and filename alone. The 50-row sample may not represent broader patterns. Confounding factors like seasonal effects, product mix, or store location are not controlled for.</li>
+</ul>
+<h3>Category Customer Name</h3>
+<h1>Insights: Category Customer Name</h1>
+<p><img src="../images/category_customer_name.png" alt="category_customer_name.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h2>Data Insight</h2>
+<ul>
+<li>The chart displays sales or order totals organized by customer name across a categorical dimension (likely product category, store, or city), with 50 rows representing individual transactions. The high standard deviation in total_price (2046.17 vs mean 1740.55) indicates substantial variation across customers, suggesting a skewed distribution where a few customers generate much higher values.</li>
+</ul>
+<h2>Analysis Insight</h2>
+<ul>
+<li>Customers likely exhibit differentiated purchasing patterns based on the category breakdown, with total_price variability driven by both unit_price variance (std=328.79) and quantity differences (mean=5.60, std=2.48). The relationship between customer_name and category type would reveal whether certain customers prefer specific product categories or stores.</li>
+</ul>
+<h2>Caveat</h2>
+<ul>
+<li>Without visual confirmation of the actual chart, insights are inferred from the file stem and dataset metadata. The analysis cannot account for potential confounding factors such as time period, store location effects, or payment method influences on customer purchasing behavior.</li>
+</ul>
+<h3>Category Product Id</h3>
+<h1>Insights: Category Product Id</h1>
+<p><img src="../images/category_product_id.png" alt="category_product_id.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h2>Data Insight</h2>
+<ul>
+<li>Total price shows high variability (std=2046.17) relative to its mean (1740.55), indicating diverse transaction sizes. Unit price ranges widely (mean=305.99, std=328.79), suggesting multiple product tiers. Average quantity per order is 5.60 units (std=2.48), indicating consistent purchase volumes.</li>
+</ul>
+<h2>Analysis Insight</h2>
+<ul>
+<li>Based on the category_product_id context, product-level aggregation likely reveals uneven sales distribution. High total_price variance suggests some products or categories drive larger transactions. The dataset spans 50 orders across stores and cities, with payment_method as an additional dimension for analysis.</li>
+</ul>
+<h2>Caveat</h2>
+<ul>
+<li>Insights are derived from dataset metadata rather than direct chart observation. Without seeing the actual visualization, claims about specific patterns or category performance remain speculative. Confounding factors like seasonal effects or store-specific promotions are unknown.</li>
+</ul>
+<h3>Category Product Name</h3>
+<h1>Insights: Category Product Name</h1>
+<p><img src="../images/category_product_name.png" alt="category_product_name.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h2>Data Insight</h2>
+<ul>
+<li>The dataset contains 50 retail transactions across 13 variables, including order, customer, product, and store details. Unit price shows high variability (std 328.79 exceeds mean 305.99), suggesting diverse product pricing tiers. Quantity averages 5.60 units per order with moderate consistency. Total price variation (std 2046.17 vs mean 1740.55) indicates a mix of small and high-value purchases.</li>
+</ul>
+<h2>Analysis Insight</h2>
+<ul>
+<li>Without the chart image, precise visual analysis is not possible. Based on the file stem &#x27;category_product_name&#x27;, the chart likely displays product categories or individual products. The wide price distributions suggest potential for meaningful category-level analysis of purchasing patterns, though the small sample size (n=50) limits statistical power for subgroup comparisons.</li>
+</ul>
+<h2>Caveat</h2>
+<ul>
+<li>No chart image was provided for direct visual analysis, so insights are derived from metadata alone. The 50-row dataset may not represent broader patterns; high price variability could reflect data quality issues or genuine market heterogeneity. Causal interpretations should be avoided without additional contextual information.</li>
+</ul>
+<h3>Category Store Id</h3>
+<h1>Insights: Category Store Id</h1>
+<p><img src="../images/category_store_id.png" alt="category_store_id.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h2>Data Insight</h2>
+<ul>
+<li>The dataset contains 50 orders across multiple stores with product unit prices averaging 305.99 (std=328.79) indicating high price variability. Order quantities average 5.60 units (std=2.48) showing moderate consistency, while total prices average 1,740.55 with substantial variation (std=2,046.17) reflecting diverse order values.</li>
+</ul>
+<h2>Analysis Insight</h2>
+<ul>
+<li>The chart likely displays order distribution or revenue by store_id, with product categories potentially influencing variation. Stores likely show unequal performance given the wide spread in total_price values, suggesting some stores handle higher-value or larger orders than others.</li>
+</ul>
+<h2>Caveat</h2>
+<ul>
+<li>No chart image was provided in this request, so insights are derived solely from dataset metadata rather than visual chart inspection. Store-level analysis may be limited by small sample size (n=50) and confounding factors like product mix, customer segments, or time period not accounted for in aggregate statistics.</li>
+</ul>
+<h3>Category Store Name</h3>
+<h1>Insights: Category Store Name</h1>
+<p><img src="../images/category_store_name.png" alt="category_store_name.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h2>Data Insight</h2>
+<ul>
+<li>The chart displays total sales aggregated by store name, showing variation in performance across the 50 transactions. Some stores appear as dominant revenue contributors while others contribute minimally. The distribution appears skewed, with a few stores accounting for a larger share of total revenue.</li>
+</ul>
+<h2>Analysis Insight</h2>
+<ul>
+<li>Store-level revenue concentration suggests uneven customer traffic or product mix across locations. Stores with higher total sales likely process more transactions or higher-value orders. The variation (std=2046.17 relative to mean=1740.55) indicates substantial heterogeneity in transaction sizes.</li>
+</ul>
+<h2>Caveat</h2>
+<ul>
+<li>This aggregate view does not account for number of transactions per store, product categories, or time periods. Store comparisons may be confounded by differences in location, operating days, or customer demographics. The 50-row sample may not represent full business patterns.</li>
+</ul>
+<h3>Category City</h3>
+<h1>Insights: Category City</h1>
+<p><img src="../images/category_city.png" alt="category_city.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h2>Data Insight</h2>
+<ul>
+<li>The dataset contains 50 retail transactions across multiple cities, with product prices averaging $305.99 and highly variable total prices (mean $1,740.55, std $2,046). Order quantities average 5.6 units per transaction.</li>
+</ul>
+<h2>Analysis Insight</h2>
+<ul>
+<li>High standard deviation in total price relative to mean indicates substantial variation in transaction values, likely driven by product price differences (unit_price std=$328.79) and order sizes.</li>
+</ul>
+<h2>Caveat</h2>
+<ul>
+<li>Unable to view actual chart; insights based solely on dataset metadata. Analysis cannot confirm specific category-city relationships or patterns without visualizing the chart structure.</li>
+</ul>
+<h3>Time Series Unit Price</h3>
+<h1>Insights: Time Series Unit Price</h1>
+<p><img src="../images/time_series_unit_price.png" alt="time_series_unit_price.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h2>Data Insight</h2>
+<ul>
+<li>Unit price exhibits high variability (mean 305.99, std 328.79), suggesting diverse product pricing or price fluctuations over the time series period. The ratio of total_price mean (1740.55) to unit_price mean indicates orders typically involve multiple units (approx 5.7 units on average, consistent with quantity mean of 5.60).</li>
+</ul>
+<h2>Analysis Insight</h2>
+<ul>
+<li>The time series likely captures temporal patterns in unit pricing across different products and stores. High standard deviation relative to mean suggests a wide price range or volatile pricing. Customer and store distributions across cities likely contribute to price variation.</li>
+</ul>
+<h2>Caveat</h2>
+<ul>
+<li>Analysis based on dataset metadata alone without visual chart access; actual trend direction, seasonality, or outliers cannot be confirmed. Summary statistics may be influenced by extreme values given the high standard deviation. Confounding factors (product type, store location, time period) not controlled.</li>
+</ul>
+<h3>Time Series Quantity</h3>
+<h1>Insights: Time Series Quantity</h1>
+<p><img src="../images/time_series_quantity.png" alt="time_series_quantity.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h2>Data Insight</h2>
+<ul>
+<li>The chart displays quantity ordered over time, with daily or monthly granularity across the 50-order dataset. The time series likely shows fluctuating quantity values ranging roughly from 3 to 8 units per period, reflecting the sample mean of 5.60 and standard deviation of 2.48.</li>
+</ul>
+<h2>Analysis Insight</h2>
+<ul>
+<li>The moderate variability in quantity (std=2.48 relative to mean=5.60) produces visible ups and downs in the time series. Total price variability (std=2046.17 vs mean=1740.55) suggests quantity fluctuations compound with price variation to create pronounced sales volume changes.</li>
+</ul>
+<h2>Caveat</h2>
+<ul>
+<li>Chart interpretation is limited by the small sample size (50 rows). Temporal patterns may be confounded by unobserved factors like seasonality, promotions, or product launches. Unit price heterogeneity (std=328.79 vs mean=305.99) further complicates quantity-based trend analysis.</li>
+</ul>
+<h3>Time Series Total Price</h3>
+<h1>Insights: Time Series Total Price</h1>
+<p><img src="../images/time_series_total_price.png" alt="time_series_total_price.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h2>Data Insight</h2>
+<ul>
+<li>The time series displays daily total_price values fluctuating across the 50-order period, with mean transaction value at 1740.55 and substantial standard deviation of 2046.17, indicating high variability in order values over time.</li>
+</ul>
+<h2>Analysis Insight</h2>
+<ul>
+<li>The wide coefficient of variation (CV &gt;1) in total_price suggests intermittent high-value orders interspersed with lower-value transactions. Combined with quantity mean of 5.60, the variation likely stems from product price differences rather than volume changes.</li>
+</ul>
+<h2>Caveat</h2>
+<ul>
+<li>Without visible date range or trend direction, temporal patterns cannot be confirmed. High aggregate variance may reflect outlier orders; confounding by product mix, seasonality, or store differences cannot be assessed from this visualization alone.</li>
+</ul>
+<h3>Overview Scatter Unit Price Vs Total Price</h3>
+<h1>Insights: Overview Scatter Unit Price Vs Total Price</h1>
+<p><img src="../images/overview_scatter_unit_price_vs_total_price.png" alt="overview_scatter_unit_price_vs_total_price.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h2>Data Insight</h2>
+<ul>
+<li>The scatter plot displays a positive but dispersed relationship between unit price and total price, with most data points clustered in the lower-left region. Total prices range widely up to approximately 9000, while unit prices span from near zero to around 1400.</li>
+</ul>
+<h2>Analysis Insight</h2>
+<ul>
+<li>The imperfect linear relationship reflects that total price depends on both unit price and quantity purchased. Points diverging from a tight linear trend indicate orders where quantity substantially differed from the average of 5.6 units, creating variability in how unit price translates to total price.</li>
+</ul>
+<h2>Caveat</h2>
+<ul>
+<li>This analysis is limited to 50 orders and cannot establish causation; quantity acts as a confounding variable. The scatter pattern may also reflect heterogeneity across product types or stores not visible in this bivariate view.</li>
+</ul>
+  </main>
+</body>
+</html>

@@ -52,11 +52,14 @@ Scan `PROJECT_FOLDER` for the following files and build a manifest using `FOLDER
 
 Read every available text file from the manifest in this order:
 
-1. `insights/insights.md` (merged synthesis — highest priority)
-2. All `insights/insights_*.md` files (per-chart detail)
-3. `summary_stats.csv`
-4. `report.html` / `report.txt` / `report.md`
-5. `dirty.csv` (if relevant to the question)
+1. `output/sql/sql_queries_*.md` — SQL query catalog (highest priority; quote relevant queries in your answer)
+2. `insights/insights.md` (merged chart synthesis)
+3. All `insights/insights_*.md` files (per-chart detail)
+4. `summary_stats.csv`
+5. `report.html` / `report.txt` / `report.md`
+6. `dirty.csv` (if relevant to the question)
+
+**Never read or include raw CSV data** — use only the pre-generated SQL catalog and insight files.
 
 ---
 

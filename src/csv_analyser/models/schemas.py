@@ -90,6 +90,8 @@ class ExecutePlanResponse(BaseModel):
     report_path: str
     insights_path: str
     insights_html_path: str
+    sql_title_path: str
+    sql_queries_path: str
     output_dir: str
 
 

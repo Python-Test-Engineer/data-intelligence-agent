@@ -54,6 +54,18 @@ about SQL queries or wants to query a dataset:
 
 Retrieve a query: `Grep pattern: "## <Title>"` in the queries file.
 
+## Pipeline workflow — REQUIRED
+
+Whenever the chart pipeline runs (POST `/execute`, POST `/generate/charts`, or any action
+that triggers chart generation), you MUST automatically continue with the SQL workflow in
+this exact order — **without waiting to be asked**:
+
+1. Run `/sql-titles data/data.csv`
+2. Run `/sql-create output/sql/sql_title.md`
+
+Do not skip these steps. Do not ask for confirmation. Run them immediately after charts are
+generated.
+
 ## LLM / API keys
 
 - **OpenRouter** (`OPENROUTER_API_KEY`) — used for insights, objectives, and `/ask`

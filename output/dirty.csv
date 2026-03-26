@@ -1,0 +1,4 @@
+,order_id,date,customer_id,customer_name,product_id,product_name,unit_price,quantity,total_price,store_id,store_name,city,payment_method
+9,ORD0010,2025-01-19,,,P004,Monitor,349.99,9,3149.91,S1,Store Alpha,New York,Debit Card
+10,ORD0011,2025-02-11,C01,Alice Johnson,P001,Laptop,999.99,8,7999.92,S1,Store Alpha,New York,PayPal
+34,ORD0035,2025-01-30,C02,Bob Smith,P001,Laptop,999.99,-1,,S2,Store Beta,Los Angeles,Credit Card

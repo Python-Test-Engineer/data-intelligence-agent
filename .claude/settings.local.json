@@ -49,7 +49,10 @@
       "Skill(update-config)",
       "Bash(powershell -c \"Get-Content 'C:/Users/mrcra/.claude/settings.json' | ConvertFrom-Json | Select-Object -ExpandProperty hooks | Select-Object -ExpandProperty Stop | ConvertTo-Json -Depth 5\")",
       "Bash(claude --dangerously-skip-permissions -p '/planner Create a function that adds two numbers')",
-      "Bash(echo \"EXIT: $?\")"
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(grep -r \"Ask AI\\\\|/ask\\\\|ask_ai\" /c/Users/mrcra/Desktop/data-intelligence-agent/src --include=*.py)",
+      "Bash(find /c/Users/mrcra/Desktop/data-intelligence-agent -type f \\\\\\(-name *skill* -o -name *ask* \\\\\\))",
+      "Bash(find /c/Users/mrcra/Desktop/data-intelligence-agent -maxdepth 3 -type f \\\\\\(-name *.md \\\\\\) -not -path .venv*)"
     ]
   }
 }

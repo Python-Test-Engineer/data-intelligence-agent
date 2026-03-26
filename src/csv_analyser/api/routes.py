@@ -43,6 +43,7 @@ from csv_analyser.services.objectives_service import MODEL as OBJECTIVES_MODEL
 from csv_analyser.services.objectives_service import OPENROUTER_BASE_URL, generate_response_to_objectives
 from csv_analyser.services.report_service import generate_report, read_report
 from csv_analyser.services.dirty_service import save_dirty_report
+from csv_analyser.services.sql_service import generate_sql_catalog
 
 
 OBJECTIVES_PATH = DATA_PATH.parent.parent / "OBJECTIVES.md"
@@ -220,6 +221,7 @@ def generate_charts(payload: ChartGenerationRequest) -> ChartGenerationResponse:
             clean_output=payload.clean_output,
             write_png=payload.write_png,
         )
+        generate_sql_catalog(df)
         return ChartGenerationResponse(
             charts_generated=len(artifacts),
             output_dir=str(OUTPUT_DIR),
@@ -245,16 +247,19 @@ def execute_plan(payload: ExecutePlanRequest) -> ExecutePlanResponse:
         save_dirty_report(df)
         report_path = generate_report(df, artifacts)
         insights_md_path, insights_html_path, _ = generate_insights_bundle(df, artifacts)
+        sql_title_path, sql_queries_path = generate_sql_catalog(df)
         html_count = sum(1 for artifact in artifacts if artifact.format == "html")
         png_count = sum(1 for artifact in artifacts if artifact.format == "png")
         return ExecutePlanResponse(
-            message="Pipeline execution completed. Charts, report, and insights were generated.",
+            message="Pipeline execution completed. Charts, report, insights, and SQL catalog were generated.",
             charts_generated=len(artifacts),
             html_charts=html_count,
             png_charts=png_count,
             report_path=str(report_path),
             insights_path=str(insights_md_path),
             insights_html_path=str(insights_html_path),
+            sql_title_path=str(sql_title_path),
+            sql_queries_path=str(sql_queries_path),
             output_dir=str(OUTPUT_DIR),
         )
     except FileNotFoundError as exc:
@@ -369,33 +374,51 @@ async def ask_question(payload: AskRequest) -> AskResponse:
     if not api_key:
         raise HTTPException(status_code=400, detail="OPENROUTER_API_KEY is not set.")
 
+    def _annotate(file_path: Path) -> str:
+        """Return file content with every line prefixed by its 1-based line number."""
+        lines = file_path.read_text(encoding="utf-8").splitlines()
+        return "\n".join(f"L{i + 1}: {line}" for i, line in enumerate(lines))
+
+    context_parts: list[str] = []
+
+    # 1. SQL query catalog — highest priority; never send raw CSV data
+    sql_dir = OUTPUT_DIR / "sql"
+    if sql_dir.exists():
+        for sql_file in sorted(sql_dir.glob("sql_queries_*.md")):
+            try:
+                context_parts.append(f"FILE: {sql_file.name}\n{_annotate(sql_file)}")
+            except Exception:
+                pass
+
+    # 2. Chart insights — summarised observations from generated plots
     try:
-        _, insights_content = read_final_insights()
+        insights_path, _ = read_final_insights()
+        context_parts.append(f"FILE: {Path(insights_path).name}\n{_annotate(Path(insights_path))}")
     except FileNotFoundError:
+        pass
+
+    if not context_parts:
         raise HTTPException(
             status_code=400,
             detail=(
-                "No insights have been generated yet. "
-                "Please run all sections (1–4) first to generate insights before asking questions."
+                "No SQL queries or chart insights found. "
+                "Please run the pipeline (sections 1–4) and generate SQL queries first."
             ),
         )
-
-    context_parts: list[str] = [f"Insights:\n{insights_content}"]
-    try:
-        artifacts = list_chart_artifacts()
-        if artifacts:
-            chart_names = ", ".join(a.name for a in artifacts)
-            context_parts.append(f"Available charts: {chart_names}")
-    except Exception:
-        pass
 
     context_block = "\n\n".join(context_parts)
 
     system_prompt = (
         "You are a data analysis assistant. "
-        "Answer questions strictly based on the provided insights and chart information. "
+        "You have access to a pre-generated SQL query catalog and chart insights — use these as your sole sources. "
+        "Each line in every file is prefixed with its line number (e.g. 'L42: ...'). "
+        "When a question can be answered by a SQL query, include the full query in a ```sql block. "
+        "When a question relates to visual patterns or trends, use the chart insights. "
         "Do not fabricate data, statistics, or conclusions beyond what is stated in the context. "
-        "If the context is insufficient to answer the question, say so clearly."
+        "Never request or use raw CSV data. "
+        "If the context is insufficient to answer the question, say so clearly. "
+        "ALWAYS end your answer with a '### Sources' section listing each source as: "
+        "`- <filename>:<line-range> — <query title or insight heading>`"
     )
     user_message = f"Context:\n{context_block}\n\nQuestion: {question}"
 
