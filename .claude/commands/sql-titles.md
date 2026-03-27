@@ -57,6 +57,17 @@ Always include these standard sections if supported by the data:
 8. **[Category] Analysis** — one section per categorical dimension (payment method, status, etc.)
 9. **Data Quality Checks** — queries targeting the specific issues spotted in Step 1
 
+**Mandatory ranking queries** — always generate these if the relevant columns exist. Users
+frequently ask natural-language questions like "which product has the highest sales?" and
+the answer must be findable in the catalog:
+
+- For every key dimension (product, customer, store, region, etc.):
+  - **[Dimension] Ranked by Total Revenue** — `SUM(revenue_col)` per dimension, DESC
+  - **[Dimension] Ranked by Total Profit** — `SUM(profit_col)` per dimension, DESC
+  - **[Dimension] Ranked by Total Units Sold** — `SUM(quantity_col)` per dimension, DESC
+- Each ranking query must include supporting columns (transaction count, revenue, profit,
+  avg margin) so a single query answers the full picture, not just one metric.
+
 Tailor section names and query titles to the actual column names and entities in this dataset.
 Do not use generic placeholder names — use the real product names, store names, etc. where helpful.
 

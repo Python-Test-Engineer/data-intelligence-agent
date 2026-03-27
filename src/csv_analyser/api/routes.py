@@ -53,8 +53,6 @@ from csv_analyser.services.dirty_service import save_dirty_report
 from csv_analyser.services.sql_service import (
     SQL_DIR,
     generate_sql_catalog,
-    get_sql_catalog_with_results,
-    run_query_against_db,
     run_tests_and_merge,
 )
 
@@ -498,164 +496,50 @@ async def ask_question(payload: AskRequest) -> AskResponse:
 
     loop = asyncio.get_event_loop()
 
-    # ── Resolve original filename from SQL status metadata ────────────────────
-    _original_csv_filename = ""
-    try:
-        if SQL_STATUS_PATH.exists():
-            _status_data = _json.loads(SQL_STATUS_PATH.read_text(encoding="utf-8"))
-            _original_csv_filename = _status_data.get("original_filename", "")
-    except Exception:
-        pass
-
-    # ── Step 1: SQL catalog — pre-computed results first, fresh run as fallback ──
-    sql_context = ""
-    try:
-        entries = get_sql_catalog_with_results()
-        if entries:
-            catalog_summary = "\n".join(
-                f"{i + 1}. {e['title']} (ARGS: {e['args']}) — {e['description']}"
-                for i, e in enumerate(entries)
-            )
-
-            def _select_query() -> dict:
-                import httpx
-                resp = httpx.post(
-                    f"{OPENROUTER_BASE_URL}/v1/messages",
-                    json={
-                        "model": OBJECTIVES_MODEL,
-                        "max_tokens": 200,
-                        "system": (
-                            "Select the single SQL query from the catalog that best answers the user question. "
-                            "Return ONLY valid JSON: {\"title\": \"<exact title or null>\", \"params\": {\"key\": \"value\"}}. "
-                            "Prefer queries with ARGS: — (no parameters needed). "
-                            "Extract any required param values from the question text."
-                        ),
-                        "messages": [
-                            {"role": "user", "content": f"Question: {question}\n\nCatalog:\n{catalog_summary}"},
-                        ],
-                    },
-                    headers={
-                        "Authorization": f"Bearer {api_key}",
-                        "Content-Type": "application/json",
-                        "anthropic-version": "2023-06-01",
-                    },
-                    timeout=30.0,
-                )
-                if not resp.is_success:
-                    return {}
-                blocks = resp.json().get("content", [])
-                text = next((b["text"] for b in blocks if b.get("type") == "text"), "")
-                start, end = text.find("{"), text.rfind("}") + 1
-                if start < 0 or end <= start:
-                    return {}
-                try:
-                    return _json.loads(text[start:end])
-                except _json.JSONDecodeError:
-                    return {}
-
-            selection = await loop.run_in_executor(None, _select_query)
-            title = selection.get("title")
-            params = selection.get("params") or {}
-
-            if title:
-                entry = next((e for e in entries if e["title"] == title), None)
-                if entry:
-                    source_file = entry.get("source_file", "sql_queries_data.md")
-                    precomputed = entry.get("result", "").strip()
-                    _dataset_tag = f" — dataset: '{_original_csv_filename}'" if _original_csv_filename else ""
-                    if precomputed and "**Status:** OK" in precomputed:
-                        sql_context = (
-                            f"[Source: output/sql/{source_file} — query: '{title}'{_dataset_tag}]\n\n"
-                            f"{precomputed}"
-                        )
-                    else:
-                        rows = run_query_against_db(entry["sql"], params if params else None)
-                        if rows:
-                            col_headers = list(rows[0].keys())
-                            col_widths = [
-                                max(len(str(h)), max(len(str(r.get(h, ""))) for r in rows))
-                                for h in col_headers
-                            ]
-                            header_line = " | ".join(
-                                str(h).ljust(w) for h, w in zip(col_headers, col_widths)
-                            )
-                            sep_line = "-+-".join("-" * w for w in col_widths)
-                            data_lines = [
-                                " | ".join(
-                                    str(r.get(h, "")).ljust(w)
-                                    for h, w in zip(col_headers, col_widths)
-                                )
-                                for r in rows
-                            ]
-                            sql_context = (
-                                f"[Source: output/sql/{source_file} — query: '{title}'"
-                                f" (run against in-memory SQLite){_dataset_tag}]\n\n"
-                                + header_line + "\n" + sep_line + "\n"
-                                + "\n".join(data_lines)
-                            )
-    except Exception:
-        pass
-
-    # ── Step 2: consolidated insights (insights.html / insights.md) ──────────
-    insights_context = ""
-    try:
-        _, insights_content = read_final_insights()
-        insights_context = "[Source: output/insights/insights.html]\n\n" + insights_content
-    except FileNotFoundError:
-        pass
-
-    # ── Step 3: individual chart insight files ────────────────────────────────
-    individual_insights: list[str] = []
-    insights_dir = Path("output/insights")
-    if insights_dir.exists():
-        for f in sorted(insights_dir.glob("*.md")):
-            if f.name == "insights.md":
-                continue
-            try:
-                content = f.read_text(encoding="utf-8").strip()
-                if content:
-                    individual_insights.append(
-                        f"[Source: output/insights/{f.name}]\n\n{content}"
-                    )
-            except Exception:
-                pass
-
-    # ── Step 4: build context and call LLM ───────────────────────────────────
-    context_parts: list[str] = []
-    context_files: list[str] = []
-    if sql_context:
-        context_parts.append(sql_context)
-        if title and entry:
-            context_files.append(f"output/sql/{entry.get('source_file', 'sql_queries_data.md')} (query: {title})")
-    if insights_context:
-        context_parts.append(insights_context)
-        context_files.append("output/insights/insights.html")
-    context_parts.extend(individual_insights)
-    for part in individual_insights:
-        import re as _re
-        m = _re.match(r"\[Source: ([^\]]+)\]", part)
-        if m:
-            context_files.append(m.group(1))
-
-    if not context_parts:
+    # ── Load SQL queries file directly ────────────────────────────────────────
+    sql_dir = SQL_STATUS_PATH.parent
+    sql_files = sorted(sql_dir.glob("sql_queries_*.md"))
+    if not sql_files:
         raise HTTPException(
             status_code=400,
-            detail="No data sources available. Run the pipeline first to generate SQL queries and insights.",
+            detail="No SQL queries file found. Run the pipeline first to generate SQL queries.",
         )
+    sql_file = sql_files[-1]
+    sql_content = sql_file.read_text(encoding="utf-8").strip()
+    context_files: list[str] = [f"output/sql/{sql_file.name}"]
 
-    context_block = "\n\n---\n\n".join(context_parts)
+    # ── Load all individual chart insight files ───────────────────────────────
+    insights_dir = OUTPUT_DIR / "insights"
+    insights_parts: list[str] = []
+    for insight_file in sorted(insights_dir.glob("*.md")):
+        if insight_file.name == "insights.md":
+            continue  # skip the summary — load individual files for full coverage
+        insights_parts.append(insight_file.read_text(encoding="utf-8").strip())
+        context_files.append(f"output/insights/{insight_file.name}")
+    insights_content = "\n\n---\n\n".join(insights_parts)
+
+    # ── Load statistical report as additional context ─────────────────────────
+    report_md_path = OUTPUT_DIR / "report.md"
+    report_content = ""
+    if report_md_path.exists():
+        report_content = report_md_path.read_text(encoding="utf-8").strip()
+        context_files.append("output/report.md")
 
     system_prompt = (
         "You are a data analysis assistant. "
-        "Answer strictly based on the provided context, using this priority order: "
-        "1) SQL query results, 2) consolidated insights (insights.html), 3) individual chart insights. "
-        "When citing information, reference the source shown in the [Source: ...] label and include "
-        "the query name or section heading. Quote specific values where relevant. "
+        "Answer strictly based on the provided SQL query results, dataset report, and insights. "
+        "Be precise: quote exact values from the data and cite which SQL query or report section supports each claim. "
+        "Structure your answer clearly — use bullet points or a short table when comparing multiple values. "
         "If the context does not contain enough information to answer the question, respond with exactly: "
         "'I am unable to answer this question based on the available data.' "
         "Do not fabricate data, statistics, or conclusions beyond what is stated in the context."
     )
-    user_message = f"Context:\n{context_block}\n\nQuestion: {question}"
+    context_block = f"SQL Query Results:\n{sql_content}"
+    if report_content:
+        context_block += f"\n\n---\n\nDataset Report:\n{report_content}"
+    if insights_content:
+        context_block += f"\n\n---\n\nInsights:\n{insights_content}"
+    user_message = f"{context_block}\n\nQuestion: {question}"
 
     def _call() -> str:
         import httpx
@@ -667,7 +551,7 @@ async def ask_question(payload: AskRequest) -> AskResponse:
         }
         body = {
             "model": OBJECTIVES_MODEL,
-            "max_tokens": 1024,
+            "max_tokens": 4096,
             "system": system_prompt,
             "messages": [{"role": "user", "content": user_message}],
         }
@@ -678,7 +562,7 @@ async def ask_question(payload: AskRequest) -> AskResponse:
             timeout=60.0,
         )
         data = resp.json()
-        if not resp.is_success:
+        if not resp.is_success or data.get("type") == "error":
             err = data.get("error", {})
             raise ValueError(f"OpenRouter error {resp.status_code}: {err.get('message', data)}")
         content = data.get("content")

@@ -1,0 +1,5 @@
+,order_id,date,customer_id,customer_name,product_id,product_name,unit_cost,unit_price,quantity,total_cost,total_revenue,profit,margin_pct,store_id,store_name,city,payment_method
+38,ORD0039,2025-06-16,C04,David Brown,P004,Monitor,180.0,349.99,10,1800.0,3499.9,1699.9,48.6,S3,Store Gamma,Chicago,Cash
+40,ORD0041,2025-04-19,C09,Isabella Taylor,P004,Monitor,,349.99,7,,2449.93,,,S1,Store Alpha,New York,Credit Card
+55,ORD0056,2025-03-30,C02,Bob Smith,P003,Keyboard,28.0,79.99,-1,,,,,S3,Store Gamma,Chicago,Debit Card
+97,ORD0098,2025-12-27,,,P004,Monitor,180.0,349.99,5,900.0,1749.95,849.95,48.6,S2,Store Beta,Los Angeles,Cash
