@@ -1,3 +1,3 @@
 event_id,session_id,timestamp,event_type,turn_index,llm_round,model,prompt_tokens,completion_tokens,stop_reason,response_text_preview,tool_use_count,tool_name,tool_use_id,tool_args_summary,result_preview,is_error_result,file_path,bytes_written,lines_written,write_operation,exec_type,exec_success,exec_exit_code,exec_duration_ms,exec_output_preview,validation_errors,code_preview,web_query,web_url,web_result_count,message_text_preview,slash_command_name,file_ref_count,conversation_length,error_message,error_traceback
-6ecda537-7960-4c22-ac0c-2daa50330acd,c9c99b55-6c1f-4638-bc27-754f2909f2eb,2026-03-27T07:43:03.680886+00:00,SESSION_START,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-5b84a6e6-3ddd-4ef4-a65f-8b71750afb0b,c9c99b55-6c1f-4638-bc27-754f2909f2eb,2026-03-27T07:43:03.680929+00:00,SESSION_END,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+550f4bd6-0ee1-49b1-88b6-712160d644ae,7c99c839-0326-468f-b1d5-2321718fa633,2026-03-27T08:58:34.182189+00:00,SESSION_START,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+7829ec81-0a0f-4ce3-98a7-14e2a5818b6a,7c99c839-0326-468f-b1d5-2321718fa633,2026-03-27T08:58:34.182247+00:00,USER_MESSAGE,0,,,,,,,,,,,,,,,,,,,,,,,,,,,/show-convo,,,1,,

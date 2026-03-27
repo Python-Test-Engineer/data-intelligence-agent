@@ -42,7 +42,7 @@ uv run uvicorn csv_analyser.main:app --reload
 |---|---|---|
 | `output/images/` | Generated chart PNGs | Yes |
 | `output/insights/` | Per-chart insight markdown + HTML | Yes |
-| `output/sql/` | SQL query catalog (`sql_title.md`, `sql_queries_*.md`) | **No** |
+| `output/sql/` | SQL query catalog (`sql_title.md`, `sql_queries_*.md`, `original_csv.md`) | **No** |
 | `data/` | Source CSV files | No |
 
 `output/sql/` is also protected **during pipeline runs**: `chart_service.py` uses
@@ -56,6 +56,7 @@ about SQL queries or wants to query a dataset:
 
 - `output/sql/sql_title.md` — catalog of query titles with descriptions
 - `output/sql/sql_queries_<table>.md` — executable SQL for every title
+- `output/sql/original_csv.md` — the original filename of the last uploaded CSV (persists across pipeline resets)
 
 Retrieve a query: `Grep pattern: "## <Title>"` in the queries file.
 
@@ -66,9 +67,10 @@ Retrieve a query: `Grep pattern: "## <Title>"` in the queries file.
 On every CSV upload, `routes.py` schedules `_build_sql_catalog_bg(csv_path)` as a
 FastAPI `BackgroundTask`. This calls `sql_service.generate_sql_catalog()` and
 `sql_service.run_tests_and_merge()` — no LLM key required. It writes
-`output/sql/.status.json` at start (`{"status": "running"}`) and completion
-(`{"status": "ready"}`). The gallery UI polls `GET /sql-status` every 2 s and shows
-a live status indicator.
+`output/sql/.status.json` at start and completion; all states include `original_filename`
+(e.g. `{"status": "ready", "original_filename": "sales_data.csv"}`). It also writes
+`output/sql/original_csv.md` with the human-readable filename. The gallery UI polls
+`GET /sql-status` every 2 s and shows a live status indicator.
 
 ### Claude sql-agent (LLM-enhanced, supplementary)
 

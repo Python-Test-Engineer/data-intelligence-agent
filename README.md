@@ -67,7 +67,7 @@ POST /execute
 |---|---|---|
 | GET | `/` | Gallery page |
 | GET | `/health` | Health check |
-| POST | `/upload/csv` | Upload + validate dataset |
+| POST | `/upload/csv` | Upload + validate dataset; triggers SQL catalog build as background task |
 | GET | `/summary` | Dataset profile (schema, missingness, domain) |
 | POST | `/generate/charts` | Generate chart bundle (PNG + metadata) |
 | GET | `/charts` | List chart artifacts |
@@ -82,10 +82,10 @@ POST /execute
 | POST | `/generate/response-to-objectives` | Generate `output/RESPONSE_TO_OBJECTIVES.md` |
 | GET | `/response-to-objectives/download` | Download objectives response (Markdown) |
 | GET | `/response-to-objectives/download-html` | Download objectives response (HTML) |
-| POST | `/ask` | Ask a question grounded in generated insights |
-| POST | `/execute` | Run full charts + report + insights pipeline |
-| POST | `/cancel-pipeline` | Cancel a running `/execute` pipeline |
-| GET | `/sql-status` | Poll SQL catalog build status (`not_started` / `running` / `ready`) |
+| POST | `/ask` | Ask a question grounded in SQL results + insights; response includes `context_files` |
+| POST | `/execute` | Run full charts + report + insights pipeline (cancellable) |
+| POST | `/cancel-pipeline` | Cancel a running `/execute` pipeline (~100–300 ms latency) |
+| GET | `/sql-status` | Poll SQL catalog build status — returns `status`, `query_count`, `original_filename` |
 | GET | `/viewer/{name}` | Single-chart viewer page |
 | GET | `/gallery` | Full-page chart gallery |
 
@@ -101,9 +101,21 @@ On every API startup the app resets transient outputs:
 - `output/RESPONSE_TO_OBJECTIVES.md` — removed
 - `output/RESPONSE_TO_OBJECTIVES.html` — removed
 
-Files under `output/sql/` are **not** reset — they are durable artifacts produced by the
-SQL commands below. They are also protected during pipeline runs: `chart_service.py` uses
-`_CLEAN_SKIP = {"sql"}` to prevent `rglob` from deleting any file whose path contains `sql/`.
+On every CSV upload `output/sql/.status.json` is removed so the gallery UI shows
+"not started" for the new dataset, then immediately recreated as `{"status": "running"}`
+by the background SQL build task.
+
+Files under `output/sql/` are **not** reset on startup — they are durable artifacts
+produced by the SQL commands. They are also protected during pipeline runs: `chart_service.py`
+uses `_CLEAN_SKIP = {"sql"}` to prevent `rglob` from deleting any file whose path contains
+`sql/`.
+
+### Pipeline Cancellation
+
+`POST /cancel-pipeline` sets a `threading.Event` checked between every pipeline step and
+between every LLM token chunk, giving ~100–300 ms cancellation latency. The pipeline returns
+HTTP 499 when cancelled. The gallery UI shows a **Cancel** button while a pipeline run is
+active and re-enables the **Ask AI** button only after a run completes successfully.
 
 ### Environment Variables
 
@@ -128,8 +140,31 @@ database, merging results inline. No LLM key is needed.
 POST /upload/csv
     └─► sql_service (BackgroundTask)
             ├─► generates output/sql/sql_queries_<table>.md   (SQL + inline results)
+            ├─► writes output/sql/original_csv.md             (original upload filename)
             └─► writes output/sql/.status.json                (polled by GET /sql-status)
 ```
+
+The catalog now includes **multi-metric analysis** queries automatically generated from the
+dataset schema:
+
+- **Performance breakdown by category** — transaction count + all sum/avg metrics grouped by each categorical column
+- **Cross-category matrix** — `cat0 × cat1` performance matrix ordered by the best profit/revenue column
+- **Unique ID concentration** — distinct ID counts per category to reveal customer or product concentration
+- **Monthly trend by category** — `strftime('%Y-%m', date)` breakdown per category to expose seasonal patterns
+
+`GET /sql-status` returns a `SqlStatusResponse` object:
+
+```json
+{
+  "status": "ready",
+  "message": "",
+  "query_count": 42,
+  "original_filename": "sales_data_q1.csv"
+}
+```
+
+The gallery UI polls this endpoint every 2 seconds after upload and displays a live spinner
+→ green badge with query count → error badge.
 
 ### Tier 2 — Claude sql-agent (LLM-enhanced, optional)
 
@@ -226,6 +261,8 @@ output/
   sql/                       SQL query library (durable — not reset)
     sql_title.md
     sql_queries_<table>.md
+    original_csv.md            original upload filename (persists across resets)
+    .status.json               build status polled by GET /sql-status
 _ideas/                      research idea files  → /planner input
 _plans/                      research plans       → /spec input
 _specs/                      technical specs      → /execute input
