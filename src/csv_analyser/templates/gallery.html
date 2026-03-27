@@ -244,7 +244,7 @@
         </article>
 
         <article class="card">
-          <h2>2) Run Analysis Pipeline</h2>
+          <h2>2) Run plots and insights</h2>
           <p class="small">Generates charts and a summary report from the uploaded dataset.</p>
           <div style="display:flex;gap:8px;">
             <button id="execute-btn" type="button" style="flex:1;">Run Full Pipeline</button>
@@ -317,6 +317,7 @@
           <h2>5) Ask AI</h2>
           <p class="small">Ask a question about your dataset or analysis results.</p>
           <p class="small">LLM model: <code>{{ objectives_model }}</code></p>
+          <p class="small" id="ask-csv-label" style="display:none;">Dataset: <code id="ask-csv-name"></code></p>
           <textarea id="ask-text" rows="4" placeholder="e.g. Which product category has the highest revenue? What are the top cities by sales? Are there any seasonal trends?"></textarea>
           <button id="ask-btn" type="button" disabled>Ask AI</button>
           <div id="ask-busy" class="busy"><span class="spinner"></span><span>Thinking…</span></div>
@@ -364,6 +365,17 @@
       }
     }
 
+    function setAskCsvLabel(filename) {
+      const label = document.getElementById("ask-csv-label");
+      const name = document.getElementById("ask-csv-name");
+      if (filename) {
+        name.textContent = filename;
+        label.style.display = "";
+      } else {
+        label.style.display = "none";
+      }
+    }
+
     function startSqlPolling() {
       if (sqlPollInterval) clearInterval(sqlPollInterval);
       sqlPollInterval = setInterval(async () => {
@@ -372,6 +384,7 @@
           if (!res.ok) return;
           const data = await res.json();
           setSqlStatus(data.status, data.query_count);
+          setAskCsvLabel(data.original_filename);
           if (data.status === "ready" || data.status === "error") {
             clearInterval(sqlPollInterval);
             sqlPollInterval = null;
@@ -724,6 +737,7 @@
         const res = await fetch("/sql-status");
         if (res.ok) {
           const data = await res.json();
+          setAskCsvLabel(data.original_filename);
           if (data.status !== "not_started") {
             setSqlStatus(data.status, data.query_count);
             // Resume polling if still running

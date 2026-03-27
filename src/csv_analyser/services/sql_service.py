@@ -582,8 +582,13 @@ def run_tests_and_merge(queries_path: Path, csv_path: Path) -> dict[str, int]:
     skipped = sum(1 for r in results if r["status"] == "skipped")
 
     # Write log file
+    _now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    _orig_csv_path = queries_path.parent / "original_csv.md"
+    _orig_csv = _orig_csv_path.read_text(encoding="utf-8").split("`")[1] if _orig_csv_path.exists() else str(csv_path)
     log_lines: list[str] = [
         "# SQL Test Results",
+        f"\nCreated: `{_now}`  ",
+        f"Original CSV: `{_orig_csv}`  ",
         f"\nQueries file: `{queries_path}`  ",
         f"Source CSV: `{csv_path}` (in-memory SQLite)  ",
         f"Queries run: **{len(results)}** (all)\n",

@@ -132,6 +132,7 @@ class SqlStatusResponse(BaseModel):
     status: str  # "not_started" | "running" | "ready" | "error"
     message: str = ""
     query_count: int = 0
+    original_filename: str = ""
 
 
 class ErrorResponse(BaseModel):

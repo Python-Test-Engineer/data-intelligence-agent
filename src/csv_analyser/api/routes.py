@@ -77,6 +77,10 @@ def _check_cancel() -> None:
 def _build_sql_catalog_bg(csv_path: Path, original_filename: str = "") -> None:
     """Background task: generate SQL catalog + run tests, updating status file throughout."""
     SQL_STATUS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    if original_filename:
+        (SQL_STATUS_PATH.parent / "original_csv.md").write_text(
+            f"# Original CSV\n\n`{original_filename}`\n", encoding="utf-8"
+        )
     SQL_STATUS_PATH.write_text(
         _json.dumps({"status": "running", "original_filename": original_filename}),
         encoding="utf-8",
@@ -163,6 +167,15 @@ def health() -> HealthResponse:
 @router.get("/sql-status", response_model=SqlStatusResponse)
 def sql_status() -> SqlStatusResponse:
     """Returns the current status of the sql-agent workflow."""
+    orig_csv_path = SQL_STATUS_PATH.parent / "original_csv.md"
+    original_filename = ""
+    if orig_csv_path.exists():
+        try:
+            parts = orig_csv_path.read_text(encoding="utf-8").split("`")
+            if len(parts) >= 2:
+                original_filename = parts[1]
+        except Exception:
+            pass
     if SQL_STATUS_PATH.exists():
         try:
             data = _json.loads(SQL_STATUS_PATH.read_text(encoding="utf-8"))
@@ -174,10 +187,10 @@ def sql_status() -> SqlStatusResponse:
                 for catalog in sorted((OUTPUT_DIR / "sql").glob("sql_queries_*.md")):
                     query_count = catalog.read_text(encoding="utf-8").count("\n## ")
                     break
-            return SqlStatusResponse(status=status, message=message, query_count=query_count)
+            return SqlStatusResponse(status=status, message=message, query_count=query_count, original_filename=original_filename)
         except Exception:
             pass
-    return SqlStatusResponse(status="not_started")
+    return SqlStatusResponse(status="not_started", original_filename=original_filename)
 
 
 @router.post("/upload/csv", response_model=CsvUploadResponse)
