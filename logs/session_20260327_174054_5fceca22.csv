@@ -1,3 +1,3 @@
 event_id,session_id,timestamp,event_type,turn_index,llm_round,model,prompt_tokens,completion_tokens,stop_reason,response_text_preview,tool_use_count,tool_name,tool_use_id,tool_args_summary,result_preview,is_error_result,file_path,bytes_written,lines_written,write_operation,exec_type,exec_success,exec_exit_code,exec_duration_ms,exec_output_preview,validation_errors,code_preview,web_query,web_url,web_result_count,message_text_preview,slash_command_name,file_ref_count,conversation_length,error_message,error_traceback
-05d42b88-dd3e-4531-84d8-e4ff51f16140,5fceca22-ef39-475d-bd43-6ab233667bc7,2026-03-27T17:46:08.369576+00:00,SESSION_START,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-035cedc0-adae-4ff8-b0bf-f106f17f681a,5fceca22-ef39-475d-bd43-6ab233667bc7,2026-03-27T17:46:08.369628+00:00,USER_MESSAGE,0,,,,,,,,,,,,,,,,,,,,,,,,,,,i cant see the file,,,1,,
+ecff23e9-a64c-4b83-af39-b5fdd653c1b8,5fceca22-ef39-475d-bd43-6ab233667bc7,2026-03-28T01:55:51.028542+00:00,SESSION_START,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+bec5595d-1066-4a2a-ab6a-5d69156359c8,5fceca22-ef39-475d-bd43-6ab233667bc7,2026-03-28T01:55:51.028578+00:00,SESSION_END,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

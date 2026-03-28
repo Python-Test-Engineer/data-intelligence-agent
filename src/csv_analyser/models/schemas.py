@@ -126,6 +126,7 @@ class AskResponse(BaseModel):
     answer: str
     model_used: str
     context_files: list[str] = []
+    sql_queries: list[dict[str, str]] = []
 
 
 class SqlStatusResponse(BaseModel):

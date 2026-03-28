@@ -236,6 +236,8 @@
             <span id="sql-agent-spinner" class="spinner" style="display:none;"></span>
             <span id="sql-agent-text"></span>
           </div>
+          <button id="rerun-sql-btn" type="button" class="btn-secondary" style="margin-top:8px;">Rebuild SQL Catalog</button>
+          <div id="rerun-sql-status" class="status"></div>
           <hr style="border:none;border-top:1px solid var(--line);margin:12px 0;" />
           <label for="objectives-text" style="font-size:0.88rem;color:var(--muted);display:block;margin-bottom:4px;">Analysis Objectives (<code>OBJECTIVES.md</code>)</label>
           <textarea id="objectives-text" rows="8" placeholder="Describe what you want to analyse. e.g. 1. Identify the top-selling products by revenue. 2. Find seasonal trends in monthly sales. This will be saved as OBJECTIVES.md."></textarea>
@@ -527,6 +529,39 @@
       }
     });
 
+    document.getElementById("rerun-sql-btn").addEventListener("click", async () => {
+      const statusEl = document.getElementById("rerun-sql-status");
+      const btn = document.getElementById("rerun-sql-btn");
+      setStatus(statusEl, "Starting SQL catalog rebuild...");
+      btn.disabled = true;
+      try {
+        const res = await fetch("/rerun-sql-catalog", { method: "POST" });
+        const body = await res.json();
+        if (!res.ok) throw new Error(body.detail || "Rebuild failed.");
+        setStatus(statusEl, "Rebuilding SQL catalog...");
+        startSqlPolling();
+        const poll = setInterval(async () => {
+          try {
+            const r = await fetch("/sql-status");
+            if (!r.ok) return;
+            const d = await r.json();
+            if (d.status === "ready") {
+              clearInterval(poll);
+              btn.disabled = false;
+              setStatus(statusEl, `SQL catalog rebuilt — ${d.query_count} queries ready.`);
+            } else if (d.status === "error") {
+              clearInterval(poll);
+              btn.disabled = false;
+              setStatus(statusEl, `Rebuild failed: ${d.message || "unknown error"}`, true);
+            }
+          } catch { /* ignore */ }
+        }, 2000);
+      } catch (error) {
+        btn.disabled = false;
+        setStatus(statusEl, String(error), true);
+      }
+    });
+
     document.getElementById("objectives-btn").addEventListener("click", async () => {
       const content = document.getElementById("objectives-text").value;
       if (!content.trim()) {
@@ -673,25 +708,31 @@
     const qaCard = document.getElementById("qa-card");
     const qaThread = document.getElementById("qa-thread");
 
-    function appendQA(question, answer, modelUsed, contextFiles) {
+    function appendQA(question, answer, modelUsed, contextFiles, sqlQueries) {
       qaThread.innerHTML = "";
       qaCard.style.display = "";
       const entry = document.createElement("div");
       entry.style.cssText = "border-top:1px solid var(--line);padding-top:10px;";
-      const filesHtml = contextFiles && contextFiles.length
-        ? `<div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--line);">
-            <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:8px;">Sources</div>
-            <div style="display:flex;flex-wrap:wrap;gap:6px;">
-              ${contextFiles.map(f => `<code style="font-size:0.71rem;background:var(--surface,#f4f4f4);padding:3px 9px;border-radius:6px;border:1.5px solid #D97757;color:#b85a25;white-space:nowrap;">${escapeHtml(f)}</code>`).join("")}
-            </div>
-          </div>`
-        : "";
+      let sourcesHtml = "";
+      if (sqlQueries && sqlQueries.length) {
+        const blocks = sqlQueries.map(q => `
+          <details style="margin-bottom:6px;">
+            <summary style="cursor:pointer;font-size:0.78rem;font-weight:600;color:#b85a25;list-style:none;display:flex;align-items:center;gap:6px;">
+              <span style="font-size:0.65rem;opacity:0.6;">▶</span>${escapeHtml(q.title)}
+            </summary>
+            <pre style="margin:6px 0 0;padding:10px 12px;background:var(--surface,#f4f4f4);border-radius:6px;border:1px solid var(--line);font-size:0.75rem;overflow-x:auto;white-space:pre;">${escapeHtml(q.sql)}</pre>
+          </details>`).join("");
+        sourcesHtml = `<div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--line);">
+          <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:8px;">SQL Sources</div>
+          ${blocks}
+        </div>`;
+      }
       entry.innerHTML = `
         <div style="font-size:0.74rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:4px;">Question</div>
         <p style="margin:0 0 10px;font-size:0.9rem;font-weight:600;">${escapeHtml(question)}</p>
         <div style="font-size:0.74rem;text-transform:uppercase;letter-spacing:0.06em;color:#3a5a4a;margin-bottom:8px;">Answer <span style="text-transform:none;font-weight:400;color:var(--muted);">· ${escapeHtml(modelUsed)}</span></div>
         <div style="font-size:0.88rem;line-height:1.85;">${mdToHtml(answer)}</div>
-        ${filesHtml}`;
+        ${sourcesHtml}`;
       qaThread.appendChild(entry);
       qaCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
@@ -767,7 +808,7 @@
         });
         const body = await res.json();
         if (!res.ok) throw new Error(body.detail || "Request failed.");
-        appendQA(body.question, body.answer, body.model_used, body.context_files || []);
+        appendQA(body.question, body.answer, body.model_used, body.context_files || [], body.sql_queries || []);
         document.getElementById("ask-text").value = "";
       } catch (error) {
         setStatus(askStatus, String(error), true);

@@ -1,37 +1,44 @@
-# SQL Query Catalog
-<!-- source: data.csv | table: data | generated: 2026-03-28 | queries: 106 -->
+# SQL Test Results
+
+Created: `2026-03-28 01:49:19`  
+Original CSV: `sales_data_sample.csv`  
+
+Queries file: `C:\Users\mrcra\Desktop\data-intelligence-agent\output\sql\sql_queries_data.md`  
+Source CSV: `data\data.csv` (in-memory SQLite)  
+Queries run: **106** (all)
 
 ---
 
-### Overview
+**Summary:** 40 passed · 0 failed · 66 skipped
 
-## Row Count
-**ARGS:** —
-**Description:** Returns the total number of rows in the dataset.
+---
+
+## 1. Row Count
+
+**Status:** OK
+
 ```sql
 SELECT COUNT(*) AS row_count
 FROM data;
 ```
-
-**Status:** OK
 
 **Rows returned:** 1
 
 | row_count |
 | --- |
 | 2823 |
+
 ---
 
-## Column Sample
-**ARGS:** —
-**Description:** Returns the first 10 rows to preview the dataset structure.
+## 2. Column Sample
+
+**Status:** OK
+
 ```sql
 SELECT *
 FROM data
 LIMIT 10;
 ```
-
-**Status:** OK
 
 **Rows returned:** 10
 
@@ -47,13 +54,13 @@ LIMIT 10;
 | 10188 | 48 | 100.0 | 1 | 5512.32 | 11/18/2003 0:00 | Shipped | 4 | 11 | 2003 | Motorcycles | 95 | S10_1678 | Herkku Gifts | +47 2267 3215 | Drammen 121, PR 744 Sentrum | None | Bergen | None | N 5804 | Norway | EMEA | Oeztan | Veysel | Medium |
 | 10201 | 22 | 98.57 | 2 | 2168.54 | 12/1/2003 0:00 | Shipped | 4 | 12 | 2003 | Motorcycles | 95 | S10_1678 | Mini Wheels Co. | 6505555787 | 5557 North Pendale Street | None | San Francisco | CA | None | USA | None | Murphy | Julie | Small |
 | 10211 | 41 | 100.0 | 14 | 4708.44 | 1/15/2004 0:00 | Shipped | 1 | 1 | 2004 | Motorcycles | 95 | S10_1678 | Auto Canal Petit | (1) 47.55.6555 | 25, rue Lauriston | None | Paris | None | 75016 | France | EMEA | Perrier | Dominique | Medium |
+
 ---
 
-### Numeric Summaries
+## 3. Summary Stats for ORDERNUMBER
 
-## Summary Stats for ORDERNUMBER
-**ARGS:** —
-**Description:** Returns min, max, average, and total for ORDERNUMBER.
+**Status:** OK
+
 ```sql
 SELECT
     MIN(ORDERNUMBER) AS min_val,
@@ -63,18 +70,18 @@ SELECT
 FROM data;
 ```
 
-**Status:** OK
-
 **Rows returned:** 1
 
 | min_val | max_val | avg_val | total |
 | --- | --- | --- | --- |
 | 10100 | 10425 | 10258.73 | 28960381 |
+
 ---
 
-## Summary Stats for QUANTITYORDERED
-**ARGS:** —
-**Description:** Returns min, max, average, and total for QUANTITYORDERED.
+## 4. Summary Stats for QUANTITYORDERED
+
+**Status:** OK
+
 ```sql
 SELECT
     MIN(QUANTITYORDERED) AS min_val,
@@ -84,18 +91,18 @@ SELECT
 FROM data;
 ```
 
-**Status:** OK
-
 **Rows returned:** 1
 
 | min_val | max_val | avg_val | total |
 | --- | --- | --- | --- |
 | 6 | 97 | 35.09 | 99067 |
+
 ---
 
-## Summary Stats for PRICEEACH
-**ARGS:** —
-**Description:** Returns min, max, average, and total for PRICEEACH.
+## 5. Summary Stats for PRICEEACH
+
+**Status:** OK
+
 ```sql
 SELECT
     MIN(PRICEEACH) AS min_val,
@@ -105,18 +112,18 @@ SELECT
 FROM data;
 ```
 
-**Status:** OK
-
 **Rows returned:** 1
 
 | min_val | max_val | avg_val | total |
 | --- | --- | --- | --- |
 | 26.88 | 100.0 | 83.66 | 236168.07 |
+
 ---
 
-## Summary Stats for ORDERLINENUMBER
-**ARGS:** —
-**Description:** Returns min, max, average, and total for ORDERLINENUMBER.
+## 6. Summary Stats for ORDERLINENUMBER
+
+**Status:** OK
+
 ```sql
 SELECT
     MIN(ORDERLINENUMBER) AS min_val,
@@ -126,18 +133,18 @@ SELECT
 FROM data;
 ```
 
-**Status:** OK
-
 **Rows returned:** 1
 
 | min_val | max_val | avg_val | total |
 | --- | --- | --- | --- |
 | 1 | 18 | 6.47 | 18254 |
+
 ---
 
-## Summary Stats for SALES
-**ARGS:** —
-**Description:** Returns min, max, average, and total for SALES.
+## 7. Summary Stats for SALES
+
+**Status:** OK
+
 ```sql
 SELECT
     MIN(SALES) AS min_val,
@@ -147,18 +154,18 @@ SELECT
 FROM data;
 ```
 
-**Status:** OK
-
 **Rows returned:** 1
 
 | min_val | max_val | avg_val | total |
 | --- | --- | --- | --- |
 | 482.13 | 14082.8 | 3553.89 | 10032628.85 |
+
 ---
 
-## Summary Stats for MSRP
-**ARGS:** —
-**Description:** Returns min, max, average, and total for MSRP.
+## 8. Summary Stats for MSRP
+
+**Status:** OK
+
 ```sql
 SELECT
     MIN(MSRP) AS min_val,
@@ -168,26 +175,24 @@ SELECT
 FROM data;
 ```
 
-**Status:** OK
-
 **Rows returned:** 1
 
 | min_val | max_val | avg_val | total |
 | --- | --- | --- | --- |
 | 33 | 214 | 100.72 | 284320 |
+
 ---
 
-## Total ORDERNUMBER by STATUS
-**ARGS:** —
-**Description:** Ranks each STATUS by total ORDERNUMBER, highest first.
+## 9. Total ORDERNUMBER by STATUS
+
+**Status:** OK
+
 ```sql
 SELECT STATUS, SUM(ORDERNUMBER) AS total_ORDERNUMBER
 FROM data
 GROUP BY STATUS
 ORDER BY total_ORDERNUMBER DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 6
 
@@ -199,19 +204,19 @@ ORDER BY total_ORDERNUMBER DESC;
 | On Hold | 457496 |
 | In Process | 427330 |
 | Disputed | 145795 |
+
 ---
 
-## Average ORDERNUMBER by STATUS
-**ARGS:** —
-**Description:** Compares average ORDERNUMBER across each STATUS.
+## 10. Average ORDERNUMBER by STATUS
+
+**Status:** OK
+
 ```sql
 SELECT STATUS, ROUND(AVG(ORDERNUMBER), 2) AS avg_ORDERNUMBER
 FROM data
 GROUP BY STATUS
 ORDER BY avg_ORDERNUMBER DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 6
 
@@ -223,19 +228,19 @@ ORDER BY avg_ORDERNUMBER DESC;
 | Resolved | 10332.91 |
 | Shipped | 10252.29 |
 | Cancelled | 10231.3 |
+
 ---
 
-## Total QUANTITYORDERED by STATUS
-**ARGS:** —
-**Description:** Ranks each STATUS by total QUANTITYORDERED, highest first.
+## 11. Total QUANTITYORDERED by STATUS
+
+**Status:** OK
+
 ```sql
 SELECT STATUS, SUM(QUANTITYORDERED) AS total_QUANTITYORDERED
 FROM data
 GROUP BY STATUS
 ORDER BY total_QUANTITYORDERED DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 6
 
@@ -247,21 +252,19 @@ ORDER BY total_QUANTITYORDERED DESC;
 | Resolved | 1660 |
 | In Process | 1490 |
 | Disputed | 597 |
+
 ---
 
-### Categorical Distributions
+## 12. Distribution of STATUS
 
-## Distribution of STATUS
-**ARGS:** —
-**Description:** Counts rows for each distinct value of STATUS, ordered by frequency.
+**Status:** OK
+
 ```sql
 SELECT STATUS, COUNT(*) AS row_count
 FROM data
 GROUP BY STATUS
 ORDER BY row_count DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 6
 
@@ -273,19 +276,19 @@ ORDER BY row_count DESC;
 | On Hold | 44 |
 | In Process | 41 |
 | Disputed | 14 |
+
 ---
 
-## Distribution of PRODUCTLINE
-**ARGS:** —
-**Description:** Counts rows for each distinct value of PRODUCTLINE, ordered by frequency.
+## 13. Distribution of PRODUCTLINE
+
+**Status:** OK
+
 ```sql
 SELECT PRODUCTLINE, COUNT(*) AS row_count
 FROM data
 GROUP BY PRODUCTLINE
 ORDER BY row_count DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 7
 
@@ -298,19 +301,19 @@ ORDER BY row_count DESC;
 | Trucks and Buses | 301 |
 | Ships | 234 |
 | Trains | 77 |
+
 ---
 
-## Distribution of ADDRESSLINE2
-**ARGS:** —
-**Description:** Counts rows for each distinct value of ADDRESSLINE2, ordered by frequency.
+## 14. Distribution of ADDRESSLINE2
+
+**Status:** OK
+
 ```sql
 SELECT ADDRESSLINE2, COUNT(*) AS row_count
 FROM data
 GROUP BY ADDRESSLINE2
 ORDER BY row_count DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 10
 
@@ -326,19 +329,19 @@ ORDER BY row_count DESC;
 | Suite 750 | 20 |
 | Floor No. 4 | 16 |
 | Suite 200 | 10 |
+
 ---
 
-## Distribution of STATE
-**ARGS:** —
-**Description:** Counts rows for each distinct value of STATE, ordered by frequency.
+## 15. Distribution of STATE
+
+**Status:** OK
+
 ```sql
 SELECT STATE, COUNT(*) AS row_count
 FROM data
 GROUP BY STATE
 ORDER BY row_count DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 17
 
@@ -361,19 +364,19 @@ ORDER BY row_count DESC;
 | NJ | 21 |
 | Osaka | 20 |
 | Queensland | 15 |
+
 ---
 
-## Distribution of COUNTRY
-**ARGS:** —
-**Description:** Counts rows for each distinct value of COUNTRY, ordered by frequency.
+## 16. Distribution of COUNTRY
+
+**Status:** OK
+
 ```sql
 SELECT COUNTRY, COUNT(*) AS row_count
 FROM data
 GROUP BY COUNTRY
 ORDER BY row_count DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 19
 
@@ -398,13 +401,13 @@ ORDER BY row_count DESC;
 | Switzerland | 31 |
 | Philippines | 26 |
 | Ireland | 16 |
+
 ---
 
-### Rankings
+## 17. ORDERDATE Ranked by Total SALES
 
-## ORDERDATE Ranked by Total SALES
-**ARGS:** —
-**Description:** Ranks each ORDERDATE by total SALES, highest first.
+**Status:** OK
+
 ```sql
 SELECT
     ORDERDATE,
@@ -414,8 +417,6 @@ FROM data
 GROUP BY ORDERDATE
 ORDER BY total_SALES DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 252
 
@@ -443,11 +444,13 @@ ORDER BY total_SALES DESC;
 | 11/25/2003 0:00 | 21 | 80218.06 |
 
 *…232 more rows not shown*
+
 ---
 
-## ORDERDATE Ranked by Total QUANTITYORDERED
-**ARGS:** —
-**Description:** Ranks each ORDERDATE by total QUANTITYORDERED, highest first.
+## 18. ORDERDATE Ranked by Total QUANTITYORDERED
+
+**Status:** OK
+
 ```sql
 SELECT
     ORDERDATE,
@@ -457,8 +460,6 @@ FROM data
 GROUP BY ORDERDATE
 ORDER BY total_QUANTITYORDERED DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 252
 
@@ -486,11 +487,13 @@ ORDER BY total_QUANTITYORDERED DESC;
 | 2/17/2005 0:00 | 22 | 768.0 |
 
 *…232 more rows not shown*
+
 ---
 
-## STATUS Ranked by Total SALES
-**ARGS:** —
-**Description:** Ranks each STATUS by total SALES, highest first.
+## 19. STATUS Ranked by Total SALES
+
+**Status:** OK
+
 ```sql
 SELECT
     STATUS,
@@ -500,8 +503,6 @@ FROM data
 GROUP BY STATUS
 ORDER BY total_SALES DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 6
 
@@ -513,11 +514,13 @@ ORDER BY total_SALES DESC;
 | Resolved | 47 | 150718.28 |
 | In Process | 41 | 144729.96 |
 | Disputed | 14 | 72212.86 |
+
 ---
 
-## STATUS Ranked by Total QUANTITYORDERED
-**ARGS:** —
-**Description:** Ranks each STATUS by total QUANTITYORDERED, highest first.
+## 20. STATUS Ranked by Total QUANTITYORDERED
+
+**Status:** OK
+
 ```sql
 SELECT
     STATUS,
@@ -527,8 +530,6 @@ FROM data
 GROUP BY STATUS
 ORDER BY total_QUANTITYORDERED DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 6
 
@@ -540,11 +541,13 @@ ORDER BY total_QUANTITYORDERED DESC;
 | Resolved | 47 | 1660.0 |
 | In Process | 41 | 1490.0 |
 | Disputed | 14 | 597.0 |
+
 ---
 
-## PRODUCTLINE Ranked by Total SALES
-**ARGS:** —
-**Description:** Ranks each PRODUCTLINE by total SALES, highest first.
+## 21. PRODUCTLINE Ranked by Total SALES
+
+**Status:** OK
+
 ```sql
 SELECT
     PRODUCTLINE,
@@ -554,8 +557,6 @@ FROM data
 GROUP BY PRODUCTLINE
 ORDER BY total_SALES DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 7
 
@@ -568,11 +569,13 @@ ORDER BY total_SALES DESC;
 | Planes | 306 | 975003.57 |
 | Ships | 234 | 714437.13 |
 | Trains | 77 | 226243.47 |
+
 ---
 
-## PRODUCTLINE Ranked by Total QUANTITYORDERED
-**ARGS:** —
-**Description:** Ranks each PRODUCTLINE by total QUANTITYORDERED, highest first.
+## 22. PRODUCTLINE Ranked by Total QUANTITYORDERED
+
+**Status:** OK
+
 ```sql
 SELECT
     PRODUCTLINE,
@@ -582,8 +585,6 @@ FROM data
 GROUP BY PRODUCTLINE
 ORDER BY total_QUANTITYORDERED DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 7
 
@@ -596,11 +597,13 @@ ORDER BY total_QUANTITYORDERED DESC;
 | Planes | 306 | 10727.0 |
 | Ships | 234 | 8127.0 |
 | Trains | 77 | 2712.0 |
+
 ---
 
-## PRODUCTCODE Ranked by Total SALES
-**ARGS:** —
-**Description:** Ranks each PRODUCTCODE by total SALES, highest first.
+## 23. PRODUCTCODE Ranked by Total SALES
+
+**Status:** OK
+
 ```sql
 SELECT
     PRODUCTCODE,
@@ -610,8 +613,6 @@ FROM data
 GROUP BY PRODUCTCODE
 ORDER BY total_SALES DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 109
 
@@ -639,11 +640,13 @@ ORDER BY total_SALES DESC;
 | S18_4600 | 27 | 123723.08 |
 
 *…89 more rows not shown*
+
 ---
 
-## PRODUCTCODE Ranked by Total QUANTITYORDERED
-**ARGS:** —
-**Description:** Ranks each PRODUCTCODE by total QUANTITYORDERED, highest first.
+## 24. PRODUCTCODE Ranked by Total QUANTITYORDERED
+
+**Status:** OK
+
 ```sql
 SELECT
     PRODUCTCODE,
@@ -653,8 +656,6 @@ FROM data
 GROUP BY PRODUCTCODE
 ORDER BY total_QUANTITYORDERED DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 109
 
@@ -682,11 +683,13 @@ ORDER BY total_QUANTITYORDERED DESC;
 | S12_1108 | 26 | 973.0 |
 
 *…89 more rows not shown*
+
 ---
 
-## CUSTOMERNAME Ranked by Total SALES
-**ARGS:** —
-**Description:** Ranks each CUSTOMERNAME by total SALES, highest first.
+## 25. CUSTOMERNAME Ranked by Total SALES
+
+**Status:** OK
+
 ```sql
 SELECT
     CUSTOMERNAME,
@@ -696,8 +699,6 @@ FROM data
 GROUP BY CUSTOMERNAME
 ORDER BY total_SALES DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 92
 
@@ -725,11 +726,13 @@ ORDER BY total_SALES DESC;
 | Online Diecast Creations Co. | 34 | 131685.3 |
 
 *…72 more rows not shown*
+
 ---
 
-## CUSTOMERNAME Ranked by Total QUANTITYORDERED
-**ARGS:** —
-**Description:** Ranks each CUSTOMERNAME by total QUANTITYORDERED, highest first.
+## 26. CUSTOMERNAME Ranked by Total QUANTITYORDERED
+
+**Status:** OK
+
 ```sql
 SELECT
     CUSTOMERNAME,
@@ -739,8 +742,6 @@ FROM data
 GROUP BY CUSTOMERNAME
 ORDER BY total_QUANTITYORDERED DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 92
 
@@ -768,11 +769,13 @@ ORDER BY total_QUANTITYORDERED DESC;
 | Online Diecast Creations Co. | 34 | 1248.0 |
 
 *…72 more rows not shown*
+
 ---
 
-## PHONE Ranked by Total SALES
-**ARGS:** —
-**Description:** Ranks each PHONE by total SALES, highest first.
+## 27. PHONE Ranked by Total SALES
+
+**Status:** OK
+
 ```sql
 SELECT
     PHONE,
@@ -782,8 +785,6 @@ FROM data
 GROUP BY PHONE
 ORDER BY total_SALES DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 91
 
@@ -811,11 +812,13 @@ ORDER BY total_SALES DESC;
 | 0695-34 6555 | 38 | 134259.33 |
 
 *…71 more rows not shown*
+
 ---
 
-## PHONE Ranked by Total QUANTITYORDERED
-**ARGS:** —
-**Description:** Ranks each PHONE by total QUANTITYORDERED, highest first.
+## 28. PHONE Ranked by Total QUANTITYORDERED
+
+**Status:** OK
+
 ```sql
 SELECT
     PHONE,
@@ -825,8 +828,6 @@ FROM data
 GROUP BY PHONE
 ORDER BY total_QUANTITYORDERED DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 91
 
@@ -854,21 +855,19 @@ ORDER BY total_QUANTITYORDERED DESC;
 | 0522-556555 | 39 | 1280.0 |
 
 *…71 more rows not shown*
+
 ---
 
-### Multi-Dimensional
+## 29. ORDERNUMBER by STATUS and PRODUCTLINE
 
-## ORDERNUMBER by STATUS and PRODUCTLINE
-**ARGS:** —
-**Description:** Shows total ORDERNUMBER broken down by both STATUS and PRODUCTLINE.
+**Status:** OK
+
 ```sql
 SELECT STATUS, PRODUCTLINE, SUM(ORDERNUMBER) AS total_ORDERNUMBER
 FROM data
 GROUP BY STATUS, PRODUCTLINE
 ORDER BY total_ORDERNUMBER DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 32
 
@@ -896,13 +895,13 @@ ORDER BY total_ORDERNUMBER DESC;
 | On Hold | Planes | 93609 |
 
 *…12 more rows not shown*
+
 ---
 
-### Multi-Metric Analysis
+## 30. Performance Breakdown by STATUS
 
-## Performance Breakdown by STATUS
-**ARGS:** —
-**Description:** Aggregates transaction count and all key metrics (revenue, cost, profit, margins) grouped by STATUS.
+**Status:** OK
+
 ```sql
 SELECT
     STATUS,
@@ -918,8 +917,6 @@ GROUP BY STATUS
 ORDER BY total_ORDERNUMBER DESC;
 ```
 
-**Status:** OK
-
 **Rows returned:** 6
 
 | STATUS | transaction_count | total_ORDERNUMBER | total_QUANTITYORDERED | total_PRICEEACH | total_ORDERLINENUMBER | total_SALES | total_MSRP |
@@ -930,11 +927,13 @@ ORDER BY total_ORDERNUMBER DESC;
 | On Hold | 44 | 457496 | 1879 | 3773.9900000000002 | 282 | 178979.19 | 4237 |
 | In Process | 41 | 427330 | 1490 | 3251.96 | 224 | 144729.96 | 4011 |
 | Disputed | 14 | 145795 | 597 | 1252.26 | 42 | 72212.86 | 1529 |
+
 ---
 
-## Performance Breakdown by PRODUCTLINE
-**ARGS:** —
-**Description:** Aggregates transaction count and all key metrics (revenue, cost, profit, margins) grouped by PRODUCTLINE.
+## 31. Performance Breakdown by PRODUCTLINE
+
+**Status:** OK
+
 ```sql
 SELECT
     PRODUCTLINE,
@@ -950,8 +949,6 @@ GROUP BY PRODUCTLINE
 ORDER BY total_ORDERNUMBER DESC;
 ```
 
-**Status:** OK
-
 **Rows returned:** 7
 
 | PRODUCTLINE | transaction_count | total_ORDERNUMBER | total_QUANTITYORDERED | total_PRICEEACH | total_ORDERLINENUMBER | total_SALES | total_MSRP |
@@ -963,11 +960,13 @@ ORDER BY total_ORDERNUMBER DESC;
 | Trucks and Buses | 301 | 3087894 | 10777 | 26345.91 | 1873 | 1127789.84 | 30842 |
 | Ships | 234 | 2399856 | 8127 | 19622.18 | 1591 | 714437.13 | 20154 |
 | Trains | 77 | 789654 | 2712 | 5825.41 | 550 | 226243.47 | 5620 |
+
 ---
 
-## Performance Breakdown by ADDRESSLINE2
-**ARGS:** —
-**Description:** Aggregates transaction count and all key metrics (revenue, cost, profit, margins) grouped by ADDRESSLINE2.
+## 32. Performance Breakdown by ADDRESSLINE2
+
+**Status:** OK
+
 ```sql
 SELECT
     ADDRESSLINE2,
@@ -983,8 +982,6 @@ GROUP BY ADDRESSLINE2
 ORDER BY total_ORDERNUMBER DESC;
 ```
 
-**Status:** OK
-
 **Rows returned:** 10
 
 | ADDRESSLINE2 | transaction_count | total_ORDERNUMBER | total_QUANTITYORDERED | total_PRICEEACH | total_ORDERLINENUMBER | total_SALES | total_MSRP |
@@ -999,11 +996,13 @@ ORDER BY total_ORDERNUMBER DESC;
 | Suite 750 | 20 | 204586 | 720 | 1779.62 | 81 | 77795.2 | 2133 |
 | Floor No. 4 | 16 | 164059 | 490 | 1377.98 | 73 | 57756.43 | 1710 |
 | Suite 200 | 10 | 103113 | 381 | 752.9 | 46 | 33144.93 | 853 |
+
 ---
 
-## STATUS × PRODUCTLINE Performance Matrix
-**ARGS:** —
-**Description:** Shows performance metrics for every STATUS and PRODUCTLINE combination, ordered by profitability.
+## 33. STATUS × PRODUCTLINE Performance Matrix
+
+**Status:** OK
+
 ```sql
 SELECT
     STATUS,
@@ -1017,8 +1016,6 @@ FROM data
 GROUP BY STATUS, PRODUCTLINE
 ORDER BY total_ORDERNUMBER DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 32
 
@@ -1046,11 +1043,13 @@ ORDER BY total_ORDERNUMBER DESC;
 | On Hold | Planes | 9 | 93609 | 418 | 762.92 | 64 |
 
 *…12 more rows not shown*
+
 ---
 
-## Unique QTR_ID Count by STATUS
-**ARGS:** —
-**Description:** Counts distinct QTR_ID values and key metrics per STATUS to reveal concentration.
+## 34. Unique QTR_ID Count by STATUS
+
+**Status:** OK
+
 ```sql
 SELECT
     STATUS,
@@ -1062,8 +1061,6 @@ GROUP BY STATUS
 ORDER BY unique_QTR_ID DESC;
 ```
 
-**Status:** OK
-
 **Rows returned:** 6
 
 | STATUS | unique_QTR_ID | transaction_count | total_ORDERNUMBER |
@@ -1074,11 +1071,13 @@ ORDER BY unique_QTR_ID DESC;
 | Cancelled | 2 | 60 | 613878 |
 | In Process | 1 | 41 | 427330 |
 | Disputed | 1 | 14 | 145795 |
+
 ---
 
-## Unique QTR_ID Count by PRODUCTLINE
-**ARGS:** —
-**Description:** Counts distinct QTR_ID values and key metrics per PRODUCTLINE to reveal concentration.
+## 35. Unique QTR_ID Count by PRODUCTLINE
+
+**Status:** OK
+
 ```sql
 SELECT
     PRODUCTLINE,
@@ -1089,8 +1088,6 @@ FROM data
 GROUP BY PRODUCTLINE
 ORDER BY unique_QTR_ID DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 7
 
@@ -1103,27 +1100,27 @@ ORDER BY unique_QTR_ID DESC;
 | Planes | 4 | 306 | 3142556 |
 | Motorcycles | 4 | 331 | 3395505 |
 | Classic Cars | 4 | 967 | 9918937 |
+
 ---
 
-### Parametric Lookups
+## 36. Filter by ORDERDATE
 
-## Filter by ORDERDATE
-**ARGS:** ORDERDATE
-**Description:** Returns all rows where ORDERDATE matches a given value.
+**Status:** SKIPPED
+
 ```sql
 SELECT *
 FROM data
 WHERE ORDERDATE = :ORDERDATE;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Performance Summary for a Specific ORDERDATE
-**ARGS:** ORDERDATE
-**Description:** Returns transaction count and all key metrics for a single ORDERDATE value.
+## 37. Performance Summary for a Specific ORDERDATE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     ORDERDATE,
@@ -1135,14 +1132,14 @@ WHERE ORDERDATE = :ORDERDATE
 GROUP BY ORDERDATE;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## STATUS Breakdown for ORDERDATE = :ORDERDATE
-**ARGS:** ORDERDATE
-**Description:** Ranks each STATUS by total SALES filtered to a single ORDERDATE value.
+## 38. STATUS Breakdown for ORDERDATE = :ORDERDATE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     STATUS,
@@ -1154,14 +1151,14 @@ GROUP BY STATUS
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## PRODUCTLINE Breakdown for ORDERDATE = :ORDERDATE
-**ARGS:** ORDERDATE
-**Description:** Ranks each PRODUCTLINE by total SALES filtered to a single ORDERDATE value.
+## 39. PRODUCTLINE Breakdown for ORDERDATE = :ORDERDATE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     PRODUCTLINE,
@@ -1173,28 +1170,28 @@ GROUP BY PRODUCTLINE
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Filter by STATUS
-**ARGS:** STATUS
-**Description:** Returns all rows where STATUS matches a given value.
+## 40. Filter by STATUS
+
+**Status:** SKIPPED
+
 ```sql
 SELECT *
 FROM data
 WHERE STATUS = :STATUS;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Performance Summary for a Specific STATUS
-**ARGS:** STATUS
-**Description:** Returns transaction count and all key metrics for a single STATUS value.
+## 41. Performance Summary for a Specific STATUS
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     STATUS,
@@ -1206,14 +1203,14 @@ WHERE STATUS = :STATUS
 GROUP BY STATUS;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## ORDERDATE Breakdown for STATUS = :STATUS
-**ARGS:** STATUS
-**Description:** Ranks each ORDERDATE by total SALES filtered to a single STATUS value.
+## 42. ORDERDATE Breakdown for STATUS = :STATUS
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     ORDERDATE,
@@ -1225,14 +1222,14 @@ GROUP BY ORDERDATE
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## PRODUCTLINE Breakdown for STATUS = :STATUS
-**ARGS:** STATUS
-**Description:** Ranks each PRODUCTLINE by total SALES filtered to a single STATUS value.
+## 43. PRODUCTLINE Breakdown for STATUS = :STATUS
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     PRODUCTLINE,
@@ -1244,28 +1241,28 @@ GROUP BY PRODUCTLINE
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Filter by PRODUCTLINE
-**ARGS:** PRODUCTLINE
-**Description:** Returns all rows where PRODUCTLINE matches a given value.
+## 44. Filter by PRODUCTLINE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT *
 FROM data
 WHERE PRODUCTLINE = :PRODUCTLINE;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Performance Summary for a Specific PRODUCTLINE
-**ARGS:** PRODUCTLINE
-**Description:** Returns transaction count and all key metrics for a single PRODUCTLINE value.
+## 45. Performance Summary for a Specific PRODUCTLINE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     PRODUCTLINE,
@@ -1277,14 +1274,14 @@ WHERE PRODUCTLINE = :PRODUCTLINE
 GROUP BY PRODUCTLINE;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## ORDERDATE Breakdown for PRODUCTLINE = :PRODUCTLINE
-**ARGS:** PRODUCTLINE
-**Description:** Ranks each ORDERDATE by total SALES filtered to a single PRODUCTLINE value.
+## 46. ORDERDATE Breakdown for PRODUCTLINE = :PRODUCTLINE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     ORDERDATE,
@@ -1296,14 +1293,14 @@ GROUP BY ORDERDATE
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## STATUS Breakdown for PRODUCTLINE = :PRODUCTLINE
-**ARGS:** PRODUCTLINE
-**Description:** Ranks each STATUS by total SALES filtered to a single PRODUCTLINE value.
+## 47. STATUS Breakdown for PRODUCTLINE = :PRODUCTLINE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     STATUS,
@@ -1315,28 +1312,28 @@ GROUP BY STATUS
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Filter by PRODUCTCODE
-**ARGS:** PRODUCTCODE
-**Description:** Returns all rows where PRODUCTCODE matches a given value.
+## 48. Filter by PRODUCTCODE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT *
 FROM data
 WHERE PRODUCTCODE = :PRODUCTCODE;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Performance Summary for a Specific PRODUCTCODE
-**ARGS:** PRODUCTCODE
-**Description:** Returns transaction count and all key metrics for a single PRODUCTCODE value.
+## 49. Performance Summary for a Specific PRODUCTCODE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     PRODUCTCODE,
@@ -1348,14 +1345,14 @@ WHERE PRODUCTCODE = :PRODUCTCODE
 GROUP BY PRODUCTCODE;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## ORDERDATE Breakdown for PRODUCTCODE = :PRODUCTCODE
-**ARGS:** PRODUCTCODE
-**Description:** Ranks each ORDERDATE by total SALES filtered to a single PRODUCTCODE value.
+## 50. ORDERDATE Breakdown for PRODUCTCODE = :PRODUCTCODE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     ORDERDATE,
@@ -1367,14 +1364,14 @@ GROUP BY ORDERDATE
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## STATUS Breakdown for PRODUCTCODE = :PRODUCTCODE
-**ARGS:** PRODUCTCODE
-**Description:** Ranks each STATUS by total SALES filtered to a single PRODUCTCODE value.
+## 51. STATUS Breakdown for PRODUCTCODE = :PRODUCTCODE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     STATUS,
@@ -1386,28 +1383,28 @@ GROUP BY STATUS
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Filter by CUSTOMERNAME
-**ARGS:** CUSTOMERNAME
-**Description:** Returns all rows where CUSTOMERNAME matches a given value.
+## 52. Filter by CUSTOMERNAME
+
+**Status:** SKIPPED
+
 ```sql
 SELECT *
 FROM data
 WHERE CUSTOMERNAME = :CUSTOMERNAME;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Performance Summary for a Specific CUSTOMERNAME
-**ARGS:** CUSTOMERNAME
-**Description:** Returns transaction count and all key metrics for a single CUSTOMERNAME value.
+## 53. Performance Summary for a Specific CUSTOMERNAME
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     CUSTOMERNAME,
@@ -1419,14 +1416,14 @@ WHERE CUSTOMERNAME = :CUSTOMERNAME
 GROUP BY CUSTOMERNAME;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## ORDERDATE Breakdown for CUSTOMERNAME = :CUSTOMERNAME
-**ARGS:** CUSTOMERNAME
-**Description:** Ranks each ORDERDATE by total SALES filtered to a single CUSTOMERNAME value.
+## 54. ORDERDATE Breakdown for CUSTOMERNAME = :CUSTOMERNAME
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     ORDERDATE,
@@ -1438,14 +1435,14 @@ GROUP BY ORDERDATE
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## STATUS Breakdown for CUSTOMERNAME = :CUSTOMERNAME
-**ARGS:** CUSTOMERNAME
-**Description:** Ranks each STATUS by total SALES filtered to a single CUSTOMERNAME value.
+## 55. STATUS Breakdown for CUSTOMERNAME = :CUSTOMERNAME
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     STATUS,
@@ -1457,28 +1454,28 @@ GROUP BY STATUS
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Filter by PHONE
-**ARGS:** PHONE
-**Description:** Returns all rows where PHONE matches a given value.
+## 56. Filter by PHONE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT *
 FROM data
 WHERE PHONE = :PHONE;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Performance Summary for a Specific PHONE
-**ARGS:** PHONE
-**Description:** Returns transaction count and all key metrics for a single PHONE value.
+## 57. Performance Summary for a Specific PHONE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     PHONE,
@@ -1490,14 +1487,14 @@ WHERE PHONE = :PHONE
 GROUP BY PHONE;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## ORDERDATE Breakdown for PHONE = :PHONE
-**ARGS:** PHONE
-**Description:** Ranks each ORDERDATE by total SALES filtered to a single PHONE value.
+## 58. ORDERDATE Breakdown for PHONE = :PHONE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     ORDERDATE,
@@ -1509,14 +1506,14 @@ GROUP BY ORDERDATE
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## STATUS Breakdown for PHONE = :PHONE
-**ARGS:** PHONE
-**Description:** Ranks each STATUS by total SALES filtered to a single PHONE value.
+## 59. STATUS Breakdown for PHONE = :PHONE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     STATUS,
@@ -1528,28 +1525,28 @@ GROUP BY STATUS
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Filter by ADDRESSLINE1
-**ARGS:** ADDRESSLINE1
-**Description:** Returns all rows where ADDRESSLINE1 matches a given value.
+## 60. Filter by ADDRESSLINE1
+
+**Status:** SKIPPED
+
 ```sql
 SELECT *
 FROM data
 WHERE ADDRESSLINE1 = :ADDRESSLINE1;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Performance Summary for a Specific ADDRESSLINE1
-**ARGS:** ADDRESSLINE1
-**Description:** Returns transaction count and all key metrics for a single ADDRESSLINE1 value.
+## 61. Performance Summary for a Specific ADDRESSLINE1
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     ADDRESSLINE1,
@@ -1561,14 +1558,14 @@ WHERE ADDRESSLINE1 = :ADDRESSLINE1
 GROUP BY ADDRESSLINE1;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## ORDERDATE Breakdown for ADDRESSLINE1 = :ADDRESSLINE1
-**ARGS:** ADDRESSLINE1
-**Description:** Ranks each ORDERDATE by total SALES filtered to a single ADDRESSLINE1 value.
+## 62. ORDERDATE Breakdown for ADDRESSLINE1 = :ADDRESSLINE1
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     ORDERDATE,
@@ -1580,14 +1577,14 @@ GROUP BY ORDERDATE
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## STATUS Breakdown for ADDRESSLINE1 = :ADDRESSLINE1
-**ARGS:** ADDRESSLINE1
-**Description:** Ranks each STATUS by total SALES filtered to a single ADDRESSLINE1 value.
+## 63. STATUS Breakdown for ADDRESSLINE1 = :ADDRESSLINE1
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     STATUS,
@@ -1599,28 +1596,28 @@ GROUP BY STATUS
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Filter by ADDRESSLINE2
-**ARGS:** ADDRESSLINE2
-**Description:** Returns all rows where ADDRESSLINE2 matches a given value.
+## 64. Filter by ADDRESSLINE2
+
+**Status:** SKIPPED
+
 ```sql
 SELECT *
 FROM data
 WHERE ADDRESSLINE2 = :ADDRESSLINE2;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Performance Summary for a Specific ADDRESSLINE2
-**ARGS:** ADDRESSLINE2
-**Description:** Returns transaction count and all key metrics for a single ADDRESSLINE2 value.
+## 65. Performance Summary for a Specific ADDRESSLINE2
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     ADDRESSLINE2,
@@ -1632,14 +1629,14 @@ WHERE ADDRESSLINE2 = :ADDRESSLINE2
 GROUP BY ADDRESSLINE2;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## ORDERDATE Breakdown for ADDRESSLINE2 = :ADDRESSLINE2
-**ARGS:** ADDRESSLINE2
-**Description:** Ranks each ORDERDATE by total SALES filtered to a single ADDRESSLINE2 value.
+## 66. ORDERDATE Breakdown for ADDRESSLINE2 = :ADDRESSLINE2
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     ORDERDATE,
@@ -1651,14 +1648,14 @@ GROUP BY ORDERDATE
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## STATUS Breakdown for ADDRESSLINE2 = :ADDRESSLINE2
-**ARGS:** ADDRESSLINE2
-**Description:** Ranks each STATUS by total SALES filtered to a single ADDRESSLINE2 value.
+## 67. STATUS Breakdown for ADDRESSLINE2 = :ADDRESSLINE2
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     STATUS,
@@ -1670,28 +1667,28 @@ GROUP BY STATUS
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Filter by CITY
-**ARGS:** CITY
-**Description:** Returns all rows where CITY matches a given value.
+## 68. Filter by CITY
+
+**Status:** SKIPPED
+
 ```sql
 SELECT *
 FROM data
 WHERE CITY = :CITY;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Performance Summary for a Specific CITY
-**ARGS:** CITY
-**Description:** Returns transaction count and all key metrics for a single CITY value.
+## 69. Performance Summary for a Specific CITY
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     CITY,
@@ -1703,14 +1700,14 @@ WHERE CITY = :CITY
 GROUP BY CITY;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## ORDERDATE Breakdown for CITY = :CITY
-**ARGS:** CITY
-**Description:** Ranks each ORDERDATE by total SALES filtered to a single CITY value.
+## 70. ORDERDATE Breakdown for CITY = :CITY
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     ORDERDATE,
@@ -1722,14 +1719,14 @@ GROUP BY ORDERDATE
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## STATUS Breakdown for CITY = :CITY
-**ARGS:** CITY
-**Description:** Ranks each STATUS by total SALES filtered to a single CITY value.
+## 71. STATUS Breakdown for CITY = :CITY
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     STATUS,
@@ -1741,28 +1738,28 @@ GROUP BY STATUS
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Filter by STATE
-**ARGS:** STATE
-**Description:** Returns all rows where STATE matches a given value.
+## 72. Filter by STATE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT *
 FROM data
 WHERE STATE = :STATE;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Performance Summary for a Specific STATE
-**ARGS:** STATE
-**Description:** Returns transaction count and all key metrics for a single STATE value.
+## 73. Performance Summary for a Specific STATE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     STATE,
@@ -1774,14 +1771,14 @@ WHERE STATE = :STATE
 GROUP BY STATE;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## ORDERDATE Breakdown for STATE = :STATE
-**ARGS:** STATE
-**Description:** Ranks each ORDERDATE by total SALES filtered to a single STATE value.
+## 74. ORDERDATE Breakdown for STATE = :STATE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     ORDERDATE,
@@ -1793,14 +1790,14 @@ GROUP BY ORDERDATE
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## STATUS Breakdown for STATE = :STATE
-**ARGS:** STATE
-**Description:** Ranks each STATUS by total SALES filtered to a single STATE value.
+## 75. STATUS Breakdown for STATE = :STATE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     STATUS,
@@ -1812,28 +1809,28 @@ GROUP BY STATUS
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Filter by POSTALCODE
-**ARGS:** POSTALCODE
-**Description:** Returns all rows where POSTALCODE matches a given value.
+## 76. Filter by POSTALCODE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT *
 FROM data
 WHERE POSTALCODE = :POSTALCODE;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Performance Summary for a Specific POSTALCODE
-**ARGS:** POSTALCODE
-**Description:** Returns transaction count and all key metrics for a single POSTALCODE value.
+## 77. Performance Summary for a Specific POSTALCODE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     POSTALCODE,
@@ -1845,14 +1842,14 @@ WHERE POSTALCODE = :POSTALCODE
 GROUP BY POSTALCODE;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## ORDERDATE Breakdown for POSTALCODE = :POSTALCODE
-**ARGS:** POSTALCODE
-**Description:** Ranks each ORDERDATE by total SALES filtered to a single POSTALCODE value.
+## 78. ORDERDATE Breakdown for POSTALCODE = :POSTALCODE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     ORDERDATE,
@@ -1864,14 +1861,14 @@ GROUP BY ORDERDATE
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## STATUS Breakdown for POSTALCODE = :POSTALCODE
-**ARGS:** POSTALCODE
-**Description:** Ranks each STATUS by total SALES filtered to a single POSTALCODE value.
+## 79. STATUS Breakdown for POSTALCODE = :POSTALCODE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     STATUS,
@@ -1883,28 +1880,28 @@ GROUP BY STATUS
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Filter by COUNTRY
-**ARGS:** COUNTRY
-**Description:** Returns all rows where COUNTRY matches a given value.
+## 80. Filter by COUNTRY
+
+**Status:** SKIPPED
+
 ```sql
 SELECT *
 FROM data
 WHERE COUNTRY = :COUNTRY;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Performance Summary for a Specific COUNTRY
-**ARGS:** COUNTRY
-**Description:** Returns transaction count and all key metrics for a single COUNTRY value.
+## 81. Performance Summary for a Specific COUNTRY
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     COUNTRY,
@@ -1916,14 +1913,14 @@ WHERE COUNTRY = :COUNTRY
 GROUP BY COUNTRY;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## ORDERDATE Breakdown for COUNTRY = :COUNTRY
-**ARGS:** COUNTRY
-**Description:** Ranks each ORDERDATE by total SALES filtered to a single COUNTRY value.
+## 82. ORDERDATE Breakdown for COUNTRY = :COUNTRY
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     ORDERDATE,
@@ -1935,14 +1932,14 @@ GROUP BY ORDERDATE
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## STATUS Breakdown for COUNTRY = :COUNTRY
-**ARGS:** COUNTRY
-**Description:** Ranks each STATUS by total SALES filtered to a single COUNTRY value.
+## 83. STATUS Breakdown for COUNTRY = :COUNTRY
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     STATUS,
@@ -1954,28 +1951,28 @@ GROUP BY STATUS
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Filter by TERRITORY
-**ARGS:** TERRITORY
-**Description:** Returns all rows where TERRITORY matches a given value.
+## 84. Filter by TERRITORY
+
+**Status:** SKIPPED
+
 ```sql
 SELECT *
 FROM data
 WHERE TERRITORY = :TERRITORY;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Performance Summary for a Specific TERRITORY
-**ARGS:** TERRITORY
-**Description:** Returns transaction count and all key metrics for a single TERRITORY value.
+## 85. Performance Summary for a Specific TERRITORY
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     TERRITORY,
@@ -1987,14 +1984,14 @@ WHERE TERRITORY = :TERRITORY
 GROUP BY TERRITORY;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## ORDERDATE Breakdown for TERRITORY = :TERRITORY
-**ARGS:** TERRITORY
-**Description:** Ranks each ORDERDATE by total SALES filtered to a single TERRITORY value.
+## 86. ORDERDATE Breakdown for TERRITORY = :TERRITORY
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     ORDERDATE,
@@ -2006,14 +2003,14 @@ GROUP BY ORDERDATE
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## STATUS Breakdown for TERRITORY = :TERRITORY
-**ARGS:** TERRITORY
-**Description:** Ranks each STATUS by total SALES filtered to a single TERRITORY value.
+## 87. STATUS Breakdown for TERRITORY = :TERRITORY
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     STATUS,
@@ -2025,28 +2022,28 @@ GROUP BY STATUS
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Filter by CONTACTLASTNAME
-**ARGS:** CONTACTLASTNAME
-**Description:** Returns all rows where CONTACTLASTNAME matches a given value.
+## 88. Filter by CONTACTLASTNAME
+
+**Status:** SKIPPED
+
 ```sql
 SELECT *
 FROM data
 WHERE CONTACTLASTNAME = :CONTACTLASTNAME;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Performance Summary for a Specific CONTACTLASTNAME
-**ARGS:** CONTACTLASTNAME
-**Description:** Returns transaction count and all key metrics for a single CONTACTLASTNAME value.
+## 89. Performance Summary for a Specific CONTACTLASTNAME
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     CONTACTLASTNAME,
@@ -2058,14 +2055,14 @@ WHERE CONTACTLASTNAME = :CONTACTLASTNAME
 GROUP BY CONTACTLASTNAME;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## ORDERDATE Breakdown for CONTACTLASTNAME = :CONTACTLASTNAME
-**ARGS:** CONTACTLASTNAME
-**Description:** Ranks each ORDERDATE by total SALES filtered to a single CONTACTLASTNAME value.
+## 90. ORDERDATE Breakdown for CONTACTLASTNAME = :CONTACTLASTNAME
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     ORDERDATE,
@@ -2077,14 +2074,14 @@ GROUP BY ORDERDATE
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## STATUS Breakdown for CONTACTLASTNAME = :CONTACTLASTNAME
-**ARGS:** CONTACTLASTNAME
-**Description:** Ranks each STATUS by total SALES filtered to a single CONTACTLASTNAME value.
+## 91. STATUS Breakdown for CONTACTLASTNAME = :CONTACTLASTNAME
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     STATUS,
@@ -2096,28 +2093,28 @@ GROUP BY STATUS
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Filter by CONTACTFIRSTNAME
-**ARGS:** CONTACTFIRSTNAME
-**Description:** Returns all rows where CONTACTFIRSTNAME matches a given value.
+## 92. Filter by CONTACTFIRSTNAME
+
+**Status:** SKIPPED
+
 ```sql
 SELECT *
 FROM data
 WHERE CONTACTFIRSTNAME = :CONTACTFIRSTNAME;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Performance Summary for a Specific CONTACTFIRSTNAME
-**ARGS:** CONTACTFIRSTNAME
-**Description:** Returns transaction count and all key metrics for a single CONTACTFIRSTNAME value.
+## 93. Performance Summary for a Specific CONTACTFIRSTNAME
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     CONTACTFIRSTNAME,
@@ -2129,14 +2126,14 @@ WHERE CONTACTFIRSTNAME = :CONTACTFIRSTNAME
 GROUP BY CONTACTFIRSTNAME;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## ORDERDATE Breakdown for CONTACTFIRSTNAME = :CONTACTFIRSTNAME
-**ARGS:** CONTACTFIRSTNAME
-**Description:** Ranks each ORDERDATE by total SALES filtered to a single CONTACTFIRSTNAME value.
+## 94. ORDERDATE Breakdown for CONTACTFIRSTNAME = :CONTACTFIRSTNAME
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     ORDERDATE,
@@ -2148,14 +2145,14 @@ GROUP BY ORDERDATE
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## STATUS Breakdown for CONTACTFIRSTNAME = :CONTACTFIRSTNAME
-**ARGS:** CONTACTFIRSTNAME
-**Description:** Ranks each STATUS by total SALES filtered to a single CONTACTFIRSTNAME value.
+## 95. STATUS Breakdown for CONTACTFIRSTNAME = :CONTACTFIRSTNAME
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     STATUS,
@@ -2167,28 +2164,28 @@ GROUP BY STATUS
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Filter by DEALSIZE
-**ARGS:** DEALSIZE
-**Description:** Returns all rows where DEALSIZE matches a given value.
+## 96. Filter by DEALSIZE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT *
 FROM data
 WHERE DEALSIZE = :DEALSIZE;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Performance Summary for a Specific DEALSIZE
-**ARGS:** DEALSIZE
-**Description:** Returns transaction count and all key metrics for a single DEALSIZE value.
+## 97. Performance Summary for a Specific DEALSIZE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     DEALSIZE,
@@ -2200,14 +2197,14 @@ WHERE DEALSIZE = :DEALSIZE
 GROUP BY DEALSIZE;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## ORDERDATE Breakdown for DEALSIZE = :DEALSIZE
-**ARGS:** DEALSIZE
-**Description:** Ranks each ORDERDATE by total SALES filtered to a single DEALSIZE value.
+## 98. ORDERDATE Breakdown for DEALSIZE = :DEALSIZE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     ORDERDATE,
@@ -2219,14 +2216,14 @@ GROUP BY ORDERDATE
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## STATUS Breakdown for DEALSIZE = :DEALSIZE
-**ARGS:** DEALSIZE
-**Description:** Ranks each STATUS by total SALES filtered to a single DEALSIZE value.
+## 99. STATUS Breakdown for DEALSIZE = :DEALSIZE
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     STATUS,
@@ -2238,14 +2235,14 @@ GROUP BY STATUS
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Rows Where SALES Exceeds :min_value
-**ARGS:** min_value
-**Description:** Returns all rows where SALES is above a given threshold.
+## 100. Rows Where SALES Exceeds :min_value
+
+**Status:** SKIPPED
+
 ```sql
 SELECT *
 FROM data
@@ -2253,14 +2250,14 @@ WHERE SALES > :min_value
 ORDER BY SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## ORDERDATE with Total SALES Above :threshold
-**ARGS:** threshold
-**Description:** Lists ORDERDATE values whose total SALES exceeds a given threshold.
+## 101. ORDERDATE with Total SALES Above :threshold
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     ORDERDATE,
@@ -2272,16 +2269,14 @@ HAVING SUM(SALES) > :threshold
 ORDER BY total_SALES DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-### Data Quality Checks
+## 102. Missing Values per Column
 
-## Missing Values per Column
-**ARGS:** —
-**Description:** Counts NULL values in each column to identify data gaps.
+**Status:** OK
+
 ```sql
 SELECT 'ORDERNUMBER' AS column_name, COUNT(*) AS null_count FROM data WHERE ORDERNUMBER IS NULL
 UNION ALL
@@ -2309,8 +2304,6 @@ SELECT 'MSRP' AS column_name, COUNT(*) AS null_count FROM data WHERE MSRP IS NUL
 ORDER BY null_count DESC;
 ```
 
-**Status:** OK
-
 **Rows returned:** 12
 
 | column_name | null_count |
@@ -2327,11 +2320,13 @@ ORDER BY null_count DESC;
 | YEAR_ID | 0 |
 | PRODUCTLINE | 0 |
 | MSRP | 0 |
+
 ---
 
-## Duplicate QTR_ID Values
-**ARGS:** —
-**Description:** Flags any QTR_ID that appears more than once in the dataset.
+## 103. Duplicate QTR_ID Values
+
+**Status:** OK
+
 ```sql
 SELECT QTR_ID, COUNT(*) AS occurrences
 FROM data
@@ -2339,8 +2334,6 @@ GROUP BY QTR_ID
 HAVING COUNT(*) > 1
 ORDER BY occurrences DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 4
 
@@ -2350,11 +2343,13 @@ ORDER BY occurrences DESC;
 | 1 | 665 |
 | 2 | 561 |
 | 3 | 503 |
+
 ---
 
-## Negative ORDERNUMBER Values
-**ARGS:** —
-**Description:** Flags rows where ORDERNUMBER is negative, which may indicate data errors.
+## 104. Negative ORDERNUMBER Values
+
+**Status:** OK
+
 ```sql
 SELECT *
 FROM data
@@ -2362,16 +2357,16 @@ WHERE ORDERNUMBER < 0
 ORDER BY ORDERNUMBER;
 ```
 
-**Status:** OK
-
 **Rows returned:** 0
 
 *(no rows returned)*
+
 ---
 
-## Negative QUANTITYORDERED Values
-**ARGS:** —
-**Description:** Flags rows where QUANTITYORDERED is negative, which may indicate data errors.
+## 105. Negative QUANTITYORDERED Values
+
+**Status:** OK
+
 ```sql
 SELECT *
 FROM data
@@ -2379,16 +2374,16 @@ WHERE QUANTITYORDERED < 0
 ORDER BY QUANTITYORDERED;
 ```
 
-**Status:** OK
-
 **Rows returned:** 0
 
 *(no rows returned)*
+
 ---
 
-## Negative PRICEEACH Values
-**ARGS:** —
-**Description:** Flags rows where PRICEEACH is negative, which may indicate data errors.
+## 106. Negative PRICEEACH Values
+
+**Status:** OK
+
 ```sql
 SELECT *
 FROM data
@@ -2396,9 +2391,8 @@ WHERE PRICEEACH < 0
 ORDER BY PRICEEACH;
 ```
 
-**Status:** OK
-
 **Rows returned:** 0
 
 *(no rows returned)*
+
 ---

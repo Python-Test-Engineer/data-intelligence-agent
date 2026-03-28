@@ -1,163 +1,154 @@
-# SQL Query Catalog — sales_data_sample.csv
+# SQL Query Catalog — data.csv
 
-Dataset: `data/data.csv`
+Dataset: `data\data.csv`
 Columns: `ORDERNUMBER`, `QUANTITYORDERED`, `PRICEEACH`, `ORDERLINENUMBER`, `SALES`, `ORDERDATE`, `STATUS`, `QTR_ID`, `MONTH_ID`, `YEAR_ID`, `PRODUCTLINE`, `MSRP`, `PRODUCTCODE`, `CUSTOMERNAME`, `PHONE`, `ADDRESSLINE1`, `ADDRESSLINE2`, `CITY`, `STATE`, `POSTALCODE`, `COUNTRY`, `TERRITORY`, `CONTACTLASTNAME`, `CONTACTFIRSTNAME`, `DEALSIZE`
 
 ---
 
-## 1. Overview
+## Overview
 
-1. Total Row Count — Returns the total number of order line items in the dataset.
-2. Column Sample — Returns the first 10 rows to preview the full dataset structure.
-3. Distinct Value Count per Categorical Column — Shows cardinality for PRODUCTLINE, STATUS, TERRITORY, DEALSIZE, COUNTRY, and CITY.
-4. Date Range of Orders — Returns the earliest and latest ORDERDATE in the dataset.
-5. Summary Statistics for Key Measures — Returns min, max, avg, and total for SALES, QUANTITYORDERED, and PRICEEACH.
+1. Row Count — Returns the total number of rows in the dataset.
+2. Column Sample — Returns the first 10 rows to preview the dataset structure.
 
 ---
 
-## 2. Revenue & Sales
+## Numeric Summaries
 
-6. Total Sales Revenue — Shows the combined sum of all SALES across the entire dataset.
-7. Total Revenue by PRODUCTLINE — Ranks each product line by total SALES generated, highest first.
-8. Total Revenue by CUSTOMERNAME — Ranks each customer by total SALES generated, highest first.
-9. Total Revenue by COUNTRY — Ranks each country by total SALES generated, highest first.
-10. Total Revenue by TERRITORY — Ranks each sales territory (NA, EMEA, APAC, Japan) by total SALES.
-11. Total Revenue by CITY — Ranks each city by total SALES, highest first.
-12. Total Revenue by DEALSIZE — Compares total SALES across Small, Medium, and Large deal sizes.
-13. Total Revenue by PRODUCTCODE — Ranks each product code by total SALES, highest first.
-14. Average Revenue per Order Line — Shows the mean SALES value per individual order line.
-15. Average PRICEEACH by PRODUCTLINE — Compares average unit selling price across product lines.
-16. Revenue by Year — Shows total SALES grouped by YEAR_ID to compare annual performance.
-17. Revenue by Quarter — Shows total SALES grouped by QTR_ID to reveal quarterly patterns.
+3. Summary Stats for ORDERNUMBER — Returns min, max, average, and total for ORDERNUMBER.
+4. Summary Stats for QUANTITYORDERED — Returns min, max, average, and total for QUANTITYORDERED.
+5. Summary Stats for PRICEEACH — Returns min, max, average, and total for PRICEEACH.
+6. Summary Stats for ORDERLINENUMBER — Returns min, max, average, and total for ORDERLINENUMBER.
+7. Summary Stats for SALES — Returns min, max, average, and total for SALES.
+8. Summary Stats for MSRP — Returns min, max, average, and total for MSRP.
+9. Total ORDERNUMBER by STATUS — Ranks each STATUS by total ORDERNUMBER, highest first.
+10. Average ORDERNUMBER by STATUS — Compares average ORDERNUMBER across each STATUS.
+11. Total QUANTITYORDERED by STATUS — Ranks each STATUS by total QUANTITYORDERED, highest first.
 
 ---
 
-## 3. Volume & Orders
+## Categorical Distributions
 
-18. Total Units Ordered — Shows the sum of QUANTITYORDERED across all order lines.
-19. Total Units by PRODUCTLINE — Ranks each product line by total QUANTITYORDERED, highest first.
-20. Total Units by CUSTOMERNAME — Ranks each customer by total QUANTITYORDERED, highest first.
-21. Total Units by PRODUCTCODE — Ranks each product code by total QUANTITYORDERED, highest first.
-22. Total Distinct Order Count — Returns the number of unique ORDERNUMBER values in the dataset.
-23. Order Line Count by STATUS — Shows how many order lines fall under each STATUS value.
-24. Average Quantity per Order Line — Returns the mean QUANTITYORDERED per line item.
-25. Orders with Most Line Items — Ranks orders by number of line items, identifying large complex orders.
+12. Distribution of STATUS — Counts rows for each distinct value of STATUS, ordered by frequency.
+13. Distribution of PRODUCTLINE — Counts rows for each distinct value of PRODUCTLINE, ordered by frequency.
+14. Distribution of ADDRESSLINE2 — Counts rows for each distinct value of ADDRESSLINE2, ordered by frequency.
+15. Distribution of STATE — Counts rows for each distinct value of STATE, ordered by frequency.
+16. Distribution of COUNTRY — Counts rows for each distinct value of COUNTRY, ordered by frequency.
 
 ---
 
-## 4. Customer Analysis
+## Rankings
 
-26. Customers Ranked by Total Revenue — Ranks all customers by lifetime SALES, highest first, with order count.
-27. Customers Ranked by Total Units Ordered — Ranks customers by total QUANTITYORDERED, highest first.
-28. Customers Ranked by Order Count — Ranks customers by number of distinct orders placed, highest first.
-29. Top 5 Customers by Revenue — Lists the 5 highest-revenue customers with total SALES and order count.
-30. Bottom 5 Customers by Revenue — Lists the 5 lowest-revenue customers to identify underperformers.
-31. Customer Count by COUNTRY — Counts distinct customers per country, ordered by count descending.
-32. Customer Count by TERRITORY — Counts distinct customers per territory.
-33. Average Revenue per Customer — Returns mean total lifetime SALES across all customers.
-34. Repeat vs One-Time Customers — Counts customers with more than one order versus exactly one order.
-35. Customers with Total Revenue Above :threshold — Lists customers whose lifetime SALES exceed a given value.
-
----
-
-## 5. Product Analysis
-
-36. Products Ranked by Total Revenue — Ranks each PRODUCTCODE by total SALES, highest first.
-37. Products Ranked by Total Units Sold — Ranks each PRODUCTCODE by total QUANTITYORDERED, highest first.
-38. Top 5 Products by Revenue — Lists the 5 highest-revenue products with total sales and units.
-39. Bottom 5 Products by Revenue — Lists the 5 lowest-revenue products to identify slow sellers.
-40. Top 3 Products by Revenue — Lists the 3 highest-revenue products for quick-reference ranking.
-41. Top 10 Products by Revenue — Lists the 10 highest-revenue products for broader analysis.
-42. Product Lines Ranked by Total Revenue — Ranks product lines by total SALES with units and order count.
-43. Product Lines Ranked by Total Units Sold — Ranks product lines by total QUANTITYORDERED, highest first.
-44. Average PRICEEACH vs MSRP by PRODUCTCODE — Compares average actual selling price against MSRP to reveal discount per product.
-45. Products Selling Below MSRP on Average — Flags products where average PRICEEACH is less than MSRP.
+17. ORDERDATE Ranked by Total SALES — Ranks each ORDERDATE by total SALES, highest first.
+18. ORDERDATE Ranked by Total QUANTITYORDERED — Ranks each ORDERDATE by total QUANTITYORDERED, highest first.
+19. STATUS Ranked by Total SALES — Ranks each STATUS by total SALES, highest first.
+20. STATUS Ranked by Total QUANTITYORDERED — Ranks each STATUS by total QUANTITYORDERED, highest first.
+21. PRODUCTLINE Ranked by Total SALES — Ranks each PRODUCTLINE by total SALES, highest first.
+22. PRODUCTLINE Ranked by Total QUANTITYORDERED — Ranks each PRODUCTLINE by total QUANTITYORDERED, highest first.
+23. PRODUCTCODE Ranked by Total SALES — Ranks each PRODUCTCODE by total SALES, highest first.
+24. PRODUCTCODE Ranked by Total QUANTITYORDERED — Ranks each PRODUCTCODE by total QUANTITYORDERED, highest first.
+25. CUSTOMERNAME Ranked by Total SALES — Ranks each CUSTOMERNAME by total SALES, highest first.
+26. CUSTOMERNAME Ranked by Total QUANTITYORDERED — Ranks each CUSTOMERNAME by total QUANTITYORDERED, highest first.
+27. PHONE Ranked by Total SALES — Ranks each PHONE by total SALES, highest first.
+28. PHONE Ranked by Total QUANTITYORDERED — Ranks each PHONE by total QUANTITYORDERED, highest first.
 
 ---
 
-## 6. Territory & Country Analysis
+## Multi-Dimensional
 
-46. Countries Ranked by Total Revenue — Ranks each country by total SALES, highest first.
-47. Countries Ranked by Total Units Ordered — Ranks each country by total QUANTITYORDERED, highest first.
-48. Territories Ranked by Total Revenue — Ranks NA, EMEA, APAC, Japan by total SALES.
-49. Revenue by Territory and Country — Shows total SALES for each country grouped within its territory.
-50. Cities Ranked by Total Revenue — Ranks cities by total SALES, highest first.
-51. Top 5 Countries by Revenue — Lists the 5 highest-revenue countries with total SALES.
-52. Bottom 5 Countries by Revenue — Lists the 5 lowest-revenue countries to identify weak markets.
-53. Customer Count and Revenue by Territory — Shows distinct customer count and total SALES per territory.
+29. ORDERNUMBER by STATUS and PRODUCTLINE — Shows total ORDERNUMBER broken down by both STATUS and PRODUCTLINE.
 
 ---
 
-## 7. Time-Based Analysis
+## Multi-Metric Analysis
 
-54. Monthly Revenue Trend — Returns total SALES grouped by year-month, ordered chronologically.
-55. Yearly Revenue Total — Shows total SALES per YEAR_ID to compare 2003, 2004, and 2005.
-56. Quarterly Revenue by Year — Shows SALES per quarter per year to reveal seasonal patterns.
-57. Monthly Revenue by PRODUCTLINE — Shows monthly SALES trend broken down by product line.
-58. Best Month by Revenue — Identifies the single year-month with the highest total SALES.
-59. Revenue Between :start_date and :end_date — Returns total SALES within an arbitrary date range.
-60. Transactions Between :start_date and :end_date — Returns all order lines within a specified date range.
-61. Revenue for :year — Returns total SALES for a specific four-digit year.
-62. Revenue for :year_month — Returns total SALES for a specific month in YYYY-MM format.
-63. Month-over-Month Revenue Change — Compares each month's total SALES against the prior month using self-join.
+30. Performance Breakdown by STATUS — Aggregates transaction count and all key metrics (revenue, cost, profit, margins) grouped by STATUS.
+31. Performance Breakdown by PRODUCTLINE — Aggregates transaction count and all key metrics (revenue, cost, profit, margins) grouped by PRODUCTLINE.
+32. Performance Breakdown by ADDRESSLINE2 — Aggregates transaction count and all key metrics (revenue, cost, profit, margins) grouped by ADDRESSLINE2.
+33. STATUS × PRODUCTLINE Performance Matrix — Shows performance metrics for every STATUS and PRODUCTLINE combination, ordered by profitability.
+34. Unique QTR_ID Count by STATUS — Counts distinct QTR_ID values and key metrics per STATUS to reveal concentration.
+35. Unique QTR_ID Count by PRODUCTLINE — Counts distinct QTR_ID values and key metrics per PRODUCTLINE to reveal concentration.
 
 ---
 
-## 8. Status & Deal Size Analysis
+## Parametric Lookups
 
-64. Revenue by STATUS — Shows total SALES grouped by order STATUS (Shipped, Disputed, Cancelled, etc.).
-65. Order Count by STATUS — Counts order lines per STATUS to show order pipeline distribution.
-66. Disputed Orders by CUSTOMERNAME — Lists customers with Disputed status orders and their total disputed SALES.
-67. Revenue by DEALSIZE — Shows total SALES, order count, and avg SALES per deal size category.
-68. DEALSIZE Distribution by PRODUCTLINE — Shows count of Small, Medium, Large deals for each product line.
-69. Cancelled or On Hold Orders — Returns all order lines with STATUS = 'Cancelled' or 'On Hold'.
+36. Filter by ORDERDATE — Returns all rows where ORDERDATE matches a given value.
+37. Performance Summary for a Specific ORDERDATE — Returns transaction count and all key metrics for a single ORDERDATE value.
+38. STATUS Breakdown for ORDERDATE = :ORDERDATE — Ranks each STATUS by total SALES filtered to a single ORDERDATE value.
+39. PRODUCTLINE Breakdown for ORDERDATE = :ORDERDATE — Ranks each PRODUCTLINE by total SALES filtered to a single ORDERDATE value.
+40. Filter by STATUS — Returns all rows where STATUS matches a given value.
+41. Performance Summary for a Specific STATUS — Returns transaction count and all key metrics for a single STATUS value.
+42. ORDERDATE Breakdown for STATUS = :STATUS — Ranks each ORDERDATE by total SALES filtered to a single STATUS value.
+43. PRODUCTLINE Breakdown for STATUS = :STATUS — Ranks each PRODUCTLINE by total SALES filtered to a single STATUS value.
+44. Filter by PRODUCTLINE — Returns all rows where PRODUCTLINE matches a given value.
+45. Performance Summary for a Specific PRODUCTLINE — Returns transaction count and all key metrics for a single PRODUCTLINE value.
+46. ORDERDATE Breakdown for PRODUCTLINE = :PRODUCTLINE — Ranks each ORDERDATE by total SALES filtered to a single PRODUCTLINE value.
+47. STATUS Breakdown for PRODUCTLINE = :PRODUCTLINE — Ranks each STATUS by total SALES filtered to a single PRODUCTLINE value.
+48. Filter by PRODUCTCODE — Returns all rows where PRODUCTCODE matches a given value.
+49. Performance Summary for a Specific PRODUCTCODE — Returns transaction count and all key metrics for a single PRODUCTCODE value.
+50. ORDERDATE Breakdown for PRODUCTCODE = :PRODUCTCODE — Ranks each ORDERDATE by total SALES filtered to a single PRODUCTCODE value.
+51. STATUS Breakdown for PRODUCTCODE = :PRODUCTCODE — Ranks each STATUS by total SALES filtered to a single PRODUCTCODE value.
+52. Filter by CUSTOMERNAME — Returns all rows where CUSTOMERNAME matches a given value.
+53. Performance Summary for a Specific CUSTOMERNAME — Returns transaction count and all key metrics for a single CUSTOMERNAME value.
+54. ORDERDATE Breakdown for CUSTOMERNAME = :CUSTOMERNAME — Ranks each ORDERDATE by total SALES filtered to a single CUSTOMERNAME value.
+55. STATUS Breakdown for CUSTOMERNAME = :CUSTOMERNAME — Ranks each STATUS by total SALES filtered to a single CUSTOMERNAME value.
+56. Filter by PHONE — Returns all rows where PHONE matches a given value.
+57. Performance Summary for a Specific PHONE — Returns transaction count and all key metrics for a single PHONE value.
+58. ORDERDATE Breakdown for PHONE = :PHONE — Ranks each ORDERDATE by total SALES filtered to a single PHONE value.
+59. STATUS Breakdown for PHONE = :PHONE — Ranks each STATUS by total SALES filtered to a single PHONE value.
+60. Filter by ADDRESSLINE1 — Returns all rows where ADDRESSLINE1 matches a given value.
+61. Performance Summary for a Specific ADDRESSLINE1 — Returns transaction count and all key metrics for a single ADDRESSLINE1 value.
+62. ORDERDATE Breakdown for ADDRESSLINE1 = :ADDRESSLINE1 — Ranks each ORDERDATE by total SALES filtered to a single ADDRESSLINE1 value.
+63. STATUS Breakdown for ADDRESSLINE1 = :ADDRESSLINE1 — Ranks each STATUS by total SALES filtered to a single ADDRESSLINE1 value.
+64. Filter by ADDRESSLINE2 — Returns all rows where ADDRESSLINE2 matches a given value.
+65. Performance Summary for a Specific ADDRESSLINE2 — Returns transaction count and all key metrics for a single ADDRESSLINE2 value.
+66. ORDERDATE Breakdown for ADDRESSLINE2 = :ADDRESSLINE2 — Ranks each ORDERDATE by total SALES filtered to a single ADDRESSLINE2 value.
+67. STATUS Breakdown for ADDRESSLINE2 = :ADDRESSLINE2 — Ranks each STATUS by total SALES filtered to a single ADDRESSLINE2 value.
+68. Filter by CITY — Returns all rows where CITY matches a given value.
+69. Performance Summary for a Specific CITY — Returns transaction count and all key metrics for a single CITY value.
+70. ORDERDATE Breakdown for CITY = :CITY — Ranks each ORDERDATE by total SALES filtered to a single CITY value.
+71. STATUS Breakdown for CITY = :CITY — Ranks each STATUS by total SALES filtered to a single CITY value.
+72. Filter by STATE — Returns all rows where STATE matches a given value.
+73. Performance Summary for a Specific STATE — Returns transaction count and all key metrics for a single STATE value.
+74. ORDERDATE Breakdown for STATE = :STATE — Ranks each ORDERDATE by total SALES filtered to a single STATE value.
+75. STATUS Breakdown for STATE = :STATE — Ranks each STATUS by total SALES filtered to a single STATE value.
+76. Filter by POSTALCODE — Returns all rows where POSTALCODE matches a given value.
+77. Performance Summary for a Specific POSTALCODE — Returns transaction count and all key metrics for a single POSTALCODE value.
+78. ORDERDATE Breakdown for POSTALCODE = :POSTALCODE — Ranks each ORDERDATE by total SALES filtered to a single POSTALCODE value.
+79. STATUS Breakdown for POSTALCODE = :POSTALCODE — Ranks each STATUS by total SALES filtered to a single POSTALCODE value.
+80. Filter by COUNTRY — Returns all rows where COUNTRY matches a given value.
+81. Performance Summary for a Specific COUNTRY — Returns transaction count and all key metrics for a single COUNTRY value.
+82. ORDERDATE Breakdown for COUNTRY = :COUNTRY — Ranks each ORDERDATE by total SALES filtered to a single COUNTRY value.
+83. STATUS Breakdown for COUNTRY = :COUNTRY — Ranks each STATUS by total SALES filtered to a single COUNTRY value.
+84. Filter by TERRITORY — Returns all rows where TERRITORY matches a given value.
+85. Performance Summary for a Specific TERRITORY — Returns transaction count and all key metrics for a single TERRITORY value.
+86. ORDERDATE Breakdown for TERRITORY = :TERRITORY — Ranks each ORDERDATE by total SALES filtered to a single TERRITORY value.
+87. STATUS Breakdown for TERRITORY = :TERRITORY — Ranks each STATUS by total SALES filtered to a single TERRITORY value.
+88. Filter by CONTACTLASTNAME — Returns all rows where CONTACTLASTNAME matches a given value.
+89. Performance Summary for a Specific CONTACTLASTNAME — Returns transaction count and all key metrics for a single CONTACTLASTNAME value.
+90. ORDERDATE Breakdown for CONTACTLASTNAME = :CONTACTLASTNAME — Ranks each ORDERDATE by total SALES filtered to a single CONTACTLASTNAME value.
+91. STATUS Breakdown for CONTACTLASTNAME = :CONTACTLASTNAME — Ranks each STATUS by total SALES filtered to a single CONTACTLASTNAME value.
+92. Filter by CONTACTFIRSTNAME — Returns all rows where CONTACTFIRSTNAME matches a given value.
+93. Performance Summary for a Specific CONTACTFIRSTNAME — Returns transaction count and all key metrics for a single CONTACTFIRSTNAME value.
+94. ORDERDATE Breakdown for CONTACTFIRSTNAME = :CONTACTFIRSTNAME — Ranks each ORDERDATE by total SALES filtered to a single CONTACTFIRSTNAME value.
+95. STATUS Breakdown for CONTACTFIRSTNAME = :CONTACTFIRSTNAME — Ranks each STATUS by total SALES filtered to a single CONTACTFIRSTNAME value.
+96. Filter by DEALSIZE — Returns all rows where DEALSIZE matches a given value.
+97. Performance Summary for a Specific DEALSIZE — Returns transaction count and all key metrics for a single DEALSIZE value.
+98. ORDERDATE Breakdown for DEALSIZE = :DEALSIZE — Ranks each ORDERDATE by total SALES filtered to a single DEALSIZE value.
+99. STATUS Breakdown for DEALSIZE = :DEALSIZE — Ranks each STATUS by total SALES filtered to a single DEALSIZE value.
+100. Rows Where SALES Exceeds :min_value — Returns all rows where SALES is above a given threshold.
+101. ORDERDATE with Total SALES Above :threshold — Lists ORDERDATE values whose total SALES exceeds a given threshold.
 
 ---
 
-## 9. Parametric Lookups
+## Data Quality Checks
 
-70. All Transactions for CUSTOMERNAME = :customer_name — Returns all order lines for a specific customer ordered by date.
-71. Revenue Summary for CUSTOMERNAME = :customer_name — Returns total SALES, orders, and units for one specific customer.
-72. Full Performance for CUSTOMERNAME = :customer_name — Shows SALES, units, avg price, and order count for one customer.
-73. Top Products for CUSTOMERNAME = :customer_name — Ranks products by SALES for one specific customer.
-74. Monthly Revenue Trend for CUSTOMERNAME = :customer_name — Shows monthly SALES trend for one customer.
-75. All Transactions for PRODUCTCODE = :product_code — Returns all order lines for a specific product code.
-76. Revenue Summary for PRODUCTCODE = :product_code — Returns total SALES, units, and avg price for one product.
-77. Top Customers for PRODUCTCODE = :product_code — Ranks customers by SALES for a specific product code.
-78. All Transactions for COUNTRY = :country — Returns all order lines for a specific country ordered by date.
-79. Revenue Summary for COUNTRY = :country — Returns total SALES, order count, and units for one country.
-80. Revenue and Orders for PRODUCTLINE = :product_line — Returns total SALES, units, and order count for one product line.
-81. Revenue Summary for TERRITORY = :territory — Returns total SALES, customer count, and units for one territory.
-82. Revenue and Orders for DEALSIZE = :deal_size — Returns total SALES and order count for a specific deal size.
-83. Orders Above :min_revenue — Returns all order lines where SALES exceed a given minimum threshold.
-84. Revenue for CUSTOMERNAME = :customer_name in COUNTRY = :country — Returns SALES filtered to a specific customer-country combination.
+102. Missing Values per Column — Counts NULL values in each column to identify data gaps.
+103. Duplicate QTR_ID Values — Flags any QTR_ID that appears more than once in the dataset.
+104. Negative ORDERNUMBER Values — Flags rows where ORDERNUMBER is negative, which may indicate data errors.
+105. Negative QUANTITYORDERED Values — Flags rows where QUANTITYORDERED is negative, which may indicate data errors.
+106. Negative PRICEEACH Values — Flags rows where PRICEEACH is negative, which may indicate data errors.
 
 ---
 
-## 10. Advanced Analytics
-
-85. Revenue Share % by PRODUCTLINE — Shows each product line's SALES as a percentage of the grand total.
-86. Revenue Share % by CUSTOMERNAME — Shows each customer's SALES contribution as a percentage of total revenue.
-87. Revenue Share % by COUNTRY — Shows each country's SALES as a percentage of the grand total.
-88. Cumulative Revenue Over Time — Shows running total of SALES ordered chronologically using self-join.
-89. Customer Revenue vs Dataset Average — Compares each customer's total SALES against the overall dataset average.
-90. Product Revenue as % of PRODUCTLINE Total — Shows each product's SALES share within its own product line.
-91. Average Order Value by CUSTOMERNAME — Shows average SALES per distinct order for each customer.
-92. Pareto: Customers Generating Top 80% of Revenue — Identifies the high-value customer segment using CTE and running sum.
-
----
-
-## 11. Data Quality Checks
-
-93. NULL Count per Column — Counts NULL values in each column, ordered by count descending.
-94. Duplicate ORDERNUMBER + ORDERLINENUMBER Combinations — Flags any order line combinations that appear more than once.
-95. Negative SALES Values — Flags rows where SALES is negative, indicating potential data entry errors.
-96. Negative QUANTITYORDERED Values — Flags rows where QUANTITYORDERED is less than zero.
-97. SALES Calculation Validation — Flags rows where SALES differs from QUANTITYORDERED × PRICEEACH by more than 1.
-98. Price Below MSRP Check — Lists products where average PRICEEACH is less than MSRP, showing discount magnitude.
-99. Outlier SALES Rows — Returns rows where SALES is more than 3 times the dataset average.
-100. Rows with Any NULL in Key Columns — Flags rows missing values in ORDERNUMBER, SALES, CUSTOMERNAME, or PRODUCTCODE.
-
----
-
-*Generated from dataset inspection — sales order dataset with 25 columns covering 2003–2005 transactions across products, customers, countries, and territories*
+*Generated from dataset inspection — data.csv (2823 rows, 25 columns)*

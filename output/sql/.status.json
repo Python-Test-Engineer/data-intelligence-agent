@@ -1,1 +1,1 @@
-{"status": "error", "message": "'utf-8' codec can't decode byte 0x84 in position 5327: invalid start byte", "original_filename": "sales_data_sample.csv"}
+{"status": "ready", "original_filename": "sales_data_sample.csv"}

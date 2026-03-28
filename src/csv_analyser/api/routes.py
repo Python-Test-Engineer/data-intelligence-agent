@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json as _json
+import re
 import shutil
 import threading
 from io import BytesIO
@@ -189,6 +190,24 @@ def sql_status() -> SqlStatusResponse:
         except Exception:
             pass
     return SqlStatusResponse(status="not_started", original_filename=original_filename)
+
+
+@router.post("/rerun-sql-catalog")
+async def rerun_sql_catalog(background_tasks: BackgroundTasks) -> dict:
+    """Re-trigger the SQL catalog build for the currently uploaded CSV."""
+    if not DATA_PATH.exists():
+        raise HTTPException(status_code=404, detail="No CSV uploaded yet — upload a file first.")
+    orig_csv_path = SQL_STATUS_PATH.parent / "original_csv.md"
+    original_filename = ""
+    if orig_csv_path.exists():
+        try:
+            parts = orig_csv_path.read_text(encoding="utf-8").split("`")
+            if len(parts) >= 2:
+                original_filename = parts[1]
+        except Exception:
+            pass
+    background_tasks.add_task(_build_sql_catalog_bg, DATA_PATH, original_filename)
+    return {"status": "running", "message": "SQL catalog rebuild started."}
 
 
 @router.post("/upload/csv", response_model=CsvUploadResponse)
@@ -508,6 +527,49 @@ async def ask_question(payload: AskRequest) -> AskResponse:
     sql_content = sql_file.read_text(encoding="utf-8").strip()
     context_files: list[str] = [f"output/sql/{sql_file.name}"]
 
+    # ── Extract relevant SQL queries for the sources panel ────────────────────
+    def _relevant_sql_queries(catalog_text: str, q: str, max_results: int = 5) -> list[dict[str, str]]:
+        """Return up to max_results SQL entries whose title/description matches keywords in q."""
+        keywords = {w.lower() for w in re.split(r"\W+", q) if len(w) > 2}
+        entries: list[dict[str, str]] = []
+        current: dict[str, str] | None = None
+        in_sql = False
+        sql_lines: list[str] = []
+        for line in catalog_text.splitlines():
+            stripped = line.strip()
+            if stripped.startswith("## ") and not stripped.startswith("### "):
+                if current is not None and sql_lines:
+                    current["sql"] = "\n".join(sql_lines).strip()
+                    title_lower = current.get("title", "").lower()
+                    desc_lower = current.get("description", "").lower()
+                    if any(kw in title_lower or kw in desc_lower for kw in keywords):
+                        entries.append(current)
+                current = {"title": stripped[3:].strip(), "description": "", "sql": ""}
+                in_sql = False
+                sql_lines = []
+            elif current is None:
+                continue
+            elif stripped.startswith("**Description:**"):
+                current["description"] = stripped.removeprefix("**Description:**").strip()
+            elif stripped == "```sql":
+                in_sql = True
+                sql_lines = []
+            elif stripped == "```" and in_sql:
+                in_sql = False
+            elif in_sql:
+                sql_lines.append(line)
+        if current is not None and sql_lines:
+            current["sql"] = "\n".join(sql_lines).strip()
+            title_lower = current.get("title", "").lower()
+            desc_lower = current.get("description", "").lower()
+            if any(kw in title_lower or kw in desc_lower for kw in keywords):
+                entries.append(current)
+        # skip parametric (placeholder) queries — they have no real results
+        non_param = [e for e in entries if ":" not in e["sql"]]
+        return (non_param or entries)[:max_results]
+
+    sql_queries_for_response = _relevant_sql_queries(sql_content, question)
+
     # ── Load all individual chart insight files ───────────────────────────────
     insights_dir = OUTPUT_DIR / "insights"
     insights_parts: list[str] = []
@@ -575,7 +637,18 @@ async def ask_question(payload: AskRequest) -> AskResponse:
     except Exception as exc:
         raise HTTPException(status_code=400, detail=f"AI request failed: {exc}") from exc
 
-    return AskResponse(question=question, answer=answer, model_used=OBJECTIVES_MODEL, context_files=context_files)
+    if "unable to answer" in answer.lower():
+        _unanswered_path = SQL_STATUS_PATH.parent / "unanswered_questions.md"
+        try:
+            existing = _unanswered_path.read_text(encoding="utf-8") if _unanswered_path.exists() else "# Unanswered Questions\n"
+            import datetime as _dt
+            timestamp = _dt.datetime.now().strftime("%Y-%m-%d %H:%M")
+            existing += f"\n- [{timestamp}] {question}"
+            _unanswered_path.write_text(existing, encoding="utf-8")
+        except Exception:
+            pass  # never block the response over a logging failure
+
+    return AskResponse(question=question, answer=answer, model_used=OBJECTIVES_MODEL, context_files=context_files, sql_queries=sql_queries_for_response)
 
 
 @router.get("/gallery", response_class=HTMLResponse)

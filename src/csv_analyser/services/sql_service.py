@@ -26,12 +26,22 @@ def _entries(df: pd.DataFrame, table: str) -> list[tuple[str, str, str, str, str
     """Build (section, title, description, sql, args) tuples from the DataFrame schema."""
     numeric = [c for c in df.columns if pd.api.types.is_numeric_dtype(df[c]) and not _is_id_col(c)]
     dates = [c for c in df.columns if pd.api.types.is_datetime64_any_dtype(df[c])]
+    # cats: low-cardinality columns used for distributions, grouping, cross-dims
     cats = [
         c for c in df.columns
         if not pd.api.types.is_numeric_dtype(df[c])
         and not pd.api.types.is_datetime64_any_dtype(df[c])
         and not _is_id_col(c)
         and df[c].nunique() <= 50
+    ]
+    # rank_cats: higher cardinality — used for rankings and parametric lookups
+    # (e.g. PRODUCTCODE, CUSTOMERNAME which often have 50–500 unique values)
+    rank_cats = [
+        c for c in df.columns
+        if not pd.api.types.is_numeric_dtype(df[c])
+        and not pd.api.types.is_datetime64_any_dtype(df[c])
+        and not _is_id_col(c)
+        and 1 < df[c].nunique() <= 500
     ]
     ids = [c for c in df.columns if _is_id_col(c)]
 
@@ -115,9 +125,9 @@ def _entries(df: pd.DataFrame, table: str) -> list[tuple[str, str, str, str, str
     _ranking_cols = list(dict.fromkeys(c for c in [_revenue_col, _profit_col, _qty_col] if c))
 
     # ── Rankings ─────────────────────────────────────────────────────────────
-    if numeric and cats:
+    if numeric and rank_cats:
         if _ranking_cols:
-            for cat in cats[:3]:
+            for cat in rank_cats[:6]:
                 for metric in _ranking_cols:
                     select_parts = [
                         f"    {cat}",
@@ -141,7 +151,7 @@ def _entries(df: pd.DataFrame, table: str) -> list[tuple[str, str, str, str, str
                     ))
         else:
             # Fallback for datasets without obvious business metric columns
-            n0, c0 = numeric[0], cats[0]
+            n0, c0 = numeric[0], rank_cats[0]
             out.append((
                 "Rankings",
                 f"Top 10 {c0} by {n0}",
@@ -156,8 +166,8 @@ def _entries(df: pd.DataFrame, table: str) -> list[tuple[str, str, str, str, str
                 f"SELECT {c0}, SUM({n0}) AS total_{n0}\nFROM {table}\nGROUP BY {c0}\nORDER BY total_{n0} ASC\nLIMIT 10;",
                 "—",
             ))
-            if len(cats) >= 2:
-                c1 = cats[1]
+            if len(rank_cats) >= 2:
+                c1 = rank_cats[1]
                 out.append((
                     "Rankings",
                     f"Top 10 {c1} by {n0}",
@@ -256,8 +266,10 @@ def _entries(df: pd.DataFrame, table: str) -> list[tuple[str, str, str, str, str
             ))
 
     # ── Parametric lookups ───────────────────────────────────────────────────
-    if cats and numeric:
-        # Build the performance summary metric columns (reused for every category)
+    if rank_cats and numeric:
+        _biz_col = _revenue_col or _profit_col or (numeric[0] if numeric else None)
+
+        # Build full performance metric block reused across every dimension
         _param_metrics: list[str] = ["    COUNT(*) AS transaction_count"]
         if _revenue_col:
             _param_metrics.append(f"    ROUND(SUM({_revenue_col}), 2) AS total_{_revenue_col}")
@@ -267,13 +279,15 @@ def _entries(df: pd.DataFrame, table: str) -> list[tuple[str, str, str, str, str
             _param_metrics.append(f"    SUM({_qty_col}) AS total_{_qty_col}")
         if _bm_pct:
             _param_metrics.append(f"    ROUND(AVG({_bm_pct[0]}), 1) AS avg_{_bm_pct[0]}")
-        # Fallback: if no business cols detected, include first two numeric cols
+        # Fallback: include first two numeric cols if no business cols detected
         if len(_param_metrics) == 1 and numeric:
             for n in numeric[:2]:
                 _param_metrics.append(f"    ROUND(SUM({n}), 2) AS total_{n}")
         _param_metrics_str = ",\n".join(_param_metrics)
 
-        for cat in cats[:4]:
+        # Per-dimension: full parametric coverage for every rankable column
+        for cat in rank_cats:
+            # 1. Row filter
             out.append((
                 "Parametric Lookups",
                 f"Filter by {cat}",
@@ -281,6 +295,7 @@ def _entries(df: pd.DataFrame, table: str) -> list[tuple[str, str, str, str, str
                 f"SELECT *\nFROM {table}\nWHERE {cat} = :{cat};",
                 cat,
             ))
+            # 2. Performance summary
             out.append((
                 "Parametric Lookups",
                 f"Performance Summary for a Specific {cat}",
@@ -293,27 +308,77 @@ def _entries(df: pd.DataFrame, table: str) -> list[tuple[str, str, str, str, str
                 ),
                 cat,
             ))
+            # 3. Ranking of other dimensions within this filter
+            if _biz_col:
+                other_cats = [c for c in rank_cats if c != cat]
+                for other in other_cats[:2]:
+                    out.append((
+                        "Parametric Lookups",
+                        f"{other} Breakdown for {cat} = :{cat}",
+                        f"Ranks each {other} by total {_biz_col} filtered to a single {cat} value.",
+                        (
+                            f"SELECT\n"
+                            f"    {other},\n"
+                            f"    COUNT(*) AS transaction_count,\n"
+                            f"    ROUND(SUM({_biz_col}), 2) AS total_{_biz_col}\n"
+                            f"FROM {table}\n"
+                            f"WHERE {cat} = :{cat}\n"
+                            f"GROUP BY {other}\n"
+                            f"ORDER BY total_{_biz_col} DESC;"
+                        ),
+                        cat,
+                    ))
+            # 4. Monthly trend for this dimension (if date-like columns present)
+            if dates and _biz_col:
+                d0 = dates[0]
+                out.append((
+                    "Parametric Lookups",
+                    f"Monthly {_biz_col} Trend for {cat} = :{cat}",
+                    f"Returns monthly {_biz_col} totals filtered to a single {cat} value.",
+                    (
+                        f"SELECT\n"
+                        f"    strftime('%Y-%m', {d0}) AS month,\n"
+                        f"    COUNT(*) AS transaction_count,\n"
+                        f"    SUM({_biz_col}) AS total_{_biz_col}\n"
+                        f"FROM {table}\n"
+                        f"WHERE {cat} = :{cat}\n"
+                        f"GROUP BY month\n"
+                        f"ORDER BY month;"
+                    ),
+                    cat,
+                ))
 
-        # Cross-dimensional: breakdown of cat1 values for a specific cat0
-        if len(cats) >= 2 and (_revenue_col or _profit_col):
-            c0, c1 = cats[0], cats[1]
-            _biz_col = _revenue_col or _profit_col
+        # Threshold parametric queries
+        if _biz_col:
             out.append((
                 "Parametric Lookups",
-                f"{c0} × {c1} Revenue Breakdown",
-                f"Returns {c1} revenue breakdown for a specific {c0} value.",
+                f"Rows Where {_biz_col} Exceeds :min_value",
+                f"Returns all rows where {_biz_col} is above a given threshold.",
                 (
-                    f"SELECT\n"
-                    f"    {c1},\n"
-                    f"    COUNT(*) AS transaction_count,\n"
-                    f"    ROUND(SUM({_biz_col}), 2) AS total_{_biz_col}\n"
-                    f"FROM {table}\n"
-                    f"WHERE {c0} = :{c0}\n"
-                    f"GROUP BY {c1}\n"
-                    f"ORDER BY total_{_biz_col} DESC;"
+                    f"SELECT *\nFROM {table}\n"
+                    f"WHERE {_biz_col} > :min_value\n"
+                    f"ORDER BY {_biz_col} DESC;"
                 ),
-                c0,
+                "min_value",
             ))
+            if rank_cats:
+                c0 = rank_cats[0]
+                out.append((
+                    "Parametric Lookups",
+                    f"{c0} with Total {_biz_col} Above :threshold",
+                    f"Lists {c0} values whose total {_biz_col} exceeds a given threshold.",
+                    (
+                        f"SELECT\n"
+                        f"    {c0},\n"
+                        f"    COUNT(*) AS transaction_count,\n"
+                        f"    ROUND(SUM({_biz_col}), 2) AS total_{_biz_col}\n"
+                        f"FROM {table}\n"
+                        f"GROUP BY {c0}\n"
+                        f"HAVING SUM({_biz_col}) > :threshold\n"
+                        f"ORDER BY total_{_biz_col} DESC;"
+                    ),
+                    "threshold",
+                ))
 
     # ── Time-based ───────────────────────────────────────────────────────────
     if dates and numeric:
