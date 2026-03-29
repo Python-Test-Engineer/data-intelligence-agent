@@ -57,6 +57,10 @@ To access Anthropic's official brand identity and style resources, use this skil
 - Cycles through orange, blue, and green accents
 - Maintains visual interest while staying on-brand
 
+## Examples
+
+- [`examples/brand-test.html`](examples/brand-test.html) — Full HTML reference page demonstrating all brand tokens: color swatches, Poppins/Lora typography specimen, accent pills, tinted cards, dark-background section, and button variants.
+
 ## Technical Details
 
 ### Font Management
