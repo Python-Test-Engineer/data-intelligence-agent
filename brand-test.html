@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anthropic Brand Guidelines — Test Page</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Brand tokens ── */
+    :root {
+      --color-dark:        #141413;
+      --color-light:       #faf9f5;
+      --color-mid-gray:    #b0aea5;
+      --color-light-gray:  #e8e6dc;
+      --color-orange:      #d97757;
+      --color-blue:        #6a9bcc;
+      --color-green:       #788c5d;
+
+      --font-heading: 'Poppins', Arial, sans-serif;
+      --font-body:    'Lora', Georgia, serif;
+    }
+
+    /* ── Base ── */
+    body {
+      background: var(--color-light);
+      color: var(--color-dark);
+      font-family: var(--font-body);
+      font-size: 1.5rem;
+      line-height: 1.7;
+    }
+
+    /* ── Layout ── */
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    /* ── Typography ── */
+    h1, h2, h3 {
+      font-family: var(--font-heading);
+      line-height: 1.2;
+    }
+
+    h1 { font-size: 2.75rem; font-weight: 700; margin-bottom: 0.4rem; }
+    h2 { font-size: 1.6rem;  font-weight: 600; margin: 2.5rem 0 0.75rem; }
+    h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.4rem; }
+
+    p  { margin-bottom: 1rem; max-width: 65ch; }
+
+    /* ── Header band ── */
+    .site-header {
+      background: var(--color-dark);
+      color: var(--color-light);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+    }
+    .site-header h1 { color: var(--color-light); }
+    .site-header p  {
+      font-family: var(--font-body);
+      color: var(--color-mid-gray);
+      margin: 0.5rem auto 0;
+      max-width: 50ch;
+    }
+
+    /* ── Divider ── */
+    hr {
+      border: none;
+      border-top: 2px solid var(--color-light-gray);
+      margin: 2rem 0;
+    }
+
+    /* ── Color swatch grid ── */
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0 2rem;
+    }
+
+    .swatch {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,.10);
+    }
+    .swatch-color {
+      height: 80px;
+    }
+    .swatch-info {
+      padding: 0.6rem 0.75rem;
+      background: #fff;
+    }
+    .swatch-info .label {
+      font-family: var(--font-heading);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--color-dark);
+    }
+    .swatch-info .hex {
+      font-size: 0.75rem;
+      color: var(--color-mid-gray);
+      font-family: monospace;
+    }
+
+    /* ── Accent pills ── */
+    .pill {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 0.35rem 1rem;
+      font-family: var(--font-heading);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #fff;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .pill-orange { background: var(--color-orange); }
+    .pill-blue   { background: var(--color-blue); }
+    .pill-green  { background: var(--color-green); }
+
+    /* ── Card strip ── */
+    .card-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0 2rem;
+    }
+
+    .card {
+      border-radius: 10px;
+      padding: 1.4rem 1.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+    }
+    .card-orange { background: #fdf3ef; }
+    .card-orange::before { background: var(--color-orange); }
+    .card-blue   { background: #eef4fb; }
+    .card-blue::before   { background: var(--color-blue); }
+    .card-green  { background: #f0f3ec; }
+    .card-green::before  { background: var(--color-green); }
+
+    .card h3 { font-family: var(--font-heading); margin-bottom: 0.35rem; }
+    .card p  { font-size: 0.9rem; color: #444; margin-bottom: 0; max-width: 100%; }
+
+    /* ── Dark section ── */
+    .dark-section {
+      background: var(--color-dark);
+      color: var(--color-light);
+      border-radius: 12px;
+      padding: 2rem 2rem;
+      margin: 2rem 0;
+    }
+    .dark-section h2 {
+      color: var(--color-light);
+      margin-top: 0;
+    }
+    .dark-section p {
+      color: var(--color-mid-gray);
+    }
+    .dark-section .accent { color: var(--color-orange); }
+
+    /* ── Typography specimen ── */
+    .type-specimen {
+      background: var(--color-light-gray);
+      border-radius: 10px;
+      padding: 1.75rem 2rem;
+      margin: 1.25rem 0 2rem;
+    }
+    .type-specimen .specimen-row {
+      margin-bottom: 1.2rem;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid var(--color-mid-gray);
+    }
+    .type-specimen .specimen-row:last-child {
+      margin-bottom: 0; padding-bottom: 0; border-bottom: none;
+    }
+    .type-specimen .meta {
+      font-family: var(--font-heading);
+      font-size: 0.72rem;
+      color: var(--color-mid-gray);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 0.25rem;
+    }
+
+    /* ── CTA button ── */
+    .btn {
+      display: inline-block;
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 0.9rem;
+      border-radius: 6px;
+      padding: 0.65rem 1.4rem;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: opacity .15s;
+    }
+    .btn:hover { opacity: .85; }
+    .btn-primary  { background: var(--color-orange); color: #fff; }
+    .btn-secondary { background: transparent; color: var(--color-dark); border: 2px solid var(--color-dark); }
+    .btn-ghost     { background: transparent; color: var(--color-blue); border: 2px solid var(--color-blue); }
+
+    /* ── Footer ── */
+    .site-footer {
+      margin-top: 4rem;
+      padding-top: 1.5rem;
+      border-top: 2px solid var(--color-light-gray);
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      color: var(--color-mid-gray);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <h1>Anthropic Brand Test Page</h1>
+    <p>A visual reference for official colors, typography, and UI components.</p>
+  </header>
+
+  <div class="container">
+
+    <!-- Color Palette -->
+    <h2>Color Palette</h2>
+    <p>The full set of brand tokens, from base neutrals to accent hues.</p>
+
+    <div class="swatch-grid">
+      <div class="swatch">
+        <div class="swatch-color" style="background:#141413;"></div>
+        <div class="swatch-info"><div class="label">Dark</div><div class="hex">#141413</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#faf9f5; border:1px solid #e8e6dc;"></div>
+        <div class="swatch-info"><div class="label">Light</div><div class="hex">#faf9f5</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#b0aea5;"></div>
+        <div class="swatch-info"><div class="label">Mid Gray</div><div class="hex">#b0aea5</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#e8e6dc;"></div>
+        <div class="swatch-info"><div class="label">Light Gray</div><div class="hex">#e8e6dc</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#d97757;"></div>
+        <div class="swatch-info"><div class="label">Orange</div><div class="hex">#d97757</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#6a9bcc;"></div>
+        <div class="swatch-info"><div class="label">Blue</div><div class="hex">#6a9bcc</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#788c5d;"></div>
+        <div class="swatch-info"><div class="label">Green</div><div class="hex">#788c5d</div></div>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- Typography -->
+    <h2>Typography</h2>
+    <p>Poppins for headings, Lora for body copy — with system-font fallbacks.</p>
+
+    <div class="type-specimen">
+      <div class="specimen-row">
+        <div class="meta">Heading — Poppins 700 · 2.75rem</div>
+        <h1 style="margin:0;">The quick brown fox</h1>
+      </div>
+      <div class="specimen-row">
+        <div class="meta">Subheading — Poppins 600 · 1.6rem</div>
+        <h2 style="margin:0;">Jumps over the lazy dog</h2>
+      </div>
+      <div class="specimen-row">
+        <div class="meta">Body — Lora 400 · 1rem</div>
+        <p style="margin:0;">Anthropic is an AI safety company whose mission is the responsible development and maintenance of advanced AI for the long-term benefit of humanity.</p>
+      </div>
+      <div class="specimen-row">
+        <div class="meta">Body Italic — Lora 400i · 1rem</div>
+        <p style="font-style:italic; margin:0;">"Safety and helpfulness are more complementary than they are at odds."</p>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- Accent Pills -->
+    <h2>Accent Colors</h2>
+    <p>Orange is the primary accent; blue and green cycle in as secondary and tertiary accents.</p>
+
+    <span class="pill pill-orange">Orange #d97757</span>
+    <span class="pill pill-blue">Blue #6a9bcc</span>
+    <span class="pill pill-green">Green #788c5d</span>
+
+    <hr />
+
+    <!-- Cards -->
+    <h2>Component Cards</h2>
+    <p>Each accent color is used as a left-border highlight on a tinted background.</p>
+
+    <div class="card-strip">
+      <div class="card card-orange">
+        <h3>Orange Accent</h3>
+        <p>Primary accent — draws attention to the most important action or callout on the page.</p>
+      </div>
+      <div class="card card-blue">
+        <h3>Blue Accent</h3>
+        <p>Secondary accent — used for informational elements, links, and supporting highlights.</p>
+      </div>
+      <div class="card card-green">
+        <h3>Green Accent</h3>
+        <p>Tertiary accent — ideal for success states, confirmations, or nature-adjacent content.</p>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- Dark section -->
+    <div class="dark-section">
+      <h2>Dark Background Usage</h2>
+      <p>
+        When the background is <span class="accent">Dark (#141413)</span>, body copy flips to
+        Light (#faf9f5) and secondary text uses Mid Gray (#b0aea5).
+        Accent colors remain unchanged — they read well on dark surfaces.
+      </p>
+    </div>
+
+    <!-- Buttons -->
+    <h2>Buttons</h2>
+    <p>Three variants to cover primary CTAs, secondary actions, and ghost/outline patterns.</p>
+
+    <button class="btn btn-primary">Primary CTA</button>
+    <button class="btn btn-secondary">Secondary Action</button>
+    <button class="btn btn-ghost">Ghost / Outline</button>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      Anthropic Brand Guidelines Test Page &mdash; for design reference only.
+    </footer>
+
+  </div>
+</body>
+</html>
