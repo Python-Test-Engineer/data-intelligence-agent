@@ -6,6 +6,73 @@ searchable SQL query library — all driven by slash commands and autonomous age
 
 ---
 
+## LLM Setup
+
+The AI features (`/generate/insights`, `/generate/response-to-objectives`, `/ask`) require an
+LLM API key. The default provider is **OpenRouter**, which gives access to hundreds of models
+from a single key.
+
+### Option 1 — OpenRouter (default)
+
+1. Sign up at [openrouter.ai](https://openrouter.ai) and create an API key.
+2. Copy `.env.example` to `.env` (or create `.env` in the project root) and add:
+
+```env
+OPENROUTER_API_KEY=sk-or-...
+
+# Optional: override which model is used for each feature
+OPENROUTER_INSIGHTS_MODEL=anthropic/claude-3.5-sonnet
+OPENROUTER_OBJECTIVES_MODEL=minimax/minimax-m2.5:free
+```
+
+The `OPENROUTER_MODEL` variable acts as a fallback for both if the specific vars are not set.
+Model IDs use OpenRouter's `provider/model-name` format — browse the full list at
+[openrouter.ai/models](https://openrouter.ai/models).
+
+### Option 2 — OpenAI directly
+
+The two LLM services (`insight_service.py`, `objectives_service.py`) use the `anthropic` Python
+SDK with a custom `base_url` pointing at OpenRouter. To switch to OpenAI:
+
+**Step 1 — Install the OpenAI SDK:**
+
+```bash
+uv add openai
+```
+
+**Step 2 — Replace the client in each service.**
+
+In `src/csv_analyser/services/insight_service.py` and
+`src/csv_analyser/services/objectives_service.py`, replace the `anthropic` import and client
+construction with the OpenAI equivalent:
+
+```python
+# Before (OpenRouter via anthropic SDK)
+import anthropic
+client = anthropic.Anthropic(
+    api_key=os.environ.get("OPENROUTER_API_KEY"),
+    base_url="https://openrouter.ai/api",
+)
+response = client.messages.create(model="anthropic/claude-3.5-sonnet", ...)
+
+# After (OpenAI)
+from openai import OpenAI
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+response = client.chat.completions.create(model="gpt-4o", ...)
+```
+
+The response shape differs between the two SDKs — `anthropic` returns `response.content[0].text`
+while `openai` returns `response.choices[0].message.content`. Update those access patterns in
+the same files after swapping the client.
+
+**Step 3 — Set your `.env`:**
+
+```env
+OPENAI_API_KEY=sk-...
+```
+
+---
+
 ## Quick Start
 
 ```bash
