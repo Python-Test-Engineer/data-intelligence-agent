@@ -63,6 +63,16 @@ and `/sql-create` commands and should be preserved across runs.
 - `OPENROUTER_API_KEY` — required for `/generate/insights`, `/generate/response-to-objectives`, and `/ask`
 - Core routes (`/upload/csv`, `/summary`, `/generate/charts`, `/generate/report`) work without any API key
 
+## Protected Files — Never Delete
+
+The following files and directories must **never** be deleted, moved, or overwritten by any agent action, cleanup routine, or pipeline step:
+
+- `_ideas/kaggle_ideas.md`
+- `_plans/kaggle_plan.md`
+- `_specs/kaggle_specs.md`
+
+These contain research briefs, analysis plans, and technical specs used for presentations and interviews. They are not generated artifacts — they are source documents. If a pipeline or cleanup step would affect these paths, skip them explicitly.
+
 ## Agent Working Rules
 
 - Keep changes minimal and scoped to the user request

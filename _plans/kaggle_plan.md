@@ -1,100 +1,92 @@
-# Research Plan — Neuroblastoma Gene Expression Exploratory Analysis
+# Research Plan — Retail Orders Exploratory Analysis
 
 **Idea source:** `_ideas/kaggle_ideas.md`
 **Dataset(s):** `data/data.csv`
-**Date:** 2026-03-21
+**Date:** 2026-04-16
 
 ---
 
 ## 1. Research Question
 
-Perform a thorough exploratory data analysis (EDA) of a neuroblastoma gene expression dataset containing clinical variables, expression levels for 16 cancer-relevant genes, and event-free survival outcomes. The goal is to uncover patterns, distributions, correlations, and group differences that would prepare a researcher for interview questions ranging from basic descriptive statistics to advanced analytical reasoning. **No predictive modelling** — this is purely exploratory. The primary outcome of interest is the binary `event` column (relapse/death vs. censored), evaluated by **AUROC** should modelling be pursued in a future phase.
+Perform a thorough exploratory data analysis (EDA) of a retail orders dataset containing order identifiers, product and category dimensions, a geographic (city) dimension, and three revenue-related numeric columns (quantity, unit price, total price). The goal is to uncover sales patterns, product and category performance, geographic revenue distribution, pricing structure, and data quality issues — preparing for interview questions ranging from basic descriptive statistics to advanced analytical reasoning.
 
 ---
 
 ## 2. Dataset Summary
 
-| Column | Type | Missing % | Notes |
-|---|---|---|---|
-| `patient_id` | Categorical (ID) | 0% | 100 unique values — primary key |
-| `age_months` | Numeric | 0% | Range 1–89, mean 30.1, std 19.4 |
-| `stage` | Categorical | 0% | 6 levels: 1, 2A, 2B, 3, 4, 4S. Stage 4 dominates (50%) |
-| `risk_group` | Categorical | 0% | 3 levels: high (45%), low (30%), intermediate (25%) |
-| `mycn_amplified` | Binary (0/1) | 0% | 20% amplified |
-| `expr_MYCN` | Numeric (log2) | 0% | Range 4.78–15.08, mean 8.86 — bimodal expected (amplified vs. not) |
-| `expr_ALK` | Numeric (log2) | 0% | Range 2.11–13.05, mean 8.19 |
-| `expr_PHOX2B` | Numeric (log2) | 0% | Range 2.85–12.40, mean 7.44 |
-| `expr_TH` | Numeric (log2) | 0% | Range 2.72–11.36, mean 7.63 |
-| `expr_CHGB` | Numeric (log2) | 0% | Range 2.85–10.82, mean 7.25 |
-| `expr_DBH` | Numeric (log2) | 0% | Range 3.86–11.70, mean 7.40 |
-| `expr_NTRK1` | Numeric (log2) | 0% | Range 2.85–12.68, mean 8.13 — elevated in low-risk |
-| `expr_NTRK2` | Numeric (log2) | 0% | Range 2.78–14.25, mean 7.47 |
-| `expr_MDM2` | Numeric (log2) | 0% | Range 3.16–12.98, mean 8.51 |
-| `expr_CDK4` | Numeric (log2) | 0% | Range 3.27–12.44, mean 8.18 |
-| `expr_BIRC5` | Numeric (log2) | 0% | Range 3.96–13.29, mean 7.66 |
-| `expr_CCND1` | Numeric (log2) | 0% | Range 2.14–13.49, mean 7.42 |
-| `expr_MYC` | Numeric (log2) | 0% | Range 4.14–12.82, mean 7.72 |
-| `expr_TERT` | Numeric (log2) | 0% | Range 3.44–11.75, mean 7.37 |
-| `expr_ATRX` | Numeric (log2) | 0% | Range 3.80–11.91, mean 7.54 |
-| `expr_TP53` | Numeric (log2) | 0% | Range 2.54–12.75, mean 7.13 |
-| `efs_months` | Numeric | 0% | Range 1.0–85.4, mean 29.1, std 20.3 |
-| `event` | Binary (0/1) | 0% | **Target variable.** 47% event, 53% censored — reasonably balanced |
+| Column | Type | Notes |
+|---|---|---|
+| `order_id` | Categorical (ID) | Unique per row — primary key; format `ORD###` |
+| `product` | Categorical | Product name (e.g. Monitor, Mouse, Keyboard) |
+| `category` | Categorical | Product category (e.g. Electronics, Accessories) |
+| `city` | Categorical | City of the order (e.g. New York, London, Paris) |
+| `quantity` | Numeric (int) | Units ordered — must be positive |
+| `unit_price` | Numeric (float) | Price per unit — must be positive |
+| `total_price` | Numeric (float) | Derived: `quantity × unit_price` — must equal the product of the two |
 
-### Key Observations
+### Key Observations from Sample
 
-- **Zero missing values** across all 23 columns — no imputation needed.
-- **No duplicate patient IDs** — each row is a unique patient.
-- **Stage 4 dominates** at 50% of patients, reflecting real-world neuroblastoma epidemiology.
-- **High-risk group is the largest** (45%), consistent with the stage distribution.
-- **MYCN amplification** is present in 20% of patients — expect bimodal `expr_MYCN` distribution.
-- **Event rate is ~47%** — well-balanced for binary classification; no oversampling needed.
-- All gene expression values are on a **log2 scale** with broadly similar ranges (roughly 2–15).
-- **NTRK1** appears elevated in low-risk patients — a known favourable prognostic marker in neuroblastoma.
-- **ALK, MDM2, CDK4** show elevated expression in high-risk patients.
+- **`total_price` is a derived column** — it must always equal `quantity × unit_price`. Any deviation signals a data quality issue.
+- **No date column** — time-series and trend analysis are not possible with the current schema. This is a notable analytical gap.
+- **Three categorical dimensions** (`product`, `category`, `city`) allow multi-dimensional revenue slicing.
+- **`order_id`** is an identifier and must be excluded from all aggregations.
+- **`unit_price` is a list/sale price** — profit margin analysis is not possible without a cost column.
+- **Accessories dominates by order count** (2 of 3 rows); Electronics leads revenue (Monitor at £3,499.90 vs £789.87 for Accessories combined).
 
 ---
 
 ## 3. Proposed Phases
 
 ### Phase 1 — Data Quality & Cleaning
-- **Validate data types:** Confirm all numeric columns parse correctly; verify categorical levels match expected values.
-- **Dirty row detection:** Flag any rows with impossible values (negative expression, negative age, `efs_months` < 0, `event` not in {0,1}, stage not in valid set). Save flagged rows to `output/PROJECT_XX/dirty.csv` with a `reason` column.
-- **Descriptive statistics:** Generate a summary table of all columns (count, mean, std, min, Q25, Q50, Q75, max for numerics; value counts for categoricals).
+- **Schema validation:** Confirm all 7 expected columns are present with correct types.
+- **Dirty row detection:**
+  - NULL or empty values in any column
+  - Duplicate `order_id` values (flag subsequent occurrences as duplicates)
+  - Negative or zero `quantity`, `unit_price`, or `total_price`
+  - `total_price` inconsistent with `round(quantity × unit_price, 2)` — flag any discrepancy > £0.01
+  - Products appearing in more than one category (category-product mapping inconsistency)
+- **Summary statistics:** Descriptive table for numeric columns (count, mean, std, min, Q25, Q50, Q75, max); value counts and percentages for categorical columns.
+- **Output:** `output/PROJECT_01/dirty.csv` with `reason` column; `output/PROJECT_01/summary_stats.csv`.
 
 ### Phase 2 — Univariate Analysis
-- **Distribution plots for each gene** — Histograms with KDE overlays for all 16 gene expression columns.
-- **Age distribution** — Histogram with KDE; annotate median and mean.
-- **EFS distribution** — Histogram with KDE, stratified by event status.
-- **Bar charts** for categorical variables: `stage`, `risk_group`, `mycn_amplified`, `event`.
-- **Box plots** of gene expression grouped by `event` — identify genes with visually distinct distributions between event/no-event groups.
-- **MYCN bimodality check** — Overlay `expr_MYCN` distributions for MYCN-amplified vs. non-amplified patients.
+- **Numeric distributions:** Histograms with KDE overlay for `quantity`, `unit_price`, `total_price`.
+  - Annotate mean and median with vertical lines on each plot.
+  - Note any visible skew (expected: `unit_price` and `total_price` right-skewed if full dataset has many low-price accessories alongside a few high-price electronics items).
+- **Categorical frequency charts:**
+  - Bar chart: order count per `product` (horizontal, sorted descending).
+  - Bar chart: order count per `category`.
+  - Bar chart: order count per `city`.
+- **Revenue bar charts (per dimension):**
+  - Total `total_price` per `product` — ranked descending.
+  - Total `total_price` per `category`.
+  - Total `total_price` per `city`.
+- **Price-point chart:** `unit_price` per product — reveals product pricing tiers clearly.
 
-### Phase 3 — Bivariate & Group Comparisons
-- **Correlation heatmap** — Pearson correlation matrix across all 16 gene expression columns plus `age_months` and `efs_months`. Annotate strong correlations (|r| > 0.5).
-- **Gene expression by risk group** — Grouped box plots for each gene across low/intermediate/high risk.
-- **Gene expression by stage** — Grouped box plots for key genes (MYCN, NTRK1, ALK) across stages.
-- **Clinical variable cross-tabs:**
-  - `risk_group` × `event` — stacked bar chart + chi-square test.
-  - `stage` × `event` — stacked bar chart + chi-square test.
-  - `mycn_amplified` × `event` — stacked bar chart + Fisher's exact test.
-  - `age_months` × `event` — box plot + Mann-Whitney U test.
-- **Statistical tests** — For each gene, run Mann-Whitney U test comparing expression in event=1 vs. event=0. Report p-values and flag significant genes (p < 0.05 after Bonferroni correction for 16 tests).
+### Phase 3 — Bivariate & Revenue Analysis
+- **Revenue by category:** Side-by-side grouped bar: total revenue and total quantity per `category`.
+- **Revenue by product:** Ranked horizontal bar of `total_price` per product — top revenue contributors.
+- **Revenue by city:** Ranked horizontal bar of `total_price` per city — geographic revenue split.
+- **Average order value by category:** `AVG(total_price)` grouped by category — distinguishes price-driven vs. volume-driven categories.
+- **Product × city revenue heatmap:** Grid heatmap of `SUM(total_price)` for each product × city combination — identifies geographic concentration per product.
+- **Category × city stacked bar:** Revenue stacked by category per city.
+- **Quantity vs. total price scatter:** Scatter plot coloured by `category` — confirms the `total_price = quantity × unit_price` relationship and reveals any outliers.
+- **Unit price vs. total price scatter:** Scatter coloured by `product` — checks within-product pricing consistency across orders.
+- **Correlation heatmap:** Pearson correlations for `quantity`, `unit_price`, `total_price`. Note: the high `unit_price`–`total_price` correlation is partially mathematical; the `quantity`–`total_price` relationship is the more analytically meaningful signal.
 
-### Phase 4 — Multivariate Exploration
-- **PCA** (Principal Component Analysis) on the 16 gene expression columns:
-  - Scree plot showing variance explained per component.
-  - 2D scatter of PC1 vs. PC2, coloured by `risk_group`, `event`, and `mycn_amplified` (3 separate plots).
-  - Loading plot showing gene contributions to PC1 and PC2.
-- **Clustermap** — Hierarchical clustering heatmap of gene expression across patients, with row annotations for risk group and event status.
+### Phase 4 — Data Quality Deep-Dive
+- **Derived column audit:** Verify `total_price == round(quantity × unit_price, 2)` row by row; produce a table of discrepancies.
+- **Price consistency check:** Flag any product with more than one distinct `unit_price` across rows — suggests pricing inconsistency or promotional pricing.
+- **Category–product mapping audit:** Confirm each product maps to exactly one category; flag exceptions.
+- **Order ID uniqueness audit:** Confirm no duplicate `order_id`; assess whether the ID format (`ORD###`) is sequential and gap-free.
 
 ### Phase 5 — Reporting
-- **HTML report** — A single self-contained HTML file consolidating:
-  - Executive summary of key findings.
-  - All charts and plots embedded inline (base64-encoded PNGs or interactive Plotly).
+- **HTML report** — a single self-contained file consolidating:
+  - Executive summary (key revenue figures, top product/category/city, data quality status).
+  - All charts embedded as base64 PNGs.
   - Summary statistics tables.
-  - Statistical test results table (gene, test statistic, p-value, significance).
-  - Key takeaways section for interview preparation.
-- Save to `output/PROJECT_XX/report.html`.
+  - Data quality findings table.
+  - Interview preparation notes (see Section 5 below).
+- Save to `output/PROJECT_01/report.html`.
 
 ---
 
@@ -104,42 +96,55 @@ The `/spec` phase should produce the following scripts:
 
 | Script | Phase | Purpose | Key Outputs |
 |---|---|---|---|
-| `phase1_clean.py` | 1 | Load CSV, validate types, detect dirty rows, produce summary stats | `dirty.csv`, `summary_stats.csv` |
-| `phase2_univariate.py` | 2 | Distribution plots for all numeric and categorical columns | Multiple PNG files |
-| `phase3_bivariate.py` | 3 | Correlation heatmap, grouped comparisons, statistical tests | PNG files, `stat_tests.csv` |
-| `phase4_multivariate.py` | 4 | PCA, clustering heatmap | PNG files, `pca_variance.csv` |
-| `phase5_report.py` | 5 | Assemble all outputs into a single HTML report | `report.html` |
+| `phase1_clean.py` | 1 | Load CSV, validate schema, detect dirty rows, produce summary stats | `dirty.csv`, `summary_stats.csv` |
+| `phase2_univariate.py` | 2 | Distribution plots for numerics; frequency and revenue bar charts for categoricals | `uni_*.png` |
+| `phase3_bivariate.py` | 3 | Revenue cross-analysis, correlation heatmap, scatter plots, heatmap matrix | `bi_*.png` |
+| `phase4_report.py` | 4 | Assemble all outputs into a single self-contained HTML report | `report.html` |
 
 ### Data Contracts Between Scripts
-- All scripts read from `data/data.csv` (raw source) or from cleaned intermediate outputs.
-- Phase 1 outputs `dirty.csv` — subsequent phases should load `data.csv` and exclude any `patient_id` values found in `dirty.csv`.
-- All plots saved as PNG to `output/PROJECT_XX/`.
-- Phase 5 reads all PNGs and CSVs from `output/PROJECT_XX/` to assemble the final HTML.
+- All scripts read from `data/data.csv` directly; Phases 2–4 re-apply dirty-row exclusion from `dirty.csv` on each run (if the file exists).
+- All PNGs saved to `output/PROJECT_01/` with `uni_` or `bi_` prefix.
+- Phase 4 reads all PNGs and CSVs from `output/PROJECT_01/` to assemble the HTML.
+- `RANDOM_SEED = 42` and `OUTPUT_DIR = "output/PROJECT_01"` defined at the top of every script.
 
 ### Libraries
-- **pandas** — data manipulation
-- **matplotlib + seaborn** — static plots
-- **scipy.stats** — statistical tests (Mann-Whitney U, chi-square, Fisher's exact)
-- **scikit-learn** — PCA
-- **jinja2** or string templating — HTML report generation
+- **pandas** — data manipulation and aggregation
+- **matplotlib + seaborn** — all static charts and heatmaps
+- **scipy.stats** — Pearson correlation, descriptive stats
+- **jinja2** or f-string templating — HTML report assembly
 
 ---
 
-## 5. Open Questions / Assumptions
+## 5. Interview Preparation Notes
 
-- **Assumption:** Gene expression values are already log2-normalised. No additional normalisation (quantile, z-score) will be applied unless distributions suggest otherwise.
-- **Assumption:** `patient_id` is excluded from all analyses (identifier only).
-- **Assumption:** `efs_months` will be used descriptively (e.g., distributions by group) but not in survival modelling, per the "exploratory only" scope.
-- **Assumption:** The interview scope covers both statistical literacy (interpreting p-values, effect sizes) and domain knowledge (neuroblastoma biology, gene function).
+Key analytical topics this dataset is likely to probe:
+
+- **Revenue vs. volume distinction:** Total price measures revenue; quantity measures volume. A high-revenue product may have low volume (high unit price) or high volume (low unit price). Monitor is the clearest example — one order, highest revenue.
+- **Derived column trap:** `total_price = quantity × unit_price` is a mathematical identity, not an independent measurement. Correlation between these columns is partially spurious — always acknowledge this.
+- **Categorical aggregation choices:** Mean vs. sum vs. count tell very different stories per category. Know which to use and why.
+- **Missing date dimension:** Without a date field, no trend, seasonality, or cohort analysis is possible. This is a data gap worth raising proactively.
+- **Single-row-per-product limitation (in sample):** With one row per product in the sample, averages equal individual values — be careful not to over-interpret sample statistics.
+- **Geographic analysis caveats:** City-level data may reflect market size, sales rep performance, or regional pricing — without additional context these are indistinguishable.
+- **Data quality rigour:** Ability to spot the derived column inconsistency check and price consistency check demonstrates analytical thoroughness beyond simple EDA.
 
 ---
 
-## 6. Risks & Mitigations
+## 6. Open Questions
+
+1. **Dataset size:** The current `data/data.csv` contains 3 rows. Is this a sample, or the full dataset? If larger, does it include a date column?
+2. **Order granularity:** Does one row represent a single order line (one product per row), or a complete order? If line-level, `order_id` may not be unique in the full dataset.
+3. **Currency:** Are all prices in a single currency, or do city rows reflect different currencies requiring normalisation?
+4. **Cost data:** Is a cost price or margin column available in the full dataset, or is analysis constrained to revenue and volume?
+5. **Interview focus:** Are there specific analytical angles to prepare for — e.g. pricing strategy, geographic performance, category mix?
+
+---
+
+## 7. Risks & Mitigations
 
 | Risk | Impact | Mitigation |
 |---|---|---|
-| Small sample size (n=100) | Low statistical power, wide confidence intervals | Acknowledge in report; use non-parametric tests; avoid over-interpretation |
-| Multiple testing (16 genes) | Inflated false-positive rate | Apply Bonferroni correction (α = 0.05/16 = 0.003125) |
-| Stage 4 dominance (50%) | May bias group-level summaries | Stratify analyses by stage where appropriate |
-| Synthetic data limitations | May not reflect real biological complexity | Note in report; focus on methodology rather than biological conclusions |
-| No external validation | Cannot assess generalisability | Flag as limitation; recommend external cohort in future phases |
+| Only 3 rows in sample | Cannot derive meaningful distributions or rankings | Proceed with schema-level analysis; note all findings are illustrative pending full data load |
+| No date column | No trend or time-based analysis | Flag as gap; recommend requesting a date-enriched version of the dataset |
+| `total_price` is derived | High correlation with `unit_price` is mathematical, not behavioural | Label clearly in all correlation commentary |
+| No cost data | Cannot assess profitability | Distinguish revenue from profit in all commentary |
+| Single city per order (assumed) | If orders are multi-city (e.g. split shipments), city aggregations are misleading | Phase 1 validation will confirm order_id × city uniqueness |
