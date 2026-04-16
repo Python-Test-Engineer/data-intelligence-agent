@@ -53,7 +53,7 @@ client = anthropic.Anthropic(
     api_key=os.environ.get("OPENROUTER_API_KEY"),
     base_url="https://openrouter.ai/api",
 )
-response = client.messages.create(model="anthropic/claude-3.5-sonnet", ...)
+response = client.messages.create(model="anthropic/claude-4.5-sonnet", ...)
 
 # After (OpenAI)
 from openai import OpenAI
