@@ -1,6 +1,6 @@
 # SQL Test Results
 
-Created: `2026-04-16 12:26:01`  
+Created: `2026-04-16 17:44:12`  
 Original CSV: `uploaded.csv`  
 
 Queries file: `C:\Users\mrcra\Desktop\data-intelligence-agent\output\sql\sql_queries_data.md`  
@@ -26,7 +26,7 @@ FROM data;
 
 | row_count |
 | --- |
-| 3 |
+| 20 |
 
 ---
 
@@ -40,38 +40,24 @@ FROM data
 LIMIT 10;
 ```
 
-**Rows returned:** 3
+**Rows returned:** 10
 
-| order_id | product | category | city | quantity | unit_price | total_price |
+| order_id | date | product_name | unit_price | quantity | total_price | city |
 | --- | --- | --- | --- | --- | --- | --- |
-| ORD001 | Monitor | Electronics | New York | 10 | 349.99 | 3499.9 |
-| ORD002 | Mouse | Accessories | London | 5 | 29.99 | 149.95 |
-| ORD003 | Keyboard | Accessories | Paris | 8 | 79.99 | 639.92 |
+| ORD0001 | 2025-04-28 | Monitor | 349.99 | 10 | 3499.9 | New York |
+| ORD0002 | 2025-09-29 | Mouse | 29.99 | 5 | 149.95 | New York |
+| ORD0003 | 2025-08-04 | Headphones | 149.99 | 8 | 1199.92 | Chicago |
+| ORD0004 | 2025-12-16 | Headphones | 149.99 | 6 | 899.94 | New York |
+| ORD0005 | 2025-02-12 | Mouse | 29.99 | 3 | 89.97 | Los Angeles |
+| ORD0008 | 2025-11-07 | Headphones | 149.99 | 9 | 1349.91 | Los Angeles |
+| ORD0009 | 2025-03-24 | Monitor | 349.99 | 3 | 1049.97 | Los Angeles |
+| ORD0011 | 2025-02-11 | Laptop | 999.99 | 8 | 7999.92 | New York |
+| ORD0012 | 2025-07-15 | Monitor | 349.99 | 5 | 1749.95 | New York |
+| ORD0013 | 2025-01-29 | Keyboard | 79.99 | 7 | 559.93 | Chicago |
 
 ---
 
-## 3. Summary Stats for quantity
-
-**Status:** OK
-
-```sql
-SELECT
-    MIN(quantity) AS min_val,
-    MAX(quantity) AS max_val,
-    ROUND(AVG(quantity), 2) AS avg_val,
-    SUM(quantity) AS total
-FROM data;
-```
-
-**Rows returned:** 1
-
-| min_val | max_val | avg_val | total |
-| --- | --- | --- | --- |
-| 5 | 10 | 7.67 | 23 |
-
----
-
-## 4. Summary Stats for unit_price
+## 3. Summary Stats for unit_price
 
 **Status:** OK
 
@@ -88,7 +74,28 @@ FROM data;
 
 | min_val | max_val | avg_val | total |
 | --- | --- | --- | --- |
-| 29.99 | 349.99 | 153.32 | 459.97 |
+| 29.99 | 999.99 | 403.49 | 8069.8 |
+
+---
+
+## 4. Summary Stats for quantity
+
+**Status:** OK
+
+```sql
+SELECT
+    MIN(quantity) AS min_val,
+    MAX(quantity) AS max_val,
+    ROUND(AVG(quantity), 2) AS avg_val,
+    SUM(quantity) AS total
+FROM data;
+```
+
+**Rows returned:** 1
+
+| min_val | max_val | avg_val | total |
+| --- | --- | --- | --- |
+| 3 | 10 | 6.65 | 133 |
 
 ---
 
@@ -109,111 +116,174 @@ FROM data;
 
 | min_val | max_val | avg_val | total |
 | --- | --- | --- | --- |
-| 149.95 | 3499.9 | 1429.92 | 4289.77 |
+| 89.97 | 7999.92 | 2695.93 | 53918.67 |
 
 ---
 
-## 6. Total quantity by product
+## 6. Total unit_price by date
 
 **Status:** OK
 
 ```sql
-SELECT product, SUM(quantity) AS total_quantity
+SELECT date, SUM(unit_price) AS total_unit_price
 FROM data
-GROUP BY product
-ORDER BY total_quantity DESC;
-```
-
-**Rows returned:** 3
-
-| product | total_quantity |
-| --- | --- |
-| Monitor | 10 |
-| Keyboard | 8 |
-| Mouse | 5 |
-
----
-
-## 7. Average quantity by product
-
-**Status:** OK
-
-```sql
-SELECT product, ROUND(AVG(quantity), 2) AS avg_quantity
-FROM data
-GROUP BY product
-ORDER BY avg_quantity DESC;
-```
-
-**Rows returned:** 3
-
-| product | avg_quantity |
-| --- | --- |
-| Monitor | 10.0 |
-| Keyboard | 8.0 |
-| Mouse | 5.0 |
-
----
-
-## 8. Total unit_price by product
-
-**Status:** OK
-
-```sql
-SELECT product, SUM(unit_price) AS total_unit_price
-FROM data
-GROUP BY product
+GROUP BY date
 ORDER BY total_unit_price DESC;
 ```
 
-**Rows returned:** 3
+**Rows returned:** 18
 
-| product | total_unit_price |
+| date | total_unit_price |
 | --- | --- |
-| Monitor | 349.99 |
-| Keyboard | 79.99 |
-| Mouse | 29.99 |
+| 2025-04-28 | 1349.98 |
+| 2025-09-25 | 999.99 |
+| 2025-06-22 | 999.99 |
+| 2025-03-26 | 999.99 |
+| 2025-02-11 | 999.99 |
+| 2025-04-10 | 499.98 |
+| 2025-07-15 | 349.99 |
+| 2025-03-24 | 349.99 |
+| 2025-02-05 | 349.99 |
+| 2025-01-02 | 349.99 |
+| 2025-12-16 | 149.99 |
+| 2025-11-07 | 149.99 |
+| 2025-10-01 | 149.99 |
+| 2025-08-04 | 149.99 |
+| 2025-03-23 | 79.99 |
+| 2025-01-29 | 79.99 |
+| 2025-09-29 | 29.99 |
+| 2025-02-12 | 29.99 |
 
 ---
 
-## 9. Distribution of product
+## 7. Average unit_price by date
 
 **Status:** OK
 
 ```sql
-SELECT product, COUNT(*) AS row_count
+SELECT date, ROUND(AVG(unit_price), 2) AS avg_unit_price
 FROM data
-GROUP BY product
-ORDER BY row_count DESC;
+GROUP BY date
+ORDER BY avg_unit_price DESC;
 ```
 
-**Rows returned:** 3
+**Rows returned:** 18
 
-| product | row_count |
+| date | avg_unit_price |
 | --- | --- |
-| Mouse | 1 |
-| Monitor | 1 |
-| Keyboard | 1 |
+| 2025-09-25 | 999.99 |
+| 2025-06-22 | 999.99 |
+| 2025-03-26 | 999.99 |
+| 2025-02-11 | 999.99 |
+| 2025-04-28 | 674.99 |
+| 2025-07-15 | 349.99 |
+| 2025-03-24 | 349.99 |
+| 2025-02-05 | 349.99 |
+| 2025-01-02 | 349.99 |
+| 2025-04-10 | 249.99 |
+| 2025-12-16 | 149.99 |
+| 2025-11-07 | 149.99 |
+| 2025-10-01 | 149.99 |
+| 2025-08-04 | 149.99 |
+| 2025-03-23 | 79.99 |
+| 2025-01-29 | 79.99 |
+| 2025-09-29 | 29.99 |
+| 2025-02-12 | 29.99 |
 
 ---
 
-## 10. Distribution of category
+## 8. Total quantity by date
 
 **Status:** OK
 
 ```sql
-SELECT category, COUNT(*) AS row_count
+SELECT date, SUM(quantity) AS total_quantity
 FROM data
-GROUP BY category
+GROUP BY date
+ORDER BY total_quantity DESC;
+```
+
+**Rows returned:** 18
+
+| date | total_quantity |
+| --- | --- |
+| 2025-04-28 | 17 |
+| 2025-04-10 | 16 |
+| 2025-11-07 | 9 |
+| 2025-03-23 | 9 |
+| 2025-08-04 | 8 |
+| 2025-02-11 | 8 |
+| 2025-06-22 | 7 |
+| 2025-03-26 | 7 |
+| 2025-02-05 | 7 |
+| 2025-01-29 | 7 |
+| 2025-12-16 | 6 |
+| 2025-10-01 | 6 |
+| 2025-01-02 | 6 |
+| 2025-09-29 | 5 |
+| 2025-07-15 | 5 |
+| 2025-09-25 | 4 |
+| 2025-03-24 | 3 |
+| 2025-02-12 | 3 |
+
+---
+
+## 9. Distribution of date
+
+**Status:** OK
+
+```sql
+SELECT date, COUNT(*) AS row_count
+FROM data
+GROUP BY date
 ORDER BY row_count DESC;
 ```
 
-**Rows returned:** 2
+**Rows returned:** 18
 
-| category | row_count |
+| date | row_count |
 | --- | --- |
-| Accessories | 2 |
-| Electronics | 1 |
+| 2025-04-28 | 2 |
+| 2025-04-10 | 2 |
+| 2025-12-16 | 1 |
+| 2025-11-07 | 1 |
+| 2025-10-01 | 1 |
+| 2025-09-29 | 1 |
+| 2025-09-25 | 1 |
+| 2025-08-04 | 1 |
+| 2025-07-15 | 1 |
+| 2025-06-22 | 1 |
+| 2025-03-26 | 1 |
+| 2025-03-24 | 1 |
+| 2025-03-23 | 1 |
+| 2025-02-12 | 1 |
+| 2025-02-11 | 1 |
+| 2025-02-05 | 1 |
+| 2025-01-29 | 1 |
+| 2025-01-02 | 1 |
+
+---
+
+## 10. Distribution of product_name
+
+**Status:** OK
+
+```sql
+SELECT product_name, COUNT(*) AS row_count
+FROM data
+GROUP BY product_name
+ORDER BY row_count DESC;
+```
+
+**Rows returned:** 5
+
+| product_name | row_count |
+| --- | --- |
+| Monitor | 6 |
+| Laptop | 5 |
+| Headphones | 5 |
+| Mouse | 2 |
+| Keyboard | 2 |
 
 ---
 
@@ -232,56 +302,74 @@ ORDER BY row_count DESC;
 
 | city | row_count |
 | --- | --- |
-| Paris | 1 |
-| New York | 1 |
-| London | 1 |
+| Los Angeles | 8 |
+| New York | 7 |
+| Chicago | 5 |
 
 ---
 
-## 12. product Ranked by Total quantity
+## 12. date Ranked by Total quantity
 
 **Status:** OK
 
 ```sql
 SELECT
-    product,
+    date,
     COUNT(*) AS transaction_count,
     ROUND(SUM(quantity), 2) AS total_quantity
 FROM data
-GROUP BY product
+GROUP BY date
 ORDER BY total_quantity DESC;
 ```
 
-**Rows returned:** 3
+**Rows returned:** 18
 
-| product | transaction_count | total_quantity |
+| date | transaction_count | total_quantity |
 | --- | --- | --- |
-| Monitor | 1 | 10.0 |
-| Keyboard | 1 | 8.0 |
-| Mouse | 1 | 5.0 |
+| 2025-04-28 | 2 | 17.0 |
+| 2025-04-10 | 2 | 16.0 |
+| 2025-11-07 | 1 | 9.0 |
+| 2025-03-23 | 1 | 9.0 |
+| 2025-08-04 | 1 | 8.0 |
+| 2025-02-11 | 1 | 8.0 |
+| 2025-06-22 | 1 | 7.0 |
+| 2025-03-26 | 1 | 7.0 |
+| 2025-02-05 | 1 | 7.0 |
+| 2025-01-29 | 1 | 7.0 |
+| 2025-12-16 | 1 | 6.0 |
+| 2025-10-01 | 1 | 6.0 |
+| 2025-01-02 | 1 | 6.0 |
+| 2025-09-29 | 1 | 5.0 |
+| 2025-07-15 | 1 | 5.0 |
+| 2025-09-25 | 1 | 4.0 |
+| 2025-03-24 | 1 | 3.0 |
+| 2025-02-12 | 1 | 3.0 |
 
 ---
 
-## 13. category Ranked by Total quantity
+## 13. product_name Ranked by Total quantity
 
 **Status:** OK
 
 ```sql
 SELECT
-    category,
+    product_name,
     COUNT(*) AS transaction_count,
     ROUND(SUM(quantity), 2) AS total_quantity
 FROM data
-GROUP BY category
+GROUP BY product_name
 ORDER BY total_quantity DESC;
 ```
 
-**Rows returned:** 2
+**Rows returned:** 5
 
-| category | transaction_count | total_quantity |
+| product_name | transaction_count | total_quantity |
 | --- | --- | --- |
-| Accessories | 2 | 13.0 |
-| Electronics | 1 | 10.0 |
+| Monitor | 6 | 40.0 |
+| Headphones | 5 | 36.0 |
+| Laptop | 5 | 33.0 |
+| Keyboard | 2 | 16.0 |
+| Mouse | 2 | 8.0 |
 
 ---
 
@@ -303,81 +391,116 @@ ORDER BY total_quantity DESC;
 
 | city | transaction_count | total_quantity |
 | --- | --- | --- |
-| New York | 1 | 10.0 |
-| Paris | 1 | 8.0 |
-| London | 1 | 5.0 |
+| Los Angeles | 8 | 51.0 |
+| New York | 7 | 50.0 |
+| Chicago | 5 | 32.0 |
 
 ---
 
-## 15. quantity by product and category
+## 15. unit_price by date and product_name
 
 **Status:** OK
 
 ```sql
-SELECT product, category, SUM(quantity) AS total_quantity
+SELECT date, product_name, SUM(unit_price) AS total_unit_price
 FROM data
-GROUP BY product, category
-ORDER BY total_quantity DESC;
+GROUP BY date, product_name
+ORDER BY total_unit_price DESC;
 ```
 
-**Rows returned:** 3
+**Rows returned:** 20
 
-| product | category | total_quantity |
+| date | product_name | total_unit_price |
 | --- | --- | --- |
-| Monitor | Electronics | 10 |
-| Keyboard | Accessories | 8 |
-| Mouse | Accessories | 5 |
+| 2025-02-11 | Laptop | 999.99 |
+| 2025-03-26 | Laptop | 999.99 |
+| 2025-04-28 | Laptop | 999.99 |
+| 2025-06-22 | Laptop | 999.99 |
+| 2025-09-25 | Laptop | 999.99 |
+| 2025-01-02 | Monitor | 349.99 |
+| 2025-02-05 | Monitor | 349.99 |
+| 2025-03-24 | Monitor | 349.99 |
+| 2025-04-10 | Monitor | 349.99 |
+| 2025-04-28 | Monitor | 349.99 |
+| 2025-07-15 | Monitor | 349.99 |
+| 2025-04-10 | Headphones | 149.99 |
+| 2025-08-04 | Headphones | 149.99 |
+| 2025-10-01 | Headphones | 149.99 |
+| 2025-11-07 | Headphones | 149.99 |
+| 2025-12-16 | Headphones | 149.99 |
+| 2025-01-29 | Keyboard | 79.99 |
+| 2025-03-23 | Keyboard | 79.99 |
+| 2025-02-12 | Mouse | 29.99 |
+| 2025-09-29 | Mouse | 29.99 |
 
 ---
 
-## 16. Performance Breakdown by product
+## 16. Performance Breakdown by date
 
 **Status:** OK
 
 ```sql
 SELECT
-    product,
+    date,
     COUNT(*) AS transaction_count,
-    SUM(quantity) AS total_quantity,
     SUM(unit_price) AS total_unit_price,
+    SUM(quantity) AS total_quantity,
     SUM(total_price) AS total_total_price
 FROM data
-GROUP BY product
-ORDER BY total_quantity DESC;
+GROUP BY date
+ORDER BY total_unit_price DESC;
 ```
 
-**Rows returned:** 3
+**Rows returned:** 18
 
-| product | transaction_count | total_quantity | total_unit_price | total_total_price |
+| date | transaction_count | total_unit_price | total_quantity | total_total_price |
 | --- | --- | --- | --- | --- |
-| Monitor | 1 | 10 | 349.99 | 3499.9 |
-| Keyboard | 1 | 8 | 79.99 | 639.92 |
-| Mouse | 1 | 5 | 29.99 | 149.95 |
+| 2025-04-28 | 2 | 1349.98 | 17 | 10499.83 |
+| 2025-09-25 | 1 | 999.99 | 4 | 3999.96 |
+| 2025-06-22 | 1 | 999.99 | 7 | 6999.93 |
+| 2025-03-26 | 1 | 999.99 | 7 | 6999.93 |
+| 2025-02-11 | 1 | 999.99 | 8 | 7999.92 |
+| 2025-04-10 | 2 | 499.98 | 16 | 4199.84 |
+| 2025-07-15 | 1 | 349.99 | 5 | 1749.95 |
+| 2025-03-24 | 1 | 349.99 | 3 | 1049.97 |
+| 2025-02-05 | 1 | 349.99 | 7 | 2449.93 |
+| 2025-01-02 | 1 | 349.99 | 6 | 2099.94 |
+| 2025-12-16 | 1 | 149.99 | 6 | 899.94 |
+| 2025-11-07 | 1 | 149.99 | 9 | 1349.91 |
+| 2025-10-01 | 1 | 149.99 | 6 | 899.94 |
+| 2025-08-04 | 1 | 149.99 | 8 | 1199.92 |
+| 2025-03-23 | 1 | 79.99 | 9 | 719.91 |
+| 2025-01-29 | 1 | 79.99 | 7 | 559.93 |
+| 2025-09-29 | 1 | 29.99 | 5 | 149.95 |
+| 2025-02-12 | 1 | 29.99 | 3 | 89.97 |
 
 ---
 
-## 17. Performance Breakdown by category
+## 17. Performance Breakdown by product_name
 
 **Status:** OK
 
 ```sql
 SELECT
-    category,
+    product_name,
     COUNT(*) AS transaction_count,
-    SUM(quantity) AS total_quantity,
     SUM(unit_price) AS total_unit_price,
+    SUM(quantity) AS total_quantity,
     SUM(total_price) AS total_total_price
 FROM data
-GROUP BY category
-ORDER BY total_quantity DESC;
+GROUP BY product_name
+ORDER BY total_unit_price DESC;
 ```
 
-**Rows returned:** 2
+**Rows returned:** 5
 
-| category | transaction_count | total_quantity | total_unit_price | total_total_price |
+| product_name | transaction_count | total_unit_price | total_quantity | total_total_price |
 | --- | --- | --- | --- | --- |
-| Accessories | 2 | 13 | 109.97999999999999 | 789.8699999999999 |
-| Electronics | 1 | 10 | 349.99 | 3499.9 |
+| Laptop | 5 | 4999.95 | 33 | 32999.67 |
+| Monitor | 6 | 2099.94 | 40 | 13999.6 |
+| Headphones | 5 | 749.95 | 36 | 5399.64 |
+| Keyboard | 2 | 159.98 | 16 | 1279.84 |
+| Mouse | 2 | 59.98 | 8 | 239.92 |
 
 ---
 
@@ -389,152 +512,187 @@ ORDER BY total_quantity DESC;
 SELECT
     city,
     COUNT(*) AS transaction_count,
-    SUM(quantity) AS total_quantity,
     SUM(unit_price) AS total_unit_price,
+    SUM(quantity) AS total_quantity,
     SUM(total_price) AS total_total_price
 FROM data
 GROUP BY city
-ORDER BY total_quantity DESC;
+ORDER BY total_unit_price DESC;
 ```
 
 **Rows returned:** 3
 
-| city | transaction_count | total_quantity | total_unit_price | total_total_price |
+| city | transaction_count | total_unit_price | total_quantity | total_total_price |
 | --- | --- | --- | --- | --- |
-| New York | 1 | 10 | 349.99 | 3499.9 |
-| Paris | 1 | 8 | 79.99 | 639.92 |
-| London | 1 | 5 | 29.99 | 149.95 |
+| New York | 7 | 2959.93 | 50 | 22019.5 |
+| Los Angeles | 8 | 2729.92 | 51 | 18239.49 |
+| Chicago | 5 | 2379.95 | 32 | 13659.68 |
 
 ---
 
-## 19. product × category Performance Matrix
+## 19. date × product_name Performance Matrix
 
 **Status:** OK
 
 ```sql
 SELECT
-    product,
-    category,
+    date,
+    product_name,
     COUNT(*) AS transaction_count,
-    SUM(quantity) AS total_quantity,
     SUM(unit_price) AS total_unit_price,
+    SUM(quantity) AS total_quantity,
     SUM(total_price) AS total_total_price
 FROM data
-GROUP BY product, category
-ORDER BY total_quantity DESC;
+GROUP BY date, product_name
+ORDER BY total_unit_price DESC;
 ```
 
-**Rows returned:** 3
+**Rows returned:** 20
 
-| product | category | transaction_count | total_quantity | total_unit_price | total_total_price |
+| date | product_name | transaction_count | total_unit_price | total_quantity | total_total_price |
 | --- | --- | --- | --- | --- | --- |
-| Monitor | Electronics | 1 | 10 | 349.99 | 3499.9 |
-| Keyboard | Accessories | 1 | 8 | 79.99 | 639.92 |
-| Mouse | Accessories | 1 | 5 | 29.99 | 149.95 |
+| 2025-02-11 | Laptop | 1 | 999.99 | 8 | 7999.92 |
+| 2025-03-26 | Laptop | 1 | 999.99 | 7 | 6999.93 |
+| 2025-04-28 | Laptop | 1 | 999.99 | 7 | 6999.93 |
+| 2025-06-22 | Laptop | 1 | 999.99 | 7 | 6999.93 |
+| 2025-09-25 | Laptop | 1 | 999.99 | 4 | 3999.96 |
+| 2025-01-02 | Monitor | 1 | 349.99 | 6 | 2099.94 |
+| 2025-02-05 | Monitor | 1 | 349.99 | 7 | 2449.93 |
+| 2025-03-24 | Monitor | 1 | 349.99 | 3 | 1049.97 |
+| 2025-04-10 | Monitor | 1 | 349.99 | 9 | 3149.91 |
+| 2025-04-28 | Monitor | 1 | 349.99 | 10 | 3499.9 |
+| 2025-07-15 | Monitor | 1 | 349.99 | 5 | 1749.95 |
+| 2025-04-10 | Headphones | 1 | 149.99 | 7 | 1049.93 |
+| 2025-08-04 | Headphones | 1 | 149.99 | 8 | 1199.92 |
+| 2025-10-01 | Headphones | 1 | 149.99 | 6 | 899.94 |
+| 2025-11-07 | Headphones | 1 | 149.99 | 9 | 1349.91 |
+| 2025-12-16 | Headphones | 1 | 149.99 | 6 | 899.94 |
+| 2025-01-29 | Keyboard | 1 | 79.99 | 7 | 559.93 |
+| 2025-03-23 | Keyboard | 1 | 79.99 | 9 | 719.91 |
+| 2025-02-12 | Mouse | 1 | 29.99 | 3 | 89.97 |
+| 2025-09-29 | Mouse | 1 | 29.99 | 5 | 149.95 |
 
 ---
 
-## 20. Unique order_id Count by product
+## 20. Unique order_id Count by date
 
 **Status:** OK
 
 ```sql
 SELECT
-    product,
+    date,
     COUNT(DISTINCT order_id) AS unique_order_id,
     COUNT(*) AS transaction_count,
-    SUM(quantity) AS total_quantity
+    SUM(unit_price) AS total_unit_price
 FROM data
-GROUP BY product
+GROUP BY date
 ORDER BY unique_order_id DESC;
 ```
 
-**Rows returned:** 3
+**Rows returned:** 18
 
-| product | unique_order_id | transaction_count | total_quantity |
+| date | unique_order_id | transaction_count | total_unit_price |
 | --- | --- | --- | --- |
-| Mouse | 1 | 1 | 5 |
-| Monitor | 1 | 1 | 10 |
-| Keyboard | 1 | 1 | 8 |
+| 2025-04-28 | 2 | 2 | 1349.98 |
+| 2025-04-10 | 2 | 2 | 499.98 |
+| 2025-12-16 | 1 | 1 | 149.99 |
+| 2025-11-07 | 1 | 1 | 149.99 |
+| 2025-10-01 | 1 | 1 | 149.99 |
+| 2025-09-29 | 1 | 1 | 29.99 |
+| 2025-09-25 | 1 | 1 | 999.99 |
+| 2025-08-04 | 1 | 1 | 149.99 |
+| 2025-07-15 | 1 | 1 | 349.99 |
+| 2025-06-22 | 1 | 1 | 999.99 |
+| 2025-03-26 | 1 | 1 | 999.99 |
+| 2025-03-24 | 1 | 1 | 349.99 |
+| 2025-03-23 | 1 | 1 | 79.99 |
+| 2025-02-12 | 1 | 1 | 29.99 |
+| 2025-02-11 | 1 | 1 | 999.99 |
+| 2025-02-05 | 1 | 1 | 349.99 |
+| 2025-01-29 | 1 | 1 | 79.99 |
+| 2025-01-02 | 1 | 1 | 349.99 |
 
 ---
 
-## 21. Unique order_id Count by category
+## 21. Unique order_id Count by product_name
 
 **Status:** OK
 
 ```sql
 SELECT
-    category,
+    product_name,
     COUNT(DISTINCT order_id) AS unique_order_id,
     COUNT(*) AS transaction_count,
-    SUM(quantity) AS total_quantity
+    SUM(unit_price) AS total_unit_price
 FROM data
-GROUP BY category
+GROUP BY product_name
 ORDER BY unique_order_id DESC;
 ```
 
-**Rows returned:** 2
+**Rows returned:** 5
 
-| category | unique_order_id | transaction_count | total_quantity |
+| product_name | unique_order_id | transaction_count | total_unit_price |
 | --- | --- | --- | --- |
-| Accessories | 2 | 2 | 13 |
-| Electronics | 1 | 1 | 10 |
+| Monitor | 6 | 6 | 2099.94 |
+| Laptop | 5 | 5 | 4999.95 |
+| Headphones | 5 | 5 | 749.95 |
+| Mouse | 2 | 2 | 59.98 |
+| Keyboard | 2 | 2 | 159.98 |
 
 ---
 
-## 22. Filter by product
+## 22. Filter by date
 
 **Status:** SKIPPED
 
 ```sql
 SELECT *
 FROM data
-WHERE product = :product;
+WHERE date = :date;
 ```
 
 **Skipped:** Query requires runtime arguments (:param)
 
 ---
 
-## 23. Performance Summary for a Specific product
+## 23. Performance Summary for a Specific date
 
 **Status:** SKIPPED
 
 ```sql
 SELECT
-    product,
+    date,
     COUNT(*) AS transaction_count,
     SUM(quantity) AS total_quantity
 FROM data
-WHERE product = :product
-GROUP BY product;
+WHERE date = :date
+GROUP BY date;
 ```
 
 **Skipped:** Query requires runtime arguments (:param)
 
 ---
 
-## 24. category Breakdown for product = :product
+## 24. product_name Breakdown for date = :date
 
 **Status:** SKIPPED
 
 ```sql
 SELECT
-    category,
+    product_name,
     COUNT(*) AS transaction_count,
-    ROUND(SUM(quantity), 2) AS total_quantity
+    ROUND(SUM(unit_price), 2) AS total_unit_price
 FROM data
-WHERE product = :product
-GROUP BY category
-ORDER BY total_quantity DESC;
+WHERE date = :date
+GROUP BY product_name
+ORDER BY total_unit_price DESC;
 ```
 
 **Skipped:** Query requires runtime arguments (:param)
 
 ---
 
-## 25. city Breakdown for product = :product
+## 25. city Breakdown for date = :date
 
 **Status:** SKIPPED
 
@@ -542,69 +700,69 @@ ORDER BY total_quantity DESC;
 SELECT
     city,
     COUNT(*) AS transaction_count,
-    ROUND(SUM(quantity), 2) AS total_quantity
+    ROUND(SUM(unit_price), 2) AS total_unit_price
 FROM data
-WHERE product = :product
+WHERE date = :date
 GROUP BY city
-ORDER BY total_quantity DESC;
+ORDER BY total_unit_price DESC;
 ```
 
 **Skipped:** Query requires runtime arguments (:param)
 
 ---
 
-## 26. Filter by category
+## 26. Filter by product_name
 
 **Status:** SKIPPED
 
 ```sql
 SELECT *
 FROM data
-WHERE category = :category;
+WHERE product_name = :product_name;
 ```
 
 **Skipped:** Query requires runtime arguments (:param)
 
 ---
 
-## 27. Performance Summary for a Specific category
+## 27. Performance Summary for a Specific product_name
 
 **Status:** SKIPPED
 
 ```sql
 SELECT
-    category,
+    product_name,
     COUNT(*) AS transaction_count,
     SUM(quantity) AS total_quantity
 FROM data
-WHERE category = :category
-GROUP BY category;
+WHERE product_name = :product_name
+GROUP BY product_name;
 ```
 
 **Skipped:** Query requires runtime arguments (:param)
 
 ---
 
-## 28. product Breakdown for category = :category
+## 28. date Breakdown for product_name = :product_name
 
 **Status:** SKIPPED
 
 ```sql
 SELECT
-    product,
+    date,
     COUNT(*) AS transaction_count,
-    ROUND(SUM(quantity), 2) AS total_quantity
+    ROUND(SUM(unit_price), 2) AS total_unit_price
 FROM data
-WHERE category = :category
-GROUP BY product
-ORDER BY total_quantity DESC;
+WHERE product_name = :product_name
+GROUP BY date
+ORDER BY total_unit_price DESC;
 ```
 
 **Skipped:** Query requires runtime arguments (:param)
 
 ---
 
-## 29. city Breakdown for category = :category
+## 29. city Breakdown for product_name = :product_name
 
 **Status:** SKIPPED
 
@@ -612,11 +770,11 @@ ORDER BY total_quantity DESC;
 SELECT
     city,
     COUNT(*) AS transaction_count,
-    ROUND(SUM(quantity), 2) AS total_quantity
+    ROUND(SUM(unit_price), 2) AS total_unit_price
 FROM data
-WHERE category = :category
+WHERE product_name = :product_name
 GROUP BY city
-ORDER BY total_quantity DESC;
+ORDER BY total_unit_price DESC;
 ```
 
 **Skipped:** Query requires runtime arguments (:param)
@@ -655,72 +813,72 @@ GROUP BY city;
 
 ---
 
-## 32. product Breakdown for city = :city
+## 32. date Breakdown for city = :city
 
 **Status:** SKIPPED
 
 ```sql
 SELECT
-    product,
+    date,
     COUNT(*) AS transaction_count,
-    ROUND(SUM(quantity), 2) AS total_quantity
+    ROUND(SUM(unit_price), 2) AS total_unit_price
 FROM data
 WHERE city = :city
-GROUP BY product
-ORDER BY total_quantity DESC;
+GROUP BY date
+ORDER BY total_unit_price DESC;
 ```
 
 **Skipped:** Query requires runtime arguments (:param)
 
 ---
 
-## 33. category Breakdown for city = :city
+## 33. product_name Breakdown for city = :city
 
 **Status:** SKIPPED
 
 ```sql
 SELECT
-    category,
+    product_name,
     COUNT(*) AS transaction_count,
-    ROUND(SUM(quantity), 2) AS total_quantity
+    ROUND(SUM(unit_price), 2) AS total_unit_price
 FROM data
 WHERE city = :city
-GROUP BY category
-ORDER BY total_quantity DESC;
+GROUP BY product_name
+ORDER BY total_unit_price DESC;
 ```
 
 **Skipped:** Query requires runtime arguments (:param)
 
 ---
 
-## 34. Rows Where quantity Exceeds :min_value
+## 34. Rows Where unit_price Exceeds :min_value
 
 **Status:** SKIPPED
 
 ```sql
 SELECT *
 FROM data
-WHERE quantity > :min_value
-ORDER BY quantity DESC;
+WHERE unit_price > :min_value
+ORDER BY unit_price DESC;
 ```
 
 **Skipped:** Query requires runtime arguments (:param)
 
 ---
 
-## 35. product with Total quantity Above :threshold
+## 35. date with Total unit_price Above :threshold
 
 **Status:** SKIPPED
 
 ```sql
 SELECT
-    product,
+    date,
     COUNT(*) AS transaction_count,
-    ROUND(SUM(quantity), 2) AS total_quantity
+    ROUND(SUM(unit_price), 2) AS total_unit_price
 FROM data
-GROUP BY product
-HAVING SUM(quantity) > :threshold
-ORDER BY total_quantity DESC;
+GROUP BY date
+HAVING SUM(unit_price) > :threshold
+ORDER BY total_unit_price DESC;
 ```
 
 **Skipped:** Query requires runtime arguments (:param)
@@ -734,17 +892,17 @@ ORDER BY total_quantity DESC;
 ```sql
 SELECT 'order_id' AS column_name, COUNT(*) AS null_count FROM data WHERE order_id IS NULL
 UNION ALL
-SELECT 'product' AS column_name, COUNT(*) AS null_count FROM data WHERE product IS NULL
+SELECT 'date' AS column_name, COUNT(*) AS null_count FROM data WHERE date IS NULL
 UNION ALL
-SELECT 'category' AS column_name, COUNT(*) AS null_count FROM data WHERE category IS NULL
-UNION ALL
-SELECT 'city' AS column_name, COUNT(*) AS null_count FROM data WHERE city IS NULL
-UNION ALL
-SELECT 'quantity' AS column_name, COUNT(*) AS null_count FROM data WHERE quantity IS NULL
+SELECT 'product_name' AS column_name, COUNT(*) AS null_count FROM data WHERE product_name IS NULL
 UNION ALL
 SELECT 'unit_price' AS column_name, COUNT(*) AS null_count FROM data WHERE unit_price IS NULL
 UNION ALL
+SELECT 'quantity' AS column_name, COUNT(*) AS null_count FROM data WHERE quantity IS NULL
+UNION ALL
 SELECT 'total_price' AS column_name, COUNT(*) AS null_count FROM data WHERE total_price IS NULL
+UNION ALL
+SELECT 'city' AS column_name, COUNT(*) AS null_count FROM data WHERE city IS NULL
 ORDER BY null_count DESC;
 ```
 
@@ -753,12 +911,12 @@ ORDER BY null_count DESC;
 | column_name | null_count |
 | --- | --- |
 | order_id | 0 |
-| product | 0 |
-| category | 0 |
-| city | 0 |
-| quantity | 0 |
+| date | 0 |
+| product_name | 0 |
 | unit_price | 0 |
+| quantity | 0 |
 | total_price | 0 |
+| city | 0 |
 
 ---
 
@@ -780,24 +938,7 @@ ORDER BY occurrences DESC;
 
 ---
 
-## 38. Negative quantity Values
-
-**Status:** OK
-
-```sql
-SELECT *
-FROM data
-WHERE quantity < 0
-ORDER BY quantity;
-```
-
-**Rows returned:** 0
-
-*(no rows returned)*
-
----
-
-## 39. Negative unit_price Values
+## 38. Negative unit_price Values
 
 **Status:** OK
 
@@ -806,6 +947,23 @@ SELECT *
 FROM data
 WHERE unit_price < 0
 ORDER BY unit_price;
+```
+
+**Rows returned:** 0
+
+*(no rows returned)*
+
+---
+
+## 39. Negative quantity Values
+
+**Status:** OK
+
+```sql
+SELECT *
+FROM data
+WHERE quantity < 0
+ORDER BY quantity;
 ```
 
 **Rows returned:** 0
