@@ -1,10 +1,10 @@
 # SQL Test Results
 
-Created: `2026-03-28 13:43:00`  
+Created: `2026-04-16 12:28:25`  
 Original CSV: `uploaded.csv`  
 
 Queries file: `C:\Users\mrcra\Desktop\data-intelligence-agent\output\sql\sql_queries_test_data.md`  
-Source CSV: `C:\Users\mrcra\AppData\Local\Temp\pytest-of-mrcra\pytest-5\test_run_tests_and_merge_inlin0\test_data.csv` (in-memory SQLite)  
+Source CSV: `C:\Users\mrcra\AppData\Local\Temp\pytest-of-mrcra\pytest-30\test_run_tests_and_merge_inlin0\test_data.csv` (in-memory SQLite)  
 Queries run: **17** (all)
 
 ---

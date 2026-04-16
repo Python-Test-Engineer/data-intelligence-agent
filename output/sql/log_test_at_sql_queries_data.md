@@ -1,37 +1,44 @@
-# SQL Query Catalog
-<!-- source: data.csv | table: data | generated: 2026-04-16 | queries: 40 -->
+# SQL Test Results
+
+Created: `2026-04-16 12:26:01`  
+Original CSV: `uploaded.csv`  
+
+Queries file: `C:\Users\mrcra\Desktop\data-intelligence-agent\output\sql\sql_queries_data.md`  
+Source CSV: `C:\Users\mrcra\Desktop\data-intelligence-agent\data\data.csv` (in-memory SQLite)  
+Queries run: **40** (all)
 
 ---
 
-### Overview
+**Summary:** 26 passed · 0 failed · 14 skipped
 
-## Row Count
-**ARGS:** —
-**Description:** Returns the total number of rows in the dataset.
+---
+
+## 1. Row Count
+
+**Status:** OK
+
 ```sql
 SELECT COUNT(*) AS row_count
 FROM data;
 ```
-
-**Status:** OK
 
 **Rows returned:** 1
 
 | row_count |
 | --- |
 | 3 |
+
 ---
 
-## Column Sample
-**ARGS:** —
-**Description:** Returns the first 10 rows to preview the dataset structure.
+## 2. Column Sample
+
+**Status:** OK
+
 ```sql
 SELECT *
 FROM data
 LIMIT 10;
 ```
-
-**Status:** OK
 
 **Rows returned:** 3
 
@@ -40,13 +47,13 @@ LIMIT 10;
 | ORD001 | Monitor | Electronics | New York | 10 | 349.99 | 3499.9 |
 | ORD002 | Mouse | Accessories | London | 5 | 29.99 | 149.95 |
 | ORD003 | Keyboard | Accessories | Paris | 8 | 79.99 | 639.92 |
+
 ---
 
-### Numeric Summaries
+## 3. Summary Stats for quantity
 
-## Summary Stats for quantity
-**ARGS:** —
-**Description:** Returns min, max, average, and total for quantity.
+**Status:** OK
+
 ```sql
 SELECT
     MIN(quantity) AS min_val,
@@ -56,18 +63,18 @@ SELECT
 FROM data;
 ```
 
-**Status:** OK
-
 **Rows returned:** 1
 
 | min_val | max_val | avg_val | total |
 | --- | --- | --- | --- |
 | 5 | 10 | 7.67 | 23 |
+
 ---
 
-## Summary Stats for unit_price
-**ARGS:** —
-**Description:** Returns min, max, average, and total for unit_price.
+## 4. Summary Stats for unit_price
+
+**Status:** OK
+
 ```sql
 SELECT
     MIN(unit_price) AS min_val,
@@ -77,18 +84,18 @@ SELECT
 FROM data;
 ```
 
-**Status:** OK
-
 **Rows returned:** 1
 
 | min_val | max_val | avg_val | total |
 | --- | --- | --- | --- |
 | 29.99 | 349.99 | 153.32 | 459.97 |
+
 ---
 
-## Summary Stats for total_price
-**ARGS:** —
-**Description:** Returns min, max, average, and total for total_price.
+## 5. Summary Stats for total_price
+
+**Status:** OK
+
 ```sql
 SELECT
     MIN(total_price) AS min_val,
@@ -98,26 +105,24 @@ SELECT
 FROM data;
 ```
 
-**Status:** OK
-
 **Rows returned:** 1
 
 | min_val | max_val | avg_val | total |
 | --- | --- | --- | --- |
 | 149.95 | 3499.9 | 1429.92 | 4289.77 |
+
 ---
 
-## Total quantity by product
-**ARGS:** —
-**Description:** Ranks each product by total quantity, highest first.
+## 6. Total quantity by product
+
+**Status:** OK
+
 ```sql
 SELECT product, SUM(quantity) AS total_quantity
 FROM data
 GROUP BY product
 ORDER BY total_quantity DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 3
 
@@ -126,19 +131,19 @@ ORDER BY total_quantity DESC;
 | Monitor | 10 |
 | Keyboard | 8 |
 | Mouse | 5 |
+
 ---
 
-## Average quantity by product
-**ARGS:** —
-**Description:** Compares average quantity across each product.
+## 7. Average quantity by product
+
+**Status:** OK
+
 ```sql
 SELECT product, ROUND(AVG(quantity), 2) AS avg_quantity
 FROM data
 GROUP BY product
 ORDER BY avg_quantity DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 3
 
@@ -147,19 +152,19 @@ ORDER BY avg_quantity DESC;
 | Monitor | 10.0 |
 | Keyboard | 8.0 |
 | Mouse | 5.0 |
+
 ---
 
-## Total unit_price by product
-**ARGS:** —
-**Description:** Ranks each product by total unit_price, highest first.
+## 8. Total unit_price by product
+
+**Status:** OK
+
 ```sql
 SELECT product, SUM(unit_price) AS total_unit_price
 FROM data
 GROUP BY product
 ORDER BY total_unit_price DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 3
 
@@ -168,21 +173,19 @@ ORDER BY total_unit_price DESC;
 | Monitor | 349.99 |
 | Keyboard | 79.99 |
 | Mouse | 29.99 |
+
 ---
 
-### Categorical Distributions
+## 9. Distribution of product
 
-## Distribution of product
-**ARGS:** —
-**Description:** Counts rows for each distinct value of product, ordered by frequency.
+**Status:** OK
+
 ```sql
 SELECT product, COUNT(*) AS row_count
 FROM data
 GROUP BY product
 ORDER BY row_count DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 3
 
@@ -191,11 +194,13 @@ ORDER BY row_count DESC;
 | Mouse | 1 |
 | Monitor | 1 |
 | Keyboard | 1 |
+
 ---
 
-## Distribution of category
-**ARGS:** —
-**Description:** Counts rows for each distinct value of category, ordered by frequency.
+## 10. Distribution of category
+
+**Status:** OK
+
 ```sql
 SELECT category, COUNT(*) AS row_count
 FROM data
@@ -203,27 +208,25 @@ GROUP BY category
 ORDER BY row_count DESC;
 ```
 
-**Status:** OK
-
 **Rows returned:** 2
 
 | category | row_count |
 | --- | --- |
 | Accessories | 2 |
 | Electronics | 1 |
+
 ---
 
-## Distribution of city
-**ARGS:** —
-**Description:** Counts rows for each distinct value of city, ordered by frequency.
+## 11. Distribution of city
+
+**Status:** OK
+
 ```sql
 SELECT city, COUNT(*) AS row_count
 FROM data
 GROUP BY city
 ORDER BY row_count DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 3
 
@@ -232,13 +235,13 @@ ORDER BY row_count DESC;
 | Paris | 1 |
 | New York | 1 |
 | London | 1 |
+
 ---
 
-### Rankings
+## 12. product Ranked by Total quantity
 
-## product Ranked by Total quantity
-**ARGS:** —
-**Description:** Ranks each product by total quantity, highest first.
+**Status:** OK
+
 ```sql
 SELECT
     product,
@@ -248,8 +251,6 @@ FROM data
 GROUP BY product
 ORDER BY total_quantity DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 3
 
@@ -258,11 +259,13 @@ ORDER BY total_quantity DESC;
 | Monitor | 1 | 10.0 |
 | Keyboard | 1 | 8.0 |
 | Mouse | 1 | 5.0 |
+
 ---
 
-## category Ranked by Total quantity
-**ARGS:** —
-**Description:** Ranks each category by total quantity, highest first.
+## 13. category Ranked by Total quantity
+
+**Status:** OK
+
 ```sql
 SELECT
     category,
@@ -273,19 +276,19 @@ GROUP BY category
 ORDER BY total_quantity DESC;
 ```
 
-**Status:** OK
-
 **Rows returned:** 2
 
 | category | transaction_count | total_quantity |
 | --- | --- | --- |
 | Accessories | 2 | 13.0 |
 | Electronics | 1 | 10.0 |
+
 ---
 
-## city Ranked by Total quantity
-**ARGS:** —
-**Description:** Ranks each city by total quantity, highest first.
+## 14. city Ranked by Total quantity
+
+**Status:** OK
+
 ```sql
 SELECT
     city,
@@ -295,8 +298,6 @@ FROM data
 GROUP BY city
 ORDER BY total_quantity DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 3
 
@@ -305,21 +306,19 @@ ORDER BY total_quantity DESC;
 | New York | 1 | 10.0 |
 | Paris | 1 | 8.0 |
 | London | 1 | 5.0 |
+
 ---
 
-### Multi-Dimensional
+## 15. quantity by product and category
 
-## quantity by product and category
-**ARGS:** —
-**Description:** Shows total quantity broken down by both product and category.
+**Status:** OK
+
 ```sql
 SELECT product, category, SUM(quantity) AS total_quantity
 FROM data
 GROUP BY product, category
 ORDER BY total_quantity DESC;
 ```
-
-**Status:** OK
 
 **Rows returned:** 3
 
@@ -328,13 +327,13 @@ ORDER BY total_quantity DESC;
 | Monitor | Electronics | 10 |
 | Keyboard | Accessories | 8 |
 | Mouse | Accessories | 5 |
+
 ---
 
-### Multi-Metric Analysis
+## 16. Performance Breakdown by product
 
-## Performance Breakdown by product
-**ARGS:** —
-**Description:** Aggregates transaction count and all key metrics (revenue, cost, profit, margins) grouped by product.
+**Status:** OK
+
 ```sql
 SELECT
     product,
@@ -347,8 +346,6 @@ GROUP BY product
 ORDER BY total_quantity DESC;
 ```
 
-**Status:** OK
-
 **Rows returned:** 3
 
 | product | transaction_count | total_quantity | total_unit_price | total_total_price |
@@ -356,11 +353,13 @@ ORDER BY total_quantity DESC;
 | Monitor | 1 | 10 | 349.99 | 3499.9 |
 | Keyboard | 1 | 8 | 79.99 | 639.92 |
 | Mouse | 1 | 5 | 29.99 | 149.95 |
+
 ---
 
-## Performance Breakdown by category
-**ARGS:** —
-**Description:** Aggregates transaction count and all key metrics (revenue, cost, profit, margins) grouped by category.
+## 17. Performance Breakdown by category
+
+**Status:** OK
+
 ```sql
 SELECT
     category,
@@ -373,19 +372,19 @@ GROUP BY category
 ORDER BY total_quantity DESC;
 ```
 
-**Status:** OK
-
 **Rows returned:** 2
 
 | category | transaction_count | total_quantity | total_unit_price | total_total_price |
 | --- | --- | --- | --- | --- |
 | Accessories | 2 | 13 | 109.97999999999999 | 789.8699999999999 |
 | Electronics | 1 | 10 | 349.99 | 3499.9 |
+
 ---
 
-## Performance Breakdown by city
-**ARGS:** —
-**Description:** Aggregates transaction count and all key metrics (revenue, cost, profit, margins) grouped by city.
+## 18. Performance Breakdown by city
+
+**Status:** OK
+
 ```sql
 SELECT
     city,
@@ -398,8 +397,6 @@ GROUP BY city
 ORDER BY total_quantity DESC;
 ```
 
-**Status:** OK
-
 **Rows returned:** 3
 
 | city | transaction_count | total_quantity | total_unit_price | total_total_price |
@@ -407,11 +404,13 @@ ORDER BY total_quantity DESC;
 | New York | 1 | 10 | 349.99 | 3499.9 |
 | Paris | 1 | 8 | 79.99 | 639.92 |
 | London | 1 | 5 | 29.99 | 149.95 |
+
 ---
 
-## product × category Performance Matrix
-**ARGS:** —
-**Description:** Shows performance metrics for every product and category combination, ordered by profitability.
+## 19. product × category Performance Matrix
+
+**Status:** OK
+
 ```sql
 SELECT
     product,
@@ -425,8 +424,6 @@ GROUP BY product, category
 ORDER BY total_quantity DESC;
 ```
 
-**Status:** OK
-
 **Rows returned:** 3
 
 | product | category | transaction_count | total_quantity | total_unit_price | total_total_price |
@@ -434,11 +431,13 @@ ORDER BY total_quantity DESC;
 | Monitor | Electronics | 1 | 10 | 349.99 | 3499.9 |
 | Keyboard | Accessories | 1 | 8 | 79.99 | 639.92 |
 | Mouse | Accessories | 1 | 5 | 29.99 | 149.95 |
+
 ---
 
-## Unique order_id Count by product
-**ARGS:** —
-**Description:** Counts distinct order_id values and key metrics per product to reveal concentration.
+## 20. Unique order_id Count by product
+
+**Status:** OK
+
 ```sql
 SELECT
     product,
@@ -450,8 +449,6 @@ GROUP BY product
 ORDER BY unique_order_id DESC;
 ```
 
-**Status:** OK
-
 **Rows returned:** 3
 
 | product | unique_order_id | transaction_count | total_quantity |
@@ -459,11 +456,13 @@ ORDER BY unique_order_id DESC;
 | Mouse | 1 | 1 | 5 |
 | Monitor | 1 | 1 | 10 |
 | Keyboard | 1 | 1 | 8 |
+
 ---
 
-## Unique order_id Count by category
-**ARGS:** —
-**Description:** Counts distinct order_id values and key metrics per category to reveal concentration.
+## 21. Unique order_id Count by category
+
+**Status:** OK
+
 ```sql
 SELECT
     category,
@@ -475,35 +474,33 @@ GROUP BY category
 ORDER BY unique_order_id DESC;
 ```
 
-**Status:** OK
-
 **Rows returned:** 2
 
 | category | unique_order_id | transaction_count | total_quantity |
 | --- | --- | --- | --- |
 | Accessories | 2 | 2 | 13 |
 | Electronics | 1 | 1 | 10 |
+
 ---
 
-### Parametric Lookups
+## 22. Filter by product
 
-## Filter by product
-**ARGS:** product
-**Description:** Returns all rows where product matches a given value.
+**Status:** SKIPPED
+
 ```sql
 SELECT *
 FROM data
 WHERE product = :product;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Performance Summary for a Specific product
-**ARGS:** product
-**Description:** Returns transaction count and all key metrics for a single product value.
+## 23. Performance Summary for a Specific product
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     product,
@@ -514,14 +511,14 @@ WHERE product = :product
 GROUP BY product;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## category Breakdown for product = :product
-**ARGS:** product
-**Description:** Ranks each category by total quantity filtered to a single product value.
+## 24. category Breakdown for product = :product
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     category,
@@ -533,14 +530,14 @@ GROUP BY category
 ORDER BY total_quantity DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## city Breakdown for product = :product
-**ARGS:** product
-**Description:** Ranks each city by total quantity filtered to a single product value.
+## 25. city Breakdown for product = :product
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     city,
@@ -552,28 +549,28 @@ GROUP BY city
 ORDER BY total_quantity DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Filter by category
-**ARGS:** category
-**Description:** Returns all rows where category matches a given value.
+## 26. Filter by category
+
+**Status:** SKIPPED
+
 ```sql
 SELECT *
 FROM data
 WHERE category = :category;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Performance Summary for a Specific category
-**ARGS:** category
-**Description:** Returns transaction count and all key metrics for a single category value.
+## 27. Performance Summary for a Specific category
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     category,
@@ -584,14 +581,14 @@ WHERE category = :category
 GROUP BY category;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## product Breakdown for category = :category
-**ARGS:** category
-**Description:** Ranks each product by total quantity filtered to a single category value.
+## 28. product Breakdown for category = :category
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     product,
@@ -603,14 +600,14 @@ GROUP BY product
 ORDER BY total_quantity DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## city Breakdown for category = :category
-**ARGS:** category
-**Description:** Ranks each city by total quantity filtered to a single category value.
+## 29. city Breakdown for category = :category
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     city,
@@ -622,28 +619,28 @@ GROUP BY city
 ORDER BY total_quantity DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Filter by city
-**ARGS:** city
-**Description:** Returns all rows where city matches a given value.
+## 30. Filter by city
+
+**Status:** SKIPPED
+
 ```sql
 SELECT *
 FROM data
 WHERE city = :city;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Performance Summary for a Specific city
-**ARGS:** city
-**Description:** Returns transaction count and all key metrics for a single city value.
+## 31. Performance Summary for a Specific city
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     city,
@@ -654,14 +651,14 @@ WHERE city = :city
 GROUP BY city;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## product Breakdown for city = :city
-**ARGS:** city
-**Description:** Ranks each product by total quantity filtered to a single city value.
+## 32. product Breakdown for city = :city
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     product,
@@ -673,14 +670,14 @@ GROUP BY product
 ORDER BY total_quantity DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## category Breakdown for city = :city
-**ARGS:** city
-**Description:** Ranks each category by total quantity filtered to a single city value.
+## 33. category Breakdown for city = :city
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     category,
@@ -692,14 +689,14 @@ GROUP BY category
 ORDER BY total_quantity DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## Rows Where quantity Exceeds :min_value
-**ARGS:** min_value
-**Description:** Returns all rows where quantity is above a given threshold.
+## 34. Rows Where quantity Exceeds :min_value
+
+**Status:** SKIPPED
+
 ```sql
 SELECT *
 FROM data
@@ -707,14 +704,14 @@ WHERE quantity > :min_value
 ORDER BY quantity DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-## product with Total quantity Above :threshold
-**ARGS:** threshold
-**Description:** Lists product values whose total quantity exceeds a given threshold.
+## 35. product with Total quantity Above :threshold
+
+**Status:** SKIPPED
+
 ```sql
 SELECT
     product,
@@ -726,16 +723,14 @@ HAVING SUM(quantity) > :threshold
 ORDER BY total_quantity DESC;
 ```
 
-**Status:** SKIPPED
-
 **Skipped:** Query requires runtime arguments (:param)
+
 ---
 
-### Data Quality Checks
+## 36. Missing Values per Column
 
-## Missing Values per Column
-**ARGS:** —
-**Description:** Counts NULL values in each column to identify data gaps.
+**Status:** OK
+
 ```sql
 SELECT 'order_id' AS column_name, COUNT(*) AS null_count FROM data WHERE order_id IS NULL
 UNION ALL
@@ -753,8 +748,6 @@ SELECT 'total_price' AS column_name, COUNT(*) AS null_count FROM data WHERE tota
 ORDER BY null_count DESC;
 ```
 
-**Status:** OK
-
 **Rows returned:** 7
 
 | column_name | null_count |
@@ -766,11 +759,13 @@ ORDER BY null_count DESC;
 | quantity | 0 |
 | unit_price | 0 |
 | total_price | 0 |
+
 ---
 
-## Duplicate order_id Values
-**ARGS:** —
-**Description:** Flags any order_id that appears more than once in the dataset.
+## 37. Duplicate order_id Values
+
+**Status:** OK
+
 ```sql
 SELECT order_id, COUNT(*) AS occurrences
 FROM data
@@ -779,16 +774,16 @@ HAVING COUNT(*) > 1
 ORDER BY occurrences DESC;
 ```
 
-**Status:** OK
-
 **Rows returned:** 0
 
 *(no rows returned)*
+
 ---
 
-## Negative quantity Values
-**ARGS:** —
-**Description:** Flags rows where quantity is negative, which may indicate data errors.
+## 38. Negative quantity Values
+
+**Status:** OK
+
 ```sql
 SELECT *
 FROM data
@@ -796,16 +791,16 @@ WHERE quantity < 0
 ORDER BY quantity;
 ```
 
-**Status:** OK
-
 **Rows returned:** 0
 
 *(no rows returned)*
+
 ---
 
-## Negative unit_price Values
-**ARGS:** —
-**Description:** Flags rows where unit_price is negative, which may indicate data errors.
+## 39. Negative unit_price Values
+
+**Status:** OK
+
 ```sql
 SELECT *
 FROM data
@@ -813,16 +808,16 @@ WHERE unit_price < 0
 ORDER BY unit_price;
 ```
 
-**Status:** OK
-
 **Rows returned:** 0
 
 *(no rows returned)*
+
 ---
 
-## Negative total_price Values
-**ARGS:** —
-**Description:** Flags rows where total_price is negative, which may indicate data errors.
+## 40. Negative total_price Values
+
+**Status:** OK
+
 ```sql
 SELECT *
 FROM data
@@ -830,9 +825,8 @@ WHERE total_price < 0
 ORDER BY total_price;
 ```
 
-**Status:** OK
-
 **Rows returned:** 0
 
 *(no rows returned)*
+
 ---

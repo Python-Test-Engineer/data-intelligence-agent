@@ -10,14 +10,6 @@
       "Bash(PYTHONUTF8=1 uv run:*)",
       "Bash(awk NR==2 {print; exit}:*)",
       "WebSearch",
-      "WebFetch(domain:pmc.ncbi.nlm.nih.gov)",
-      "WebFetch(domain:www.ncbi.nlm.nih.gov)",
-      "WebFetch(domain:ftp.ncbi.nlm.nih.gov)",
-      "WebFetch(domain:www.nature.com)",
-      "WebFetch(domain:www.ebi.ac.uk)",
-      "WebFetch(domain:gdc.cancer.gov)",
-      "WebFetch(domain:www.cell.com)",
-      "WebFetch(domain:www.biorxiv.org)",
       "Bash(git:*)",
       "Skill(execute)",
       "Bash(mkdir:*)",
@@ -64,7 +56,9 @@
       "Bash(set +a)",
       "Bash(unset OPENROUTER_API_KEY OPENROUTER_MODEL ANTHROPIC_BASE_URL ANTHROPIC_AUTH_TOKEN ANTHROPIC_API_KEY ANTHROPIC_MODEL)",
       "Skill(sql-titles)",
-      "Skill(sql-create)"
+      "Skill(sql-create)",
+      "Bash(del:*)",
+      "Bash(powershell.exe:*)"
     ],
     "env": {
       "ANTHROPIC_BASE_URL": "https://openrouter.ai/api/v1",

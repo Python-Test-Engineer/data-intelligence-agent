@@ -55,200 +55,184 @@
     </div>
     <h1>Final Data Insights</h1>
 <ul>
-<li>Generated: 2026-03-28 13:44 UTC</li>
+<li>Generated: 2026-04-16 11:26 UTC</li>
 <li>Model setting: google/gemini-2.5-flash-lite</li>
 <li>LLM-enabled: yes</li>
-<li>Individual insight files: 12</li>
+<li>Individual insight files: 10</li>
 </ul>
 <h2>Dataset Context</h2>
 <ul>
-<li>Rows: 20</li>
+<li>Rows: 3</li>
 <li>Columns: 7</li>
 <li>Numeric columns: 3</li>
-<li>unit_price: mean=403.49, std=370.34</li>
-<li>quantity: mean=6.65, std=1.95</li>
-<li>total_price: mean=2695.93, std=2567.29</li>
+<li>quantity: mean=7.67, std=2.52</li>
+<li>unit_price: mean=153.32, std=172.14</li>
+<li>total_price: mean=1429.92, std=1809.31</li>
 </ul>
 <h2>Consolidated Chart Insights</h2>
-<h3>Overview Numeric Distributions</h3>
-<h1>Insights: Overview Numeric Distributions</h1>
-<p><img src="../images/overview_numeric_distributions.png" alt="overview_numeric_distributions.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h2>Generation Notes</h2>
+<ul>
+<li>LLM generation failed for one or more charts; heuristic fallback was used.</li>
+<li>category_category.png: Error code: 401 - {&#x27;error&#x27;: {&#x27;message&#x27;: &#x27;User not found.&#x27;, &#x27;code&#x27;: 401}}</li>
+<li>category_city.png: Error code: 401 - {&#x27;error&#x27;: {&#x27;message&#x27;: &#x27;User not found.&#x27;, &#x27;code&#x27;: 401}}</li>
+<li>category_order_id.png: Error code: 401 - {&#x27;error&#x27;: {&#x27;message&#x27;: &#x27;User not found.&#x27;, &#x27;code&#x27;: 401}}</li>
+<li>category_product.png: Error code: 401 - {&#x27;error&#x27;: {&#x27;message&#x27;: &#x27;User not found.&#x27;, &#x27;code&#x27;: 401}}</li>
+<li>correlation_heatmap.png: Error code: 401 - {&#x27;error&#x27;: {&#x27;message&#x27;: &#x27;User not found.&#x27;, &#x27;code&#x27;: 401}}</li>
+<li>distribution_quantity.png: Error code: 401 - {&#x27;error&#x27;: {&#x27;message&#x27;: &#x27;User not found.&#x27;, &#x27;code&#x27;: 401}}</li>
+<li>distribution_total_price.png: Error code: 401 - {&#x27;error&#x27;: {&#x27;message&#x27;: &#x27;User not found.&#x27;, &#x27;code&#x27;: 401}}</li>
+<li>distribution_unit_price.png: Error code: 401 - {&#x27;error&#x27;: {&#x27;message&#x27;: &#x27;User not found.&#x27;, &#x27;code&#x27;: 401}}</li>
+<li>overview_numeric_distributions.png: Error code: 401 - {&#x27;error&#x27;: {&#x27;message&#x27;: &#x27;User not found.&#x27;, &#x27;code&#x27;: 401}}</li>
+<li>overview_scatter_unit_price_vs_total_price.png: Error code: 401 - {&#x27;error&#x27;: {&#x27;message&#x27;: &#x27;User not found.&#x27;, &#x27;code&#x27;: 401}}</li>
+</ul>
+<h3>Category Category</h3>
+<h1>Insights: Category Category</h1>
+<p><img src="../images/category_category.png" alt="category_category.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
 <h2>Data Insight</h2>
 <ul>
-<li>The box plot clearly shows that &#x27;total_price&#x27; has the widest range and highest median value, followed by &#x27;unit_price&#x27;. &#x27;Quantity&#x27; has minimal variability and a very low median, suggesting most orders contain few items.</li>
+<li>&#x27;Accessories&#x27; is the most frequent value in &#x27;category&#x27;. Imbalanced categories may skew aggregates and require stratified analysis.</li>
 </ul>
 <h2>Analysis Insight</h2>
 <ul>
-<li>The distributions indicate that while individual item prices vary, the total price of orders exhibits significant spread. This suggests that the number of units purchased, despite its low median, can substantially impact the final order cost.</li>
+<li>Rare categories can be grouped into an &#x27;Other&#x27; bucket to reduce noise and improve model generalisation.</li>
 </ul>
 <h2>Caveat</h2>
 <ul>
-<li>The analysis is based on a small dataset (20 rows). The wide spread in &#x27;total_price&#x27; and &#x27;unit_price&#x27; could be due to outliers or a limited variety of products and order sizes represented.</li>
-</ul>
-<h3>Correlation Heatmap</h3>
-<h1>Insights: Correlation Heatmap</h1>
-<p><img src="../images/correlation_heatmap.png" alt="correlation_heatmap.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
-<h2>Data Insight</h2>
-<ul>
-<li>The heatmap shows a very strong positive correlation (0.94) between &#x27;unit_price&#x27; and &#x27;total_price&#x27;. &#x27;Quantity&#x27; shows a negligible correlation with both &#x27;unit_price&#x27; (0.02) and &#x27;total_price&#x27; (0.26).</li>
-</ul>
-<h2>Analysis Insight</h2>
-<ul>
-<li>The high correlation between &#x27;unit_price&#x27; and &#x27;total_price&#x27; suggests that the total price is largely driven by the unit price of products sold. The low correlation with quantity indicates that the number of items bought doesn&#x27;t significantly affect the total sale value in this dataset.</li>
-</ul>
-<h2>Caveat</h2>
-<ul>
-<li>The analysis is based on a small dataset (20 rows), and correlations observed may not represent the general trend. Other factors influencing total price, not included in the chart, could be significant.</li>
-</ul>
-<h3>Distribution Unit Price</h3>
-<h1>Insights: Distribution Unit Price</h1>
-<p><img src="../images/distribution_unit_price.png" alt="distribution_unit_price.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
-<h2>Data Insight</h2>
-<ul>
-<li>The histogram shows three distinct groups of unit prices: around 100, between 300-400, and at 1000. The largest count (6) is observed for unit prices between 300 and 400. The counts for unit prices around 100 and at 1000 are lower, with 2 and 5 respectively.</li>
-</ul>
-<h2>Analysis Insight</h2>
-<ul>
-<li>The distribution of unit prices in this dataset appears multimodal, with peaks suggesting distinct product categories or pricing tiers. The presence of a cluster around 300-400 and a solitary high price point at 1000 warrants further investigation into the products associated with these price ranges.</li>
-</ul>
-<h2>Caveat</h2>
-<ul>
-<li>The small sample size (20 rows) limits the generalizability of these findings. The histogram bins are wide, potentially obscuring finer price variations. Additional context on product types or categories is needed to fully interpret the observed price distributions.</li>
-</ul>
-<h3>Distribution Quantity</h3>
-<h1>Insights: Distribution Quantity</h1>
-<p><img src="../images/distribution_quantity.png" alt="distribution_quantity.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
-<h2>Data Insight</h2>
-<ul>
-<li>The histogram shows the distribution of order quantities. Most orders fall between quantities of 6 and 9, with a peak at quantity 7. Quantities of 3, 5, 6, 8, 9, and 10 have at least two orders, while quantity 4 has only one.</li>
-</ul>
-<h2>Analysis Insight</h2>
-<ul>
-<li>The quantity distribution is skewed, with a higher frequency of quantities around 7. This suggests a common order size, but data represents a small sample size of 20 orders.</li>
-</ul>
-<h2>Caveat</h2>
-<ul>
-<li>The observed distribution might not represent the overall trend due to the very small dataset size (20 rows). It&#x27;s difficult to infer general patterns or make predictions based on this limited data.</li>
-</ul>
-<h3>Distribution Total Price</h3>
-<h1>Insights: Distribution Total Price</h1>
-<p><img src="../images/distribution_total_price.png" alt="distribution_total_price.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
-<h2>Data Insight</h2>
-<ul>
-<li>The histogram shows that most orders have a total price between 0 and 1,000, with a significant drop in frequency for prices between 1,000 and 4,000. There are two distinct peaks, one around 1,000 and another around 7,000-8,000.</li>
-</ul>
-<h2>Analysis Insight</h2>
-<ul>
-<li>The distribution of total_price is highly skewed. The majority of orders fall into the lower price ranges, suggesting a concentration of lower-value transactions. The presence of higher-priced orders creates a long tail in the distribution.</li>
-</ul>
-<h2>Caveat</h2>
-<ul>
-<li>The small dataset size (20 rows) limits the generalizability of these findings. The binning method might obscure finer price point variations. Outliers or specific product types could be driving the higher price clusters.</li>
-</ul>
-<h3>Category Order Id</h3>
-<h1>Insights: Category Order Id</h1>
-<p><img src="../images/category_order_id.png" alt="category_order_id.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
-<h2>Data Insight</h2>
-<ul>
-<li>The bar chart displays the frequency of top order IDs. Each visible order ID (ORD0001 through ORD0028) appears to have a count slightly above 1, suggesting each order ID is unique within the displayed subset of orders.</li>
-</ul>
-<h2>Analysis Insight</h2>
-<ul>
-<li>This visualization focuses on the frequency of individual order IDs. The uniform height of the bars indicates that each of the selected order IDs occurs with approximately the same frequency in the dataset. This suggests no single order ID dominates this particular view.</li>
-</ul>
-<h2>Caveat</h2>
-<ul>
-<li>The chart shows &#x27;Top Values&#x27; for order_id, implying that not all order IDs in the dataset are represented. The exact count is obscured by the bar height relative to the y-axis, and the dataset&#x27;s small size (20 rows) limits the generalizability of these findings.</li>
-</ul>
-<h3>Category Product Name</h3>
-<h1>Insights: Category Product Name</h1>
-<p><img src="../images/category_product_name.png" alt="category_product_name.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
-<h2>Data Insight</h2>
-<ul>
-<li>Monitors are the most frequently ordered product, appearing 6 times, followed by Headphones and Laptops, each appearing 5 times. Keyboards and Mice are the least frequently ordered, each appearing 2 times.</li>
-</ul>
-<h2>Analysis Insight</h2>
-<ul>
-<li>The bar chart clearly illustrates the distribution of product orders, highlighting &#x27;Monitor&#x27;, &#x27;Headphones&#x27;, and &#x27;Laptop&#x27; as the top-performing products in terms of order frequency within this dataset.</li>
-</ul>
-<h2>Caveat</h2>
-<ul>
-<li>This analysis is based on a small dataset of 20 rows. The observed frequencies may not be representative of overall sales trends and could be influenced by various factors not captured in the data.</li>
+<li>Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.</li>
 </ul>
 <h3>Category City</h3>
 <h1>Insights: Category City</h1>
 <p><img src="../images/category_city.png" alt="category_city.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
 <h2>Data Insight</h2>
 <ul>
-<li>Los Angeles has the highest count of orders (8), followed by New York (7), and Chicago (5). These three cities represent the top values in the dataset.</li>
+<li>&#x27;Accessories&#x27; is the most frequent value in &#x27;category&#x27;. Imbalanced categories may skew aggregates and require stratified analysis.</li>
 </ul>
 <h2>Analysis Insight</h2>
 <ul>
-<li>The bar chart visually represents the frequency of orders across different cities. Los Angeles shows the most activity, suggesting it is a primary market or has the most customers based on this data.</li>
+<li>Rare categories can be grouped into an &#x27;Other&#x27; bucket to reduce noise and improve model generalisation.</li>
 </ul>
 <h2>Caveat</h2>
 <ul>
-<li>This analysis is based on a small dataset of 20 rows. The &#x27;Top Values&#x27; might not reflect the overall market distribution and could be influenced by sampling or specific time periods not represented.</li>
+<li>Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.</li>
 </ul>
-<h3>Time Series Unit Price</h3>
-<h1>Insights: Time Series Unit Price</h1>
-<p><img src="../images/time_series_unit_price.png" alt="time_series_unit_price.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h3>Category Order Id</h3>
+<h1>Insights: Category Order Id</h1>
+<p><img src="../images/category_order_id.png" alt="category_order_id.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
 <h2>Data Insight</h2>
 <ul>
-<li>The unit price shows significant volatility throughout 2025. It peaks in May at approximately 1800, then drops sharply, recovers slightly in September to around 1000, and finally plateaus from November onwards, staying constant near 100.</li>
+<li>&#x27;ORD001&#x27; is the most frequent value in &#x27;order_id&#x27;. Imbalanced categories may skew aggregates and require stratified analysis.</li>
 </ul>
 <h2>Analysis Insight</h2>
 <ul>
-<li>The trend indicates a generally decreasing unit price after May, with a notable dip in July and a brief resurgence in September. The price stabilization in the final two months suggests a potential shift in market conditions or inventory management.</li>
+<li>Rare categories can be grouped into an &#x27;Other&#x27; bucket to reduce noise and improve model generalisation.</li>
 </ul>
 <h2>Caveat</h2>
 <ul>
-<li>The analysis is based on limited data points (20 rows). Fluctuations may be influenced by seasonal factors, specific product promotions, or reporting anomalies. The observed trends do not account for potential confounding variables like product type or sales volume.</li>
+<li>Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.</li>
 </ul>
-<h3>Time Series Quantity</h3>
-<h1>Insights: Time Series Quantity</h1>
-<p><img src="../images/time_series_quantity.png" alt="time_series_quantity.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h3>Category Product</h3>
+<h1>Insights: Category Product</h1>
+<p><img src="../images/category_product.png" alt="category_product.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
 <h2>Data Insight</h2>
 <ul>
-<li>The quantity shows a significant peak in May 2025, reaching over 30 units. Following this peak, there is a sharp decline in June and July, stabilizing at a lower level for the remainder of the observed period.</li>
+<li>&#x27;Monitor&#x27; is the most frequent value in &#x27;product&#x27;. Imbalanced categories may skew aggregates and require stratified analysis.</li>
 </ul>
 <h2>Analysis Insight</h2>
 <ul>
-<li>The monthly trend of quantity reveals a dramatic surge in May, followed by a substantial drop. This suggests a possible seasonal event, promotion, or a specific product launch causing the May spike, with demand returning to baseline levels afterward.</li>
+<li>Rare categories can be grouped into an &#x27;Other&#x27; bucket to reduce noise and improve model generalisation.</li>
 </ul>
 <h2>Caveat</h2>
 <ul>
-<li>The time series is limited to 20 data points, providing a short observation window. The identity of the product and the specific reasons for the quantity fluctuations are not available, preventing a deeper causal analysis.</li>
+<li>Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.</li>
 </ul>
-<h3>Time Series Total Price</h3>
-<h1>Insights: Time Series Total Price</h1>
-<p><img src="../images/time_series_total_price.png" alt="time_series_total_price.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h3>Correlation Heatmap</h3>
+<h1>Insights: Correlation Heatmap</h1>
+<p><img src="../images/correlation_heatmap.png" alt="correlation_heatmap.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
 <h2>Data Insight</h2>
 <ul>
-<li>The total price shows a significant peak in May 2025, reaching approximately 14.5k. Following this peak, there&#x27;s a sharp decline through June and July, with a slight recovery in September and a general downward trend towards the end of the year.</li>
+<li>The strongest correlation is between &#x27;unit_price&#x27; and &#x27;total_price&#x27; (r ≈ 1.00), suggesting these columns move together and may be related.</li>
 </ul>
 <h2>Analysis Insight</h2>
 <ul>
-<li>The total price exhibits high volatility throughout the observed period. The sharp increase leading to May and the subsequent drastic decrease suggest potentially seasonal or event-driven sales patterns. The overall trend indicates that sales performance in the latter half of the year is considerably lower than the mid-year peak.</li>
+<li>Use this map to reduce collinearity in downstream models and prioritise orthogonal feature subsets.</li>
 </ul>
 <h2>Caveat</h2>
 <ul>
-<li>The analysis is based on a small dataset (20 rows) and limited time frame. The observed trends may not be representative of longer-term performance. Variations in total price could be influenced by factors not present in the data, such as specific product sales or marketing campaigns.</li>
+<li>Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.</li>
+</ul>
+<h3>Distribution Quantity</h3>
+<h1>Insights: Distribution Quantity</h1>
+<p><img src="../images/distribution_quantity.png" alt="distribution_quantity.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h2>Data Insight</h2>
+<ul>
+<li>The distribution of &#x27;quantity&#x27; reveals the spread and shape of values. Skewed distributions or outliers may warrant transformation before modelling.</li>
+</ul>
+<h2>Analysis Insight</h2>
+<ul>
+<li>Highly skewed distributions may benefit from log or Box-Cox transformation before statistical modelling.</li>
+</ul>
+<h2>Caveat</h2>
+<ul>
+<li>Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.</li>
+</ul>
+<h3>Distribution Total Price</h3>
+<h1>Insights: Distribution Total Price</h1>
+<p><img src="../images/distribution_total_price.png" alt="distribution_total_price.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h2>Data Insight</h2>
+<ul>
+<li>The distribution of &#x27;total price&#x27; reveals the spread and shape of values. Skewed distributions or outliers may warrant transformation before modelling.</li>
+</ul>
+<h2>Analysis Insight</h2>
+<ul>
+<li>Highly skewed distributions may benefit from log or Box-Cox transformation before statistical modelling.</li>
+</ul>
+<h2>Caveat</h2>
+<ul>
+<li>Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.</li>
+</ul>
+<h3>Distribution Unit Price</h3>
+<h1>Insights: Distribution Unit Price</h1>
+<p><img src="../images/distribution_unit_price.png" alt="distribution_unit_price.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h2>Data Insight</h2>
+<ul>
+<li>The distribution of &#x27;unit price&#x27; reveals the spread and shape of values. Skewed distributions or outliers may warrant transformation before modelling.</li>
+</ul>
+<h2>Analysis Insight</h2>
+<ul>
+<li>Highly skewed distributions may benefit from log or Box-Cox transformation before statistical modelling.</li>
+</ul>
+<h2>Caveat</h2>
+<ul>
+<li>Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.</li>
+</ul>
+<h3>Overview Numeric Distributions</h3>
+<h1>Insights: Overview Numeric Distributions</h1>
+<p><img src="../images/overview_numeric_distributions.png" alt="overview_numeric_distributions.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
+<h2>Data Insight</h2>
+<ul>
+<li>The dataset contains 3 numeric column(s). This chart compares their spread, helping spot outliers and scale differences.</li>
+</ul>
+<h2>Analysis Insight</h2>
+<ul>
+<li>Consider normalising or scaling columns with very different ranges before applying distance-based algorithms.</li>
+</ul>
+<h2>Caveat</h2>
+<ul>
+<li>Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.</li>
 </ul>
 <h3>Overview Scatter Unit Price Vs Total Price</h3>
 <h1>Insights: Overview Scatter Unit Price Vs Total Price</h1>
 <p><img src="../images/overview_scatter_unit_price_vs_total_price.png" alt="overview_scatter_unit_price_vs_total_price.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
 <h2>Data Insight</h2>
 <ul>
-<li>The scatter plot displays a generally positive relationship between unit price and total price, indicated by points clustering towards the upper right. However, there are distinct groups of points suggesting potential variations in quantity or product type, such as orders with similar unit prices but different total prices.</li>
+<li>This scatter plot reveals the relationship between two numeric columns. Clusters or linear trends can motivate correlation and regression analyses.</li>
 </ul>
 <h2>Analysis Insight</h2>
 <ul>
-<li>When unit price increases, total price tends to increase as well, but the number of data points is small. The data appears segmented, with several orders having unit prices around 400 and others around 100, each with varying total prices suggesting differences in quantity or product.</li>
+<li>The bivariate structure can motivate interaction terms and subgroup analyses in regression models.</li>
 </ul>
 <h2>Caveat</h2>
 <ul>
-<li>With only 20 data points, observed patterns may not be statistically significant or generalizable. The scatter plot does not account for the &#x27;quantity&#x27; variable, which is a crucial factor in determining total price and could explain the observed variations.</li>
+<li>Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.</li>
 </ul>
   </main>
 </body>

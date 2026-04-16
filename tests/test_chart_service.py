@@ -10,15 +10,15 @@ from csv_analyser.services.chart_service import generate_standard_charts, list_c
 def _build_chart_df() -> pd.DataFrame:
     return pd.DataFrame(
         {
-            "age_months": [12, 24, 18, 36, 30],
-            "stage": ["2", "4", "3", "4", "2"],
-            "risk_group": ["low", "high", "intermediate", "high", "low"],
-            "efs_months": [30, 12, 20, 8, 28],
-            "event": [0, 1, 0, 1, 0],
-            "mycn_amplified": [0, 1, 0, 1, 0],
-            "expr_mycn": [1.2, 2.7, 1.8, 3.1, 1.4],
-            "expr_alk": [1.9, 1.2, 1.5, 1.1, 1.8],
-            "expr_mdm2": [1.1, 2.4, 1.9, 2.8, 1.3],
+            "product": ["Monitor", "Mouse", "Keyboard", "Laptop", "Headset"],
+            "category": ["Electronics", "Accessories", "Accessories", "Electronics", "Accessories"],
+            "city": ["New York", "London", "Paris", "New York", "London"],
+            "quantity": [10, 5, 8, 2, 6],
+            "unit_price": [349.99, 29.99, 79.99, 999.99, 59.99],
+            "total_price": [3499.90, 149.95, 639.92, 1999.98, 359.94],
+            "revenue": [3499.90, 149.95, 639.92, 1999.98, 359.94],
+            "discount": [0.1, 0.0, 0.05, 0.15, 0.0],
+            "profit": [700.0, 45.0, 128.0, 400.0, 72.0],
         }
     )
 

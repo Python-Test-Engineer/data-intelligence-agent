@@ -1,11 +1,11 @@
 ---
-description: "Read an idea file `kaggle_ideas` from _ideas/, explore the referenced dataset, and produce a structured research plan. Usage: '/planner _ideas/kaggle_ideas.md"
+description: "Read an idea file from _ideas/, explore the referenced dataset, and produce a structured research plan. Usage: '/planner _ideas/<filename>.md"
 allowed-tools: Read, Glob, Grep, Bash(uv run python *), Bash(git diff), Bash(git diff --staged), Write, Edit, AskUserQuestion
 argument-hint: "_ideas/<filename>.md"
 model: Opus
 ---
 
-**Argument required:** The path to an idea file inside `_ideas/`, e.g. `_ideas/kaggle_ideas.md`
+**Argument required:** The path to an idea file inside `_ideas/`, e.g. `_ideas/my_ideas.md`
 
 Ensure an argument is given
 
@@ -72,7 +72,7 @@ Only ask questions that cannot be answered from the idea file or the data itself
 
 ## Step 4 — Write the plan
 
-Save the completed plan to `_plans/kaggle_plan.md`.
+Save the completed plan to `_plans/<stem>_plan.md` (derive the stem from the idea filename).
 
 Use this structure:
 

@@ -1,10 +1,10 @@
 ---
 description: "Implement and run all scripts defined in a technical spec from _specs/. Usage: /execute _specs/<filename>"
-argument-hint: "_specs/kaggle_specs.md"
+argument-hint: "_specs/<filename>.md"
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash(uv run python *), Bash(uv add *), Bash(uv sync), Bash(mkdir *), Bash(git diff), Bash(git diff --staged), AskUserQuestion
 ---
 
-**Argument required:** The path to a spec file inside `_specs/`, e.g. `/execute _specs/kaggle_specs.md`
+**Argument required:** The path to a spec file inside `_specs/`, e.g. `/execute _specs/my_spec.md`
 
 If no argument was provided, list available spec files and ask the user which to use:
 

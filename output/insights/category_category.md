@@ -1,6 +1,6 @@
-# Insights: Category City
+# Insights: Category Category
 
-![category_city.png](../images/category_city.png)
+![category_category.png](../images/category_category.png)
 
 ## Data Insight
 - 'Accessories' is the most frequent value in 'category'. Imbalanced categories may skew aggregates and require stratified analysis.

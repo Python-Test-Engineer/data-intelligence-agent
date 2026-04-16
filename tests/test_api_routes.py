@@ -13,11 +13,10 @@ client = TestClient(app)
 
 def _upload_seed_csv() -> None:
     csv_content = (
-        "patient id,age months,risk group,stage,efs months,event,mycn amplified,"
-        "expr_mycn,expr_alk,expr_mdm2\n"
-        "p1,12,low,2,30,0,0,1.2,2.0,1.1\n"
-        "p2,24,high,4,12,1,1,2.6,1.1,2.4\n"
-        "p3,18,intermediate,3,18,0,0,1.7,1.4,1.8\n"
+        "order_id,product,category,city,quantity,unit_price,total_price\n"
+        "ORD001,Monitor,Electronics,New York,10,349.99,3499.90\n"
+        "ORD002,Mouse,Accessories,London,5,29.99,149.95\n"
+        "ORD003,Keyboard,Accessories,Paris,8,79.99,639.92\n"
     )
     response = client.post(
         "/upload/csv",
@@ -44,7 +43,7 @@ def test_upload_csv_endpoint_overwrites_dataset(tmp_path: Path, monkeypatch) -> 
     target_path = tmp_path / "data.csv"
     monkeypatch.setattr(routes, "DATA_PATH", target_path)
 
-    csv_content = "patient id,age months,risk group,stage,efs months,event,mycn amplified,expr_mycn,expr_alk\np1,12,low,2,30,0,0,1.2,2.0\n"
+    csv_content = "order_id,product,category,city,quantity,unit_price,total_price\nORD001,Monitor,Electronics,New York,10,349.99,3499.90\n"
     response = client.post(
         "/upload/csv",
         files={"file": ("uploaded.csv", csv_content, "text/csv")},

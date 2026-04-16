@@ -1,9 +1,9 @@
-# Insights: Category City
+# Insights: Category Product
 
-![category_city.png](../images/category_city.png)
+![category_product.png](../images/category_product.png)
 
 ## Data Insight
-- 'Accessories' is the most frequent value in 'category'. Imbalanced categories may skew aggregates and require stratified analysis.
+- 'Monitor' is the most frequent value in 'product'. Imbalanced categories may skew aggregates and require stratified analysis.
 
 ## Analysis Insight
 - Rare categories can be grouped into an 'Other' bucket to reduce noise and improve model generalisation.

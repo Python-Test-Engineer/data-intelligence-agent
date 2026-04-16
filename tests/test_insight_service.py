@@ -12,15 +12,15 @@ from csv_analyser.services.insight_service import generate_insights_bundle, read
 def _build_df() -> pd.DataFrame:
     return pd.DataFrame(
         {
-            "age_months": [12, 24, 18, 36, 30],
-            "stage": ["2", "4", "3", "4", "2"],
-            "risk_group": ["low", "high", "intermediate", "high", "low"],
-            "efs_months": [30, 12, 20, 8, 28],
-            "event": [0, 1, 0, 1, 0],
-            "mycn_amplified": [0, 1, 0, 1, 0],
-            "expr_mycn": [1.2, 2.7, 1.8, 3.1, 1.4],
-            "expr_alk": [1.9, 1.2, 1.5, 1.1, 1.8],
-            "expr_mdm2": [1.1, 2.4, 1.9, 2.8, 1.3],
+            "product": ["Monitor", "Mouse", "Keyboard", "Laptop", "Headset"],
+            "category": ["Electronics", "Accessories", "Accessories", "Electronics", "Accessories"],
+            "city": ["New York", "London", "Paris", "New York", "London"],
+            "quantity": [10, 5, 8, 2, 6],
+            "unit_price": [349.99, 29.99, 79.99, 999.99, 59.99],
+            "total_price": [3499.90, 149.95, 639.92, 1999.98, 359.94],
+            "revenue": [3499.90, 149.95, 639.92, 1999.98, 359.94],
+            "discount": [0.1, 0.0, 0.05, 0.15, 0.0],
+            "profit": [700.0, 45.0, 128.0, 400.0, 72.0],
         }
     )
 
@@ -29,16 +29,16 @@ def test_generate_insights_bundle_writes_markdown_and_html(tmp_path: Path) -> No
     df = _build_df()
     artifacts = [
         ChartArtifact(
-            name="biomarker_correlation_heatmap.png",
-            category="biomarker",
+            name="correlation_heatmap.png",
+            category="correlation",
             format="png",
-            path=str(tmp_path / "images" / "biomarker_correlation_heatmap.png"),
+            path=str(tmp_path / "images" / "correlation_heatmap.png"),
         ),
         ChartArtifact(
-            name="clinical_risk_distribution.png",
-            category="clinical",
+            name="category_distribution.png",
+            category="category",
             format="png",
-            path=str(tmp_path / "images" / "clinical_risk_distribution.png"),
+            path=str(tmp_path / "images" / "category_distribution.png"),
         ),
     ]
 
@@ -99,7 +99,7 @@ def test_generate_insights_uses_llm_when_configured(
 
     image_dir = tmp_path / "images"
     image_dir.mkdir(parents=True, exist_ok=True)
-    image_path = image_dir / "clinical_age_distribution.png"
+    image_path = image_dir / "overview_distribution.png"
     image_path.write_bytes(b"\x89PNG\r\n\x1a\nfake")
 
     monkeypatch.setenv("OPENROUTER_API_KEY", "test-key")
@@ -109,7 +109,7 @@ def test_generate_insights_uses_llm_when_configured(
     artifacts = [
         ChartArtifact(
             name=image_path.name,
-            category="clinical",
+            category="overview",
             format="png",
             path=str(image_path),
         )

@@ -1,11 +1,11 @@
 ---
-description: "Translate a research plan from _plans/kaggle_plan.md into a detailed Python technical spec. Usage: /spec _plans/<filename>"
+description: "Translate a research plan from _plans/ into a detailed Python technical spec. Usage: /spec _plans/<filename>"
 argument-hint: "_plans/<filename>.md"
 allowed-tools: Read, Glob, Write, Edit, AskUserQuestion
 model: Sonnet
 ---
 
-**Argument required:** The path to a plan file inside `_plans/`, e.g. ` _plans/kaggle_plan.md`
+**Argument required:** The path to a plan file inside `_plans/`, e.g. `_plans/my_plan.md`
 
 If no argument was provided, list available plan files and ask the user which to use:
 
@@ -15,13 +15,13 @@ Glob: _plans/**/*.md
 
 Then stop and ask the user to re-run with the correct file.
 
-Save output file to `_specs/kaggle_specs.md`
+Save output file to `_specs/<stem>_spec.md` (derive the stem from the plan filename).
 
 ---
 
 ## Your role
 
-You are an experienced data scientist and oncological researcher acting as a Python software architect. Your job is to translate the research plan into a precise, implementation-ready technical spec that a developer (or `/execute`) can follow without ambiguity.
+You are an experienced data scientist and Python software architect. Your job is to translate the research plan into a precise, implementation-ready technical spec that a developer (or `/execute`) can follow without ambiguity.
 
 Do **not** write actual code. Write intent, contracts, and structure.
 
@@ -63,7 +63,7 @@ Only ask if genuinely unclear from the plan.
 
 ## Step 4 — Write the spec
 
-Save the completed spec to `_specs/kaggle_specs.md` (same stem, `.md` extension).
+Save the completed spec to `_specs/<stem>_spec.md` (derive the stem from the plan filename).
 
 Use this structure:
 

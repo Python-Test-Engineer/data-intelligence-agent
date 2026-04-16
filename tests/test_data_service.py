@@ -10,13 +10,13 @@ from csv_analyser.services.data_service import build_summary, infer_schema, load
 
 def test_load_dataset_normalizes_columns(tmp_path: Path) -> None:
     csv_path = tmp_path / "sample.csv"
-    csv_path.write_text("Patient ID,Value One\nNB001,10\n", encoding="utf-8")
+    csv_path.write_text("Order ID,Total Price\nORD001,10\n", encoding="utf-8")
 
     df = load_dataset(csv_path)
 
-    assert "patient_id" in df.columns
-    assert "value_one" in df.columns
-    assert int(df.loc[0, "value_one"]) == 10
+    assert "order_id" in df.columns
+    assert "total_price" in df.columns
+    assert int(df.loc[0, "total_price"]) == 10
 
 
 def test_infer_schema_contains_expected_keys() -> None:
@@ -38,9 +38,9 @@ def test_load_dataset_missing_file_raises(tmp_path: Path) -> None:
 def test_build_summary_has_profile_fields() -> None:
     df = pd.DataFrame(
         {
-            "risk_group": ["low", "high"],
-            "stage": ["2A", "4"],
-            "event": [0, 1],
+            "category": ["Electronics", "Accessories"],
+            "city": ["New York", "London"],
+            "quantity": [10, 5],
         }
     )
 

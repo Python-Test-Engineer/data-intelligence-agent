@@ -1,5 +1,5 @@
 # SQL Query Catalog
-<!-- source: test_data.csv | table: test_data | generated: 2026-03-28 | queries: 17 -->
+<!-- source: test_data.csv | table: test_data | generated: 2026-04-16 | queries: 17 -->
 
 ---
 

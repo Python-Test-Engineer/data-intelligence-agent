@@ -3,10 +3,10 @@
 ![overview_scatter_unit_price_vs_total_price.png](../images/overview_scatter_unit_price_vs_total_price.png)
 
 ## Data Insight
-- The scatter plot displays a generally positive relationship between unit price and total price, indicated by points clustering towards the upper right. However, there are distinct groups of points suggesting potential variations in quantity or product type, such as orders with similar unit prices but different total prices.
+- This scatter plot reveals the relationship between two numeric columns. Clusters or linear trends can motivate correlation and regression analyses.
 
 ## Analysis Insight
-- When unit price increases, total price tends to increase as well, but the number of data points is small. The data appears segmented, with several orders having unit prices around 400 and others around 100, each with varying total prices suggesting differences in quantity or product.
+- The bivariate structure can motivate interaction terms and subgroup analyses in regression models.
 
 ## Caveat
-- With only 20 data points, observed patterns may not be statistically significant or generalizable. The scatter plot does not account for the 'quantity' variable, which is a crucial factor in determining total price and could explain the observed variations.
+- Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.
