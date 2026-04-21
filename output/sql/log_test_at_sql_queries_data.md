@@ -1,7 +1,7 @@
 # SQL Test Results
 
-Created: `2026-04-16 17:44:12`  
-Original CSV: `uploaded.csv`  
+Created: `2026-04-21 06:57:01`  
+Original CSV: `sales_data_20.csv`  
 
 Queries file: `C:\Users\mrcra\Desktop\data-intelligence-agent\output\sql\sql_queries_data.md`  
 Source CSV: `C:\Users\mrcra\Desktop\data-intelligence-agent\data\data.csv` (in-memory SQLite)  

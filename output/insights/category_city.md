@@ -3,7 +3,7 @@
 ![category_city.png](../images/category_city.png)
 
 ## Data Insight
-- 'Accessories' is the most frequent value in 'category'. Imbalanced categories may skew aggregates and require stratified analysis.
+- 'Los Angeles' is the most frequent value in 'city'. Imbalanced categories may skew aggregates and require stratified analysis.
 
 ## Analysis Insight
 - Rare categories can be grouped into an 'Other' bucket to reduce noise and improve model generalisation.

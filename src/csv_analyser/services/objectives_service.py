@@ -7,7 +7,7 @@ import threading
 from datetime import UTC, datetime
 from pathlib import Path
 
-import anthropic
+import httpx
 from dotenv import load_dotenv
 
 from csv_analyser.config import OUTPUT_DIR, PROJECT_ROOT
@@ -45,11 +45,11 @@ def _read_sql_catalog() -> str:
 
 def count_objectives(text: str) -> int:
     """Count distinct objectives in text regardless of format."""
-    lines = [l.strip() for l in text.splitlines() if l.strip()]
-    bullets = [l for l in lines if l.startswith("- ") or l.startswith("* ")]
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    bullets = [line for line in lines if line.startswith("- ") or line.startswith("* ")]
     if bullets:
         return len(bullets)
-    numbered = [l for l in lines if re.match(r"^\d+[.):]", l)]
+    numbered = [line for line in lines if re.match(r"^\d+[.):]", line)]
     if numbered:
         return len(numbered)
     # Free-form prose: count non-empty paragraphs
@@ -164,22 +164,34 @@ Be thorough. This is a professional analysis document.\
 Please write the full detailed Response to Objectives document now.\
 """
 
-    client = anthropic.Anthropic(
-        api_key=api_key,
-        base_url=OPENROUTER_BASE_URL,
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+        "anthropic-version": "2023-06-01",
+    }
+    body = {
+        "model": MODEL,
+        "max_tokens": MAX_TOKENS,
+        "system": system_prompt,
+        "messages": [{"role": "user", "content": user_message}],
+    }
+    resp = httpx.post(
+        f"{OPENROUTER_BASE_URL}/v1/messages",
+        json=body,
+        headers=headers,
+        timeout=120.0,
     )
-
-    text_content = ""
-    with client.messages.stream(
-        model=MODEL,
-        max_tokens=MAX_TOKENS,
-        system=system_prompt,
-        messages=[{"role": "user", "content": user_message}],
-    ) as stream:
-        for chunk in stream.text_stream:
-            if cancel_event and cancel_event.is_set():
-                raise RuntimeError("Pipeline cancelled.")
-            text_content += chunk
+    try:
+        data = resp.json()
+    except ValueError:
+        data = {"error": {"message": resp.text}}
+    if not resp.is_success or data.get("type") == "error":
+        err = data.get("error", {})
+        raise RuntimeError(f"OpenRouter error {resp.status_code}: {err.get('message', data)}")
+    if cancel_event and cancel_event.is_set():
+        raise RuntimeError("Pipeline cancelled.")
+    blocks = data.get("content", [])
+    text_content = "".join(block.get("text", "") for block in blocks if block.get("type") == "text")
 
     if not text_content.strip():
         raise RuntimeError("Model returned no content.")

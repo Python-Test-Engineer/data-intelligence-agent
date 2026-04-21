@@ -3,7 +3,7 @@
 ![category_order_id.png](../images/category_order_id.png)
 
 ## Data Insight
-- 'ORD001' is the most frequent value in 'order_id'. Imbalanced categories may skew aggregates and require stratified analysis.
+- 'ORD0001' is the most frequent value in 'order_id'. Imbalanced categories may skew aggregates and require stratified analysis.
 
 ## Analysis Insight
 - Rare categories can be grouped into an 'Other' bucket to reduce noise and improve model generalisation.

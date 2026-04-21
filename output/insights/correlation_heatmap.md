@@ -3,7 +3,7 @@
 ![correlation_heatmap.png](../images/correlation_heatmap.png)
 
 ## Data Insight
-- The strongest correlation is between 'unit_price' and 'total_price' (r ≈ 1.00), suggesting these columns move together and may be related.
+- The strongest correlation is between 'unit_price' and 'total_price' (r ≈ 0.94), suggesting these columns move together and may be related.
 
 ## Analysis Insight
 - Use this map to reduce collinearity in downstream models and prioritise orthogonal feature subsets.
