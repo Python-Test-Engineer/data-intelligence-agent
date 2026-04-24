@@ -160,5 +160,10 @@ class UnansweredQuestionsResponse(BaseModel):
     count: int
 
 
+class AdversarialReviewResponse(BaseModel):
+    critique: str
+    model_used: str
+
+
 class ErrorResponse(BaseModel):
     detail: str

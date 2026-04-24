@@ -334,6 +334,95 @@
 
       </section>
       </section>
+
+      <!-- Adversarial Reviewer — full-width section -->
+      <section style="margin-top:16px;">
+        <article class="card">
+          <div style="display:flex;align-items:flex-start;gap:32px;flex-wrap:wrap;">
+
+            <!-- Left: concept explanation -->
+            <div style="flex:1;min-width:260px;">
+              <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:6px;">Architecture Pattern</div>
+              <h2 style="font-size:1.05rem;margin:0 0 10px;letter-spacing:-0.015em;">Adversarial Reviewer</h2>
+              <p style="margin:0 0 10px;font-size:0.87rem;line-height:1.7;color:var(--muted);">
+                A <strong style="color:var(--ink);">second, independent model</strong> acts as a critic.
+                It receives the primary model's full output — charts, insights, the statistical report, and the SQL catalog — and returns structured critique:
+                weak reasoning, missing data angles, chart-type mismatches, unjustified claims, and concrete rewrite suggestions.
+              </p>
+              <p style="margin:0 0 10px;font-size:0.87rem;line-height:1.7;color:var(--muted);">
+                The primary model then re-runs with the critique embedded in its context, producing a revised output that has been stress-tested before you ever read it.
+                This mirrors red-team evaluation in ML safety: adversarial pressure forces outputs to be better-justified and harder to challenge.
+              </p>
+              <p style="margin:0;font-size:0.83rem;line-height:1.6;color:var(--muted);">
+                Suggested pairing: use a high-reasoning model (e.g. <code>o3</code> or <code>claude-opus-4</code>) as the critic against a faster primary model,
+                so the cost of critique is paid only once per pipeline run.
+              </p>
+            </div>
+
+            <!-- Right: pipeline diagram + critique categories -->
+            <div style="flex:2;min-width:320px;display:flex;flex-direction:column;gap:14px;">
+
+              <!-- Pipeline flow -->
+              <div style="display:flex;align-items:stretch;gap:0;border-radius:10px;overflow:hidden;border:1px solid var(--line);">
+                <div style="flex:1;background:var(--accent-soft);padding:13px 15px;">
+                  <div style="font-size:0.78rem;font-weight:700;margin-bottom:4px;">Primary Model</div>
+                  <div style="font-size:0.73rem;color:var(--muted);line-height:1.55;">Generates charts · insights · report · SQL catalog</div>
+                </div>
+                <div style="display:flex;align-items:center;padding:0 10px;background:var(--surface);color:var(--muted);font-size:1.1rem;border-left:1px solid var(--line);border-right:1px solid var(--line);">→</div>
+                <div style="flex:1;background:#fdf3ee;padding:13px 15px;">
+                  <div style="font-size:0.78rem;font-weight:700;margin-bottom:4px;color:#8f3820;">Critic Model</div>
+                  <div style="font-size:0.73rem;color:var(--muted);line-height:1.55;">Reviews all outputs · flags gaps · challenges logic · proposes rewrites</div>
+                </div>
+                <div style="display:flex;align-items:center;padding:0 10px;background:var(--surface);color:var(--muted);font-size:1.1rem;border-left:1px solid var(--line);border-right:1px solid var(--line);">→</div>
+                <div style="flex:1;background:#eef4ee;padding:13px 15px;">
+                  <div style="font-size:0.78rem;font-weight:700;margin-bottom:4px;color:#2a5a2a;">Revised Output</div>
+                  <div style="font-size:0.73rem;color:var(--muted);line-height:1.55;">Primary re-runs with critique context · stronger, better-justified insights</div>
+                </div>
+              </div>
+
+              <!-- Critique category tiles -->
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;">
+                <div class="stat">
+                  <div class="stat-label">Methodology</div>
+                  <div style="font-size:0.78rem;color:var(--muted);margin-top:4px;line-height:1.5;">Are the right chart types and statistics chosen for the data?</div>
+                </div>
+                <div class="stat">
+                  <div class="stat-label">Coverage</div>
+                  <div style="font-size:0.78rem;color:var(--muted);margin-top:4px;line-height:1.5;">Are any key columns, segments, or trends unexplored?</div>
+                </div>
+                <div class="stat">
+                  <div class="stat-label">Claim Quality</div>
+                  <div style="font-size:0.78rem;color:var(--muted);margin-top:4px;line-height:1.5;">Are statements supported by evidence or stated as assumptions?</div>
+                </div>
+                <div class="stat">
+                  <div class="stat-label">Actionability</div>
+                  <div style="font-size:0.78rem;color:var(--muted);margin-top:4px;line-height:1.5;">Do the insights lead to decisions, or are they descriptive only?</div>
+                </div>
+                <div class="stat">
+                  <div class="stat-label">Objectives Fit</div>
+                  <div style="font-size:0.78rem;color:var(--muted);margin-top:4px;line-height:1.5;">Does the output directly address what was asked in OBJECTIVES.md?</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Run bar -->
+          <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line);display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+            <button id="adversarial-run-btn" type="button" style="width:auto;padding:10px 20px;" disabled>Run Adversarial Review</button>
+            <div id="adversarial-busy" class="busy"><span class="spinner"></span><span>deepseek/deepseek-v4-pro reviewing… this may take 30–60 s</span></div>
+            <div id="adversarial-status" class="status" style="margin-top:0;flex:1;min-width:180px;"></div>
+          </div>
+
+          <!-- Output -->
+          <div id="adversarial-output" style="display:none;margin-top:14px;border-top:1px solid var(--line);padding-top:14px;">
+            <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:#8f3820;margin-bottom:10px;">Critic Findings · <code style="font-size:0.78rem;text-transform:none;letter-spacing:0;">deepseek/deepseek-v4-pro</code></div>
+            <div id="adversarial-content" style="font-size:0.87rem;line-height:1.8;"></div>
+          </div>
+
+        </article>
+      </section>
+
     </main>
   </div>
 
@@ -526,6 +615,9 @@
         downloadResponseHtmlBtn.disabled = true;
         downloadResponseBtn.disabled = true;
         askBtn.disabled = true;
+        adversarialRunBtn.disabled = true;
+        adversarialOutput.style.display = "none";
+        setStatus(adversarialStatus, "");
       } catch (error) {
         setStatus(uploadStatus, String(error), true);
       }
@@ -612,6 +704,7 @@
         viewInsightsBtn.disabled = false;
         responseBtn.disabled = false;
         askBtn.disabled = false;
+        adversarialRunBtn.disabled = false;
         await refreshReport();
         await refreshImages();
       } catch (error) {
@@ -848,6 +941,7 @@
           viewInsightsBtn.disabled = false;
           responseBtn.disabled = false;
           askBtn.disabled = false;
+          adversarialRunBtn.disabled = false;
         }
       } catch { /* no insights yet */ }
 
@@ -861,6 +955,33 @@
         }
       } catch { /* no response yet */ }
     }
+
+    // --- Adversarial Reviewer ---
+    const adversarialRunBtn = document.getElementById("adversarial-run-btn");
+    const adversarialBusy = document.getElementById("adversarial-busy");
+    const adversarialStatus = document.getElementById("adversarial-status");
+    const adversarialOutput = document.getElementById("adversarial-output");
+    const adversarialContent = document.getElementById("adversarial-content");
+
+    adversarialRunBtn.addEventListener("click", async () => {
+      adversarialBusy.classList.add("active");
+      adversarialRunBtn.disabled = true;
+      setStatus(adversarialStatus, "");
+      adversarialOutput.style.display = "none";
+      try {
+        const res = await fetch("/adversarial-review", { method: "POST" });
+        const body = await res.json();
+        if (!res.ok) throw new Error(body.detail || "Review failed.");
+        adversarialContent.innerHTML = mdToHtml(body.critique);
+        adversarialOutput.style.display = "";
+        setStatus(adversarialStatus, `Review complete · ${body.model_used}`);
+      } catch (error) {
+        setStatus(adversarialStatus, String(error), true);
+      } finally {
+        adversarialBusy.classList.remove("active");
+        adversarialRunBtn.disabled = false;
+      }
+    });
 
     document.addEventListener("DOMContentLoaded", initPageState);
 

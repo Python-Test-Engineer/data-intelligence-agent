@@ -22,6 +22,7 @@ from starlette.requests import Request
 logger = logging.getLogger(__name__)
 
 from csv_analyser.models.schemas import (
+    AdversarialReviewResponse,
     AskRequest,
     AskResponse,
     ChartGenerationRequest,
@@ -737,3 +738,137 @@ def gallery(request: Request) -> HTMLResponse:
         "gallery.html",
         {"request": request, "charts": [], "images": [], "insights_model": INSIGHTS_MODEL, "objectives_model": OBJECTIVES_MODEL},
     )
+
+
+_ADVERSARIAL_MODEL = "deepseek/deepseek-v4-pro"
+_ADVERSARIAL_OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
+
+
+@router.post("/adversarial-review", response_model=AdversarialReviewResponse)
+async def adversarial_review() -> AdversarialReviewResponse:
+    """Run a second-model adversarial review over all current pipeline outputs."""
+    api_key = os.environ.get("OPENROUTER_API_KEY", "")
+    if not api_key:
+        raise HTTPException(status_code=400, detail="OPENROUTER_API_KEY is not set.")
+
+    # ── Collect pipeline artefacts ────────────────────────────────────────────
+    sql_files = sorted((OUTPUT_DIR / "sql").glob("sql_queries_*.md"))
+    sql_catalog = sql_files[-1].read_text(encoding="utf-8").strip() if sql_files else ""
+
+    insights_dir = OUTPUT_DIR / "insights"
+    insight_parts: list[str] = []
+    if insights_dir.exists():
+        for f in sorted(insights_dir.glob("*.md")):
+            if f.name != "insights.md":
+                insight_parts.append(f.read_text(encoding="utf-8").strip())
+    insights_text = "\n\n---\n\n".join(insight_parts)
+
+    report_path = OUTPUT_DIR / "report.md"
+    report_text = report_path.read_text(encoding="utf-8").strip() if report_path.exists() else ""
+
+    objectives_text = OBJECTIVES_PATH.read_text(encoding="utf-8").strip() if OBJECTIVES_PATH.exists() else ""
+
+    if not any([sql_catalog, insights_text, report_text]):
+        raise HTTPException(
+            status_code=400,
+            detail="No pipeline outputs found. Run the full pipeline first.",
+        )
+
+    system_prompt = """\
+You are a rigorous adversarial reviewer for a data analytics pipeline.
+Your role is to stress-test the pipeline's outputs — not summarise them.
+You must identify weaknesses, gaps, and questionable claims, then propose concrete improvements.
+
+Structure your response as follows:
+
+## Verdict
+One paragraph: overall quality of the analysis, headline strengths and fatal flaws.
+
+## Methodology
+- Are the right statistical methods and chart types used?
+- Are there unjustified assumptions or missing controls?
+- Flag any p-hacking risk, cherry-picking, or correlation-causation confusion.
+
+## Coverage
+- Which columns, segments, or business questions are unexplored?
+- What distributions, outliers, or time-based patterns were missed?
+
+## Claim Quality
+- List any claims that lack supporting evidence.
+- Flag vague language ("appears to", "seems to") that should be quantified.
+- Identify any fabricated or hallucinated figures.
+
+## Actionability
+- Do the insights lead to concrete decisions?
+- Which findings are purely descriptive and need a "so what"?
+
+## Objectives Fit
+- Does the output directly and completely address each stated objective?
+- Call out any objective that was sidestepped or only partially answered.
+
+## Top 5 Improvements
+A numbered list — highest-impact, most specific improvements the analyst should make next.
+
+Be direct. Do not soften criticism. Your value is proportional to the problems you surface.\
+"""
+
+    user_message = f"""\
+## Analysis Objectives
+{objectives_text if objectives_text else "(none provided)"}
+
+---
+
+## Statistical Report
+{report_text if report_text else "(not generated yet)"}
+
+---
+
+## Chart Insights
+{insights_text if insights_text else "(not generated yet)"}
+
+---
+
+## SQL Query Catalog
+{sql_catalog if sql_catalog else "(not generated yet)"}
+
+---
+
+Review all of the above and produce your adversarial critique now.\
+"""
+
+    def _call() -> str:
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        }
+        body = {
+            "model": _ADVERSARIAL_MODEL,
+            "max_tokens": 8000,
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_message},
+            ],
+        }
+        resp = httpx.post(_ADVERSARIAL_OPENROUTER_URL, json=body, headers=headers, timeout=120.0)
+        try:
+            data = resp.json()
+        except ValueError:
+            data = {}
+        if not resp.is_success:
+            err = data.get("error", {})
+            raise ValueError(f"OpenRouter error {resp.status_code}: {err.get('message', resp.text)}")
+        choices = data.get("choices", [])
+        if not choices:
+            raise ValueError(f"Model returned no choices. Full response: {data}")
+        return choices[0].get("message", {}).get("content", "")
+
+    loop = asyncio.get_running_loop()
+    try:
+        critique = await loop.run_in_executor(None, _call)
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=f"Adversarial review failed: {exc}") from exc
+
+    if not critique.strip():
+        raise HTTPException(status_code=400, detail="Model returned empty critique.")
+
+    return AdversarialReviewResponse(critique=critique, model_used=_ADVERSARIAL_MODEL)
