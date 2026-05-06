@@ -23,12 +23,17 @@ App: http://127.0.0.1:8001 · Docs: http://127.0.0.1:8001/docs
 | `output/` | Generated artefacts (images, insights, report, SQL catalog) |
 | `OBJECTIVES.md` | User-supplied business questions answered by the pipeline |
 | `_ideas/`, `_plans/`, `_specs/` | **Never delete** — used for interview/talk prep |
+| `src/csv_analyser/models/schemas.py` | Pydantic request/response models incl. `AdversarialReviewResponse` |
 
 ## Pipeline steps (`POST /execute`)
 
 1. Load dataset → 2. Generate charts → 3. Generate dirty-rows report + statistical report → 4. Generate LLM insights
 
 SQL catalog is built **on upload** as a `BackgroundTask`, not inside `/execute`.
+
+## Adversarial review (`POST /adversarial-review`)
+
+Runs a second-model critique over all current pipeline outputs (SQL catalog + chart insights + statistical report + objectives). Uses `deepseek/deepseek-v4-pro` via OpenRouter. Returns `AdversarialReviewResponse(critique, model_used)`. Surfaces in the gallery as step "6) Adversarial Reviewer". No pipeline run required — can be triggered independently after outputs exist.
 
 ## SQL catalog — two-tier architecture
 
