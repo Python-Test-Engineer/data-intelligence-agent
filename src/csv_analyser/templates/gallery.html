@@ -506,10 +506,17 @@
           <!-- Output -->
           <div id="adversarial-output"
             style="display:none;margin-top:14px;border-top:1px solid var(--line);padding-top:14px;">
-            <div
-              style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:#8f3820;margin-bottom:10px;">
-              Critic Findings · <code
-                style="font-size:0.78rem;text-transform:none;letter-spacing:0;">deepseek/deepseek-v4-pro</code></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+              <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:#8f3820;">
+                Critic Findings · <code style="font-size:0.78rem;text-transform:none;letter-spacing:0;">deepseek/deepseek-v4-pro</code>
+              </div>
+              <div style="display:flex;gap:8px;">
+                <button id="adversarial-view-btn" type="button" class="btn-secondary"
+                  style="width:auto;padding:7px 14px;font-size:0.82rem;">Open in Browser</button>
+                <button id="adversarial-download-btn" type="button" class="btn-secondary"
+                  style="width:auto;padding:7px 14px;font-size:0.82rem;">Save .md</button>
+              </div>
+            </div>
             <div id="adversarial-content" style="font-size:0.87rem;line-height:1.8;"></div>
           </div>
 
@@ -1055,6 +1062,16 @@
     const adversarialStatus = document.getElementById("adversarial-status");
     const adversarialOutput = document.getElementById("adversarial-output");
     const adversarialContent = document.getElementById("adversarial-content");
+    const adversarialViewBtn = document.getElementById("adversarial-view-btn");
+    const adversarialDownloadBtn = document.getElementById("adversarial-download-btn");
+
+    adversarialViewBtn.addEventListener("click", () => {
+      window.open("/adversarial-review/view", "_blank", "noopener,noreferrer");
+    });
+
+    adversarialDownloadBtn.addEventListener("click", () => {
+      window.location.href = "/adversarial-review/download";
+    });
 
     adversarialRunBtn.addEventListener("click", async () => {
       adversarialBusy.classList.add("active");
@@ -1067,7 +1084,7 @@
         if (!res.ok) throw new Error(body.detail || "Review failed.");
         adversarialContent.innerHTML = mdToHtml(body.critique);
         adversarialOutput.style.display = "";
-        setStatus(adversarialStatus, `Review complete · ${body.model_used}`);
+        setStatus(adversarialStatus, `Review complete · saved to output/ADVERSARIAL_REVIEW.md · ${body.model_used}`);
       } catch (error) {
         setStatus(adversarialStatus, String(error), true);
       } finally {
@@ -1076,7 +1093,23 @@
       }
     });
 
-    document.addEventListener("DOMContentLoaded", initPageState);
+    async function restoreAdversarialReview() {
+      try {
+        const res = await fetch("/adversarial-review/content");
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.exists && data.content) {
+          adversarialContent.innerHTML = mdToHtml(data.content);
+          adversarialOutput.style.display = "";
+          setStatus(adversarialStatus, `Loaded from output/ADVERSARIAL_REVIEW.md · ${data.model_used}`);
+        }
+      } catch { /* ignore */ }
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      await initPageState();
+      await restoreAdversarialReview();
+    });
 
   </script>
 </body>

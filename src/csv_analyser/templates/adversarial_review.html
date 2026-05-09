@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adversarial Review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f5f4ee;
+      --card: #fcfbf8;
+      --ink: #111111;
+      --muted: #4a4945;
+      --line: #d8d4c8;
+      --warn: #8f2f20;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+    .wrap {
+      width: min(860px, 100% - 36px);
+      margin: 32px auto 60px;
+    }
+    .header {
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .header h1 { margin: 0 0 6px; font-size: 1.4rem; letter-spacing: -0.02em; }
+    .header p { margin: 0; font-size: 0.84rem; color: var(--muted); font-family: "IBM Plex Mono", monospace; }
+    .download-btn {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 8px 16px;
+      background: #D97757;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.84rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .download-btn:hover { opacity: 0.9; }
+    .content {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 28px 32px;
+      line-height: 1.8;
+    }
+    .content h2 { font-size: 1.08rem; margin: 22px 0 8px; color: var(--warn); }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 0.96rem; margin: 16px 0 6px; }
+    .content p { margin: 6px 0; }
+    .content ul, .content ol { margin: 6px 0; padding-left: 20px; }
+    .content li { margin: 4px 0; }
+    .content code {
+      background: #ece8dc;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.85em;
+    }
+    .content strong { font-weight: 600; }
+    .content hr { border: none; border-top: 1px solid var(--line); margin: 16px 0; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <h1>Adversarial Review</h1>
+      <p>Critic model: <code>{{ model_used }}</code></p>
+      <a class="download-btn" href="/adversarial-review/download">Download ADVERSARIAL_REVIEW.md</a>
+    </div>
+    <div class="content" id="review-content"></div>
+  </div>
+  <script>
+    const raw = {{ content | tojson }};
+
+    function escapeHtml(s) {
+      return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    }
+
+    function mdToHtml(text) {
+      const lines = text.split("\n");
+      const out = [];
+      let inUl = false, inOl = false, inCode = false, codeBuf = [];
+
+      function closeList() {
+        if (inUl) { out.push("</ul>"); inUl = false; }
+        if (inOl) { out.push("</ol>"); inOl = false; }
+      }
+
+      function inline(s) {
+        s = escapeHtml(s);
+        s = s.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+        s = s.replace(/\*(.+?)\*/g, "<em>$1</em>");
+        s = s.replace(/`([^`]+)`/g, "<code>$1</code>");
+        return s;
+      }
+
+      for (const raw of lines) {
+        const line = raw.trimEnd();
+        if (line.startsWith("```")) {
+          if (!inCode) { closeList(); inCode = true; codeBuf = []; }
+          else {
+            out.push(`<pre style="background:#ece8dc;padding:12px;border-radius:8px;overflow-x:auto;font-size:0.82rem;font-family:'IBM Plex Mono',monospace;">${escapeHtml(codeBuf.join("\n"))}</pre>`);
+            inCode = false; codeBuf = [];
+          }
+          continue;
+        }
+        if (inCode) { codeBuf.push(raw); continue; }
+        if (/^# /.test(line)) { closeList(); out.push(`<h1>${inline(line.slice(2))}</h1>`); }
+        else if (/^## /.test(line)) { closeList(); out.push(`<h2>${inline(line.slice(3))}</h2>`); }
+        else if (/^### /.test(line)) { closeList(); out.push(`<h3>${inline(line.slice(4))}</h3>`); }
+        else if (/^[-*] /.test(line)) {
+          if (!inUl) { closeList(); out.push("<ul>"); inUl = true; }
+          out.push(`<li>${inline(line.slice(2))}</li>`);
+        } else if (/^\d+\. /.test(line)) {
+          if (!inOl) { closeList(); out.push("<ol>"); inOl = true; }
+          out.push(`<li>${inline(line.replace(/^\d+\.\s+/, ""))}</li>`);
+        } else if (/^---+$/.test(line.trim())) {
+          closeList(); out.push("<hr>");
+        } else if (line.trim() === "") {
+          closeList();
+        } else {
+          closeList(); out.push(`<p>${inline(line)}</p>`);
+        }
+      }
+      closeList();
+      return out.join("");
+    }
+
+    document.getElementById("review-content").innerHTML = mdToHtml(raw);
+  </script>
+</body>
+</html>

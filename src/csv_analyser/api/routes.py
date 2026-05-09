@@ -74,6 +74,7 @@ from csv_analyser.services.sql_service import (
 
 
 OBJECTIVES_PATH = DATA_PATH.parent.parent / "OBJECTIVES.md"
+ADVERSARIAL_REVIEW_PATH = OUTPUT_DIR / "ADVERSARIAL_REVIEW.md"
 SQL_STATUS_PATH = OUTPUT_DIR / "sql" / ".status.json"
 router = APIRouter()
 
@@ -871,4 +872,41 @@ Review all of the above and produce your adversarial critique now.\
     if not critique.strip():
         raise HTTPException(status_code=400, detail="Model returned empty critique.")
 
+    ADVERSARIAL_REVIEW_PATH.parent.mkdir(parents=True, exist_ok=True)
+    ADVERSARIAL_REVIEW_PATH.write_text(
+        f"# Adversarial Review\n\n_Model: {_ADVERSARIAL_MODEL}_\n\n---\n\n{critique}\n",
+        encoding="utf-8",
+    )
+
     return AdversarialReviewResponse(critique=critique, model_used=_ADVERSARIAL_MODEL)
+
+
+@router.get("/adversarial-review/content")
+def adversarial_review_content() -> dict:
+    """Return the saved adversarial review if it exists."""
+    if not ADVERSARIAL_REVIEW_PATH.exists():
+        return {"exists": False, "content": "", "model_used": _ADVERSARIAL_MODEL}
+    return {"exists": True, "content": ADVERSARIAL_REVIEW_PATH.read_text(encoding="utf-8"), "model_used": _ADVERSARIAL_MODEL}
+
+
+@router.get("/adversarial-review/download")
+def adversarial_review_download() -> FileResponse:
+    if not ADVERSARIAL_REVIEW_PATH.exists():
+        raise HTTPException(status_code=404, detail="ADVERSARIAL_REVIEW.md has not been generated yet.")
+    return FileResponse(
+        path=str(ADVERSARIAL_REVIEW_PATH),
+        media_type="text/markdown",
+        headers={"Content-Disposition": 'attachment; filename="ADVERSARIAL_REVIEW.md"'},
+    )
+
+
+@router.get("/adversarial-review/view", response_class=HTMLResponse)
+def adversarial_review_view(request: Request) -> HTMLResponse:
+    if not ADVERSARIAL_REVIEW_PATH.exists():
+        raise HTTPException(status_code=404, detail="ADVERSARIAL_REVIEW.md has not been generated yet.")
+    content = ADVERSARIAL_REVIEW_PATH.read_text(encoding="utf-8")
+    return templates.TemplateResponse(
+        request,
+        "adversarial_review.html",
+        {"request": request, "content": content, "model_used": _ADVERSARIAL_MODEL},
+    )

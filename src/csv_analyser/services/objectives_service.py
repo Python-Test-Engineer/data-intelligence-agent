@@ -167,16 +167,17 @@ Please write the full detailed Response to Objectives document now.\
     headers = {
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json",
-        "anthropic-version": "2023-06-01",
     }
     body = {
         "model": MODEL,
         "max_tokens": MAX_TOKENS,
-        "system": system_prompt,
-        "messages": [{"role": "user", "content": user_message}],
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_message},
+        ],
     }
     resp = httpx.post(
-        f"{OPENROUTER_BASE_URL}/v1/messages",
+        f"{OPENROUTER_BASE_URL}/v1/chat/completions",
         json=body,
         headers=headers,
         timeout=120.0,
@@ -185,13 +186,13 @@ Please write the full detailed Response to Objectives document now.\
         data = resp.json()
     except ValueError:
         data = {"error": {"message": resp.text}}
-    if not resp.is_success or data.get("type") == "error":
+    if not resp.is_success or "error" in data:
         err = data.get("error", {})
         raise RuntimeError(f"OpenRouter error {resp.status_code}: {err.get('message', data)}")
     if cancel_event and cancel_event.is_set():
         raise RuntimeError("Pipeline cancelled.")
-    blocks = data.get("content", [])
-    text_content = "".join(block.get("text", "") for block in blocks if block.get("type") == "text")
+    choices = data.get("choices", [])
+    text_content = choices[0].get("message", {}).get("content", "") if choices else ""
 
     if not text_content.strip():
         raise RuntimeError("Model returned no content.")
