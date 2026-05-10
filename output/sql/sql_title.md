@@ -1,7 +1,7 @@
 # SQL Query Catalog — data.csv
 
 Dataset: `C:\Users\mrcra\Desktop\data-intelligence-agent\data\data.csv`
-Columns: `order_id`, `date`, `product_name`, `unit_price`, `quantity`, `total_price`, `city`
+Columns: `PatientId`, `AppointmentID`, `Gender`, `ScheduledDay`, `AppointmentDay`, `Age`, `Neighbourhood`, `Scholarship`, `Hipertension`, `Diabetes`, `Alcoholism`, `Handcap`, `SMS_received`, `No-show`
 
 ---
 
@@ -14,75 +14,79 @@ Columns: `order_id`, `date`, `product_name`, `unit_price`, `quantity`, `total_pr
 
 ## Numeric Summaries
 
-3. Summary Stats for unit_price — Returns min, max, average, and total for unit_price.
-4. Summary Stats for quantity — Returns min, max, average, and total for quantity.
-5. Summary Stats for total_price — Returns min, max, average, and total for total_price.
-6. Total unit_price by date — Ranks each date by total unit_price, highest first.
-7. Average unit_price by date — Compares average unit_price across each date.
-8. Total quantity by date — Ranks each date by total quantity, highest first.
+3. Summary Stats for PatientId — Returns min, max, average, and total for PatientId.
+4. Summary Stats for AppointmentID — Returns min, max, average, and total for AppointmentID.
+5. Summary Stats for Age — Returns min, max, average, and total for Age.
+6. Summary Stats for Scholarship — Returns min, max, average, and total for Scholarship.
+7. Summary Stats for Hipertension — Returns min, max, average, and total for Hipertension.
+8. Summary Stats for Diabetes — Returns min, max, average, and total for Diabetes.
+9. Total PatientId by Gender — Ranks each Gender by total PatientId, highest first.
+10. Average PatientId by Gender — Compares average PatientId across each Gender.
+11. Total AppointmentID by Gender — Ranks each Gender by total AppointmentID, highest first.
 
 ---
 
 ## Categorical Distributions
 
-9. Distribution of date — Counts rows for each distinct value of date, ordered by frequency.
-10. Distribution of product_name — Counts rows for each distinct value of product_name, ordered by frequency.
-11. Distribution of city — Counts rows for each distinct value of city, ordered by frequency.
+12. Distribution of Gender — Counts rows for each distinct value of Gender, ordered by frequency.
+13. Distribution of AppointmentDay — Counts rows for each distinct value of AppointmentDay, ordered by frequency.
+14. Distribution of No-show — Counts rows for each distinct value of No-show, ordered by frequency.
 
 ---
 
 ## Rankings
 
-12. date Ranked by Total quantity — Ranks each date by total quantity, highest first.
-13. product_name Ranked by Total quantity — Ranks each product_name by total quantity, highest first.
-14. city Ranked by Total quantity — Ranks each city by total quantity, highest first.
+15. Top 10 Gender by PatientId — Lists the 10 Gender values with the highest total PatientId.
+16. Bottom 10 Gender by PatientId — Lists the 10 Gender values with the lowest total PatientId.
+17. Top 10 AppointmentDay by PatientId — Lists the 10 AppointmentDay values with the highest total PatientId.
 
 ---
 
 ## Multi-Dimensional
 
-15. unit_price by date and product_name — Shows total unit_price broken down by both date and product_name.
+18. PatientId by Gender and AppointmentDay — Shows total PatientId broken down by both Gender and AppointmentDay.
 
 ---
 
 ## Multi-Metric Analysis
 
-16. Performance Breakdown by date — Aggregates transaction count and all key metrics (revenue, cost, profit, margins) grouped by date.
-17. Performance Breakdown by product_name — Aggregates transaction count and all key metrics (revenue, cost, profit, margins) grouped by product_name.
-18. Performance Breakdown by city — Aggregates transaction count and all key metrics (revenue, cost, profit, margins) grouped by city.
-19. date × product_name Performance Matrix — Shows performance metrics for every date and product_name combination, ordered by profitability.
-20. Unique order_id Count by date — Counts distinct order_id values and key metrics per date to reveal concentration.
-21. Unique order_id Count by product_name — Counts distinct order_id values and key metrics per product_name to reveal concentration.
+19. Performance Breakdown by Gender — Aggregates transaction count and all key metrics (revenue, cost, profit, margins) grouped by Gender.
+20. Performance Breakdown by AppointmentDay — Aggregates transaction count and all key metrics (revenue, cost, profit, margins) grouped by AppointmentDay.
+21. Performance Breakdown by No-show — Aggregates transaction count and all key metrics (revenue, cost, profit, margins) grouped by No-show.
+22. Gender × AppointmentDay Performance Matrix — Shows performance metrics for every Gender and AppointmentDay combination, ordered by profitability.
 
 ---
 
 ## Parametric Lookups
 
-22. Filter by date — Returns all rows where date matches a given value.
-23. Performance Summary for a Specific date — Returns transaction count and all key metrics for a single date value.
-24. product_name Breakdown for date = :date — Ranks each product_name by total unit_price filtered to a single date value.
-25. city Breakdown for date = :date — Ranks each city by total unit_price filtered to a single date value.
-26. Filter by product_name — Returns all rows where product_name matches a given value.
-27. Performance Summary for a Specific product_name — Returns transaction count and all key metrics for a single product_name value.
-28. date Breakdown for product_name = :product_name — Ranks each date by total unit_price filtered to a single product_name value.
-29. city Breakdown for product_name = :product_name — Ranks each city by total unit_price filtered to a single product_name value.
-30. Filter by city — Returns all rows where city matches a given value.
-31. Performance Summary for a Specific city — Returns transaction count and all key metrics for a single city value.
-32. date Breakdown for city = :city — Ranks each date by total unit_price filtered to a single city value.
-33. product_name Breakdown for city = :city — Ranks each product_name by total unit_price filtered to a single city value.
-34. Rows Where unit_price Exceeds :min_value — Returns all rows where unit_price is above a given threshold.
-35. date with Total unit_price Above :threshold — Lists date values whose total unit_price exceeds a given threshold.
+23. Filter by Gender — Returns all rows where Gender matches a given value.
+24. Performance Summary for a Specific Gender — Returns transaction count and all key metrics for a single Gender value.
+25. AppointmentDay Breakdown for Gender = :Gender — Ranks each AppointmentDay by total PatientId filtered to a single Gender value.
+26. Neighbourhood Breakdown for Gender = :Gender — Ranks each Neighbourhood by total PatientId filtered to a single Gender value.
+27. Filter by AppointmentDay — Returns all rows where AppointmentDay matches a given value.
+28. Performance Summary for a Specific AppointmentDay — Returns transaction count and all key metrics for a single AppointmentDay value.
+29. Gender Breakdown for AppointmentDay = :AppointmentDay — Ranks each Gender by total PatientId filtered to a single AppointmentDay value.
+30. Neighbourhood Breakdown for AppointmentDay = :AppointmentDay — Ranks each Neighbourhood by total PatientId filtered to a single AppointmentDay value.
+31. Filter by Neighbourhood — Returns all rows where Neighbourhood matches a given value.
+32. Performance Summary for a Specific Neighbourhood — Returns transaction count and all key metrics for a single Neighbourhood value.
+33. Gender Breakdown for Neighbourhood = :Neighbourhood — Ranks each Gender by total PatientId filtered to a single Neighbourhood value.
+34. AppointmentDay Breakdown for Neighbourhood = :Neighbourhood — Ranks each AppointmentDay by total PatientId filtered to a single Neighbourhood value.
+35. Filter by No-show — Returns all rows where No-show matches a given value.
+36. Performance Summary for a Specific No-show — Returns transaction count and all key metrics for a single No-show value.
+37. Gender Breakdown for No-show = :No-show — Ranks each Gender by total PatientId filtered to a single No-show value.
+38. AppointmentDay Breakdown for No-show = :No-show — Ranks each AppointmentDay by total PatientId filtered to a single No-show value.
+39. Rows Where PatientId Exceeds :min_value — Returns all rows where PatientId is above a given threshold.
+40. Gender with Total PatientId Above :threshold — Lists Gender values whose total PatientId exceeds a given threshold.
 
 ---
 
 ## Data Quality Checks
 
-36. Missing Values per Column — Counts NULL values in each column to identify data gaps.
-37. Duplicate order_id Values — Flags any order_id that appears more than once in the dataset.
-38. Negative unit_price Values — Flags rows where unit_price is negative, which may indicate data errors.
-39. Negative quantity Values — Flags rows where quantity is negative, which may indicate data errors.
-40. Negative total_price Values — Flags rows where total_price is negative, which may indicate data errors.
+41. Missing Values per Column — Counts NULL values in each column to identify data gaps.
+42. Negative PatientId Values — Flags rows where PatientId is negative, which may indicate data errors.
+43. Negative AppointmentID Values — Flags rows where AppointmentID is negative, which may indicate data errors.
+44. Negative Age Values — Flags rows where Age is negative, which may indicate data errors.
 
 ---
 
-*Generated from dataset inspection — data.csv (20 rows, 7 columns)*
+*Generated from dataset inspection — data.csv (110527 rows, 14 columns)*

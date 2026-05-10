@@ -1,34 +1,19 @@
 # Final Data Insights
 
-- Generated: 2026-05-09 06:04 UTC
+- Generated: 2026-05-10 12:38 UTC
 - Model setting: google/gemini-2.5-flash-lite
 - LLM-enabled: yes
 - Individual insight files: 12
 
 ## Dataset Context
-- Rows: 20
-- Columns: 7
-- Numeric columns: 3
-- unit_price: mean=403.49, std=370.34
-- quantity: mean=6.65, std=1.95
-- total_price: mean=2695.93, std=2567.29
+- Rows: 110527
+- Columns: 14
+- Numeric columns: 9
+- patientid: mean=147496265710394.06, std=256094920291739.09
+- appointmentid: mean=5675305.12, std=71295.75
+- age: mean=37.09, std=23.11
 
 ## Consolidated Chart Insights
-
-## Generation Notes
-- LLM generation failed for one or more charts; heuristic fallback was used.
-- overview_numeric_distributions.png: Error code: 401 - {'error': {'message': 'User not found.', 'code': 401}}
-- correlation_heatmap.png: Error code: 401 - {'error': {'message': 'User not found.', 'code': 401}}
-- distribution_unit_price.png: Error code: 401 - {'error': {'message': 'User not found.', 'code': 401}}
-- distribution_quantity.png: Error code: 401 - {'error': {'message': 'User not found.', 'code': 401}}
-- distribution_total_price.png: Error code: 401 - {'error': {'message': 'User not found.', 'code': 401}}
-- category_order_id.png: Error code: 401 - {'error': {'message': 'User not found.', 'code': 401}}
-- category_product_name.png: Error code: 401 - {'error': {'message': 'User not found.', 'code': 401}}
-- category_city.png: Error code: 401 - {'error': {'message': 'User not found.', 'code': 401}}
-- time_series_unit_price.png: Error code: 401 - {'error': {'message': 'User not found.', 'code': 401}}
-- time_series_quantity.png: Error code: 401 - {'error': {'message': 'User not found.', 'code': 401}}
-- time_series_total_price.png: Error code: 401 - {'error': {'message': 'User not found.', 'code': 401}}
-- overview_scatter_unit_price_vs_total_price.png: Error code: 401 - {'error': {'message': 'User not found.', 'code': 401}}
 
 ### Overview Numeric Distributions
 
@@ -37,13 +22,13 @@
 ![overview_numeric_distributions.png](../images/overview_numeric_distributions.png)
 
 ## Data Insight
-- The dataset contains 3 numeric column(s). This chart compares their spread, helping spot outliers and scale differences.
+- The 'patientid' column exhibits extreme variability in its values, with a mean around 1.47e15 and a very large standard deviation. The other numeric columns ('appointmentid', 'age', 'scholarship', 'hipertension', 'diabetes', 'alcoholism', 'handcap', 'sms_received') show much smaller and more concentrated distributions, with 'age' having the largest spread among them.
 
 ## Analysis Insight
-- Consider normalising or scaling columns with very different ranges before applying distance-based algorithms.
+- The box plot clearly highlights that 'patientid' and 'appointmentid' are identifiers with very large numerical ranges, while 'age' and binary/categorical features like 'scholarship', 'hipertension', 'diabetes', 'alcoholism', 'handcap', and 'sms_received' have small, near-zero values when represented numerically. This suggests distinct data types and scales within the dataset.
 
 ## Caveat
-- Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.
+- The box plot for 'patientid' appears truncated on the y-axis, potentially obscuring extreme outliers or the full range of its distribution. The extremely large values in 'patientid' and 'appointmentid' are likely identifiers and not intended for direct quantitative analysis or comparison with other features.
 
 ### Correlation Heatmap
 
@@ -52,161 +37,161 @@
 ![correlation_heatmap.png](../images/correlation_heatmap.png)
 
 ## Data Insight
-- The strongest correlation is between 'unit_price' and 'total_price' (r ≈ 0.94), suggesting these columns move together and may be related.
+- The heatmap shows moderate positive correlations between hypertension and diabetes (0.43), and between age and hypertension (0.50). 'Sms_received' exhibits a notable negative correlation with 'appointmentid' (-0.26). Most other variable pairs show very weak correlations, close to zero.
 
 ## Analysis Insight
-- Use this map to reduce collinearity in downstream models and prioritise orthogonal feature subsets.
+- Age is moderately correlated with hypertension, suggesting older individuals may have higher rates of this condition. The negative correlation between 'sms_received' and 'appointmentid' is intriguing and warrants further investigation into appointment scheduling nuances.
 
 ## Caveat
-- Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.
+- Correlation does not imply causation. The heatmap displays linear relationships; non-linear associations may exist. Unseen confounding variables could influence observed correlations between different health conditions and appointment-related factors.
 
-### Distribution Unit Price
+### Distribution Patientid
 
-# Insights: Distribution Unit Price
+# Insights: Distribution Patientid
 
-![distribution_unit_price.png](../images/distribution_unit_price.png)
+![distribution_patientid.png](../images/distribution_patientid.png)
 
 ## Data Insight
-- The distribution of 'unit price' reveals the spread and shape of values. Skewed distributions or outliers may warrant transformation before modelling.
+- The histogram shows a highly skewed distribution of patient IDs. The vast majority of observations have patient IDs clustered near zero, with a sharp decline in counts as patient ID values increase. Few patients have very large patient ID values.
 
 ## Analysis Insight
-- Highly skewed distributions may benefit from log or Box-Cox transformation before statistical modelling.
+- Most appointments are associated with a small number of patients, indicated by the high frequency of low patient IDs. The long tail suggests some patients may have very large IDs, which could be due to data entry, system changes, or a small number of chronically ill patients.
 
 ## Caveat
-- Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.
+- The patient ID distribution might be an artifact of the ID generation system rather than reflecting patient behavior. Without knowing the ID assignment logic, it's difficult to interpret the meaning of the skew or the presence of very large IDs.
 
-### Distribution Quantity
+### Distribution Appointmentid
 
-# Insights: Distribution Quantity
+# Insights: Distribution Appointmentid
 
-![distribution_quantity.png](../images/distribution_quantity.png)
+![distribution_appointmentid.png](../images/distribution_appointmentid.png)
 
 ## Data Insight
-- The distribution of 'quantity' reveals the spread and shape of values. Skewed distributions or outliers may warrant transformation before modelling.
+- The histogram shows the distribution of 'appointmentid'. The majority of appointment IDs are concentrated in the higher range, specifically in bins around 5.6M to 5.8M, with a peak count exceeding 30,000. There are very few appointments with IDs below 5.4M.
 
 ## Analysis Insight
-- Highly skewed distributions may benefit from log or Box-Cox transformation before statistical modelling.
+- The distribution of 'appointmentid' appears to be right-skewed, with a long tail of lower counts at the lower end of the ID range. The mode is located in the 5.7M to 5.8M range, indicating most appointments fall within this identifier group.
 
 ## Caveat
-- Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.
+- The 'appointmentid' is likely an arbitrary numerical identifier. Its distribution may not reflect any meaningful underlying trend or characteristic of the appointments themselves. The observed structure could be an artifact of how these IDs were generated or assigned sequentially.
 
-### Distribution Total Price
+### Distribution Age
 
-# Insights: Distribution Total Price
+# Insights: Distribution Age
 
-![distribution_total_price.png](../images/distribution_total_price.png)
+![distribution_age.png](../images/distribution_age.png)
 
 ## Data Insight
-- The distribution of 'total price' reveals the spread and shape of values. Skewed distributions or outliers may warrant transformation before modelling.
+- The histogram shows the distribution of patient ages, representing the count of patients within specific age ranges. The highest counts are observed for the youngest age groups, with a noticeable decline in patient numbers as age increases, particularly after age 60.
 
 ## Analysis Insight
-- Highly skewed distributions may benefit from log or Box-Cox transformation before statistical modelling.
+- The age distribution is right-skewed, indicating that the majority of patients are younger. There are smaller, but still significant, counts of older patients. The distribution suggests a broad range of patient ages, with a concentration in the younger to middle-aged demographics.
 
 ## Caveat
-- Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.
+- The chart displays counts per age bin, not the exact age of each patient. This aggregation may obscure finer patterns within age groups. The dataset's scope (e.g., specific clinic or region) could influence the observed age distribution.
 
-### Category Order Id
+### Distribution Scholarship
 
-# Insights: Category Order Id
+# Insights: Distribution Scholarship
 
-![category_order_id.png](../images/category_order_id.png)
+![distribution_scholarship.png](../images/distribution_scholarship.png)
 
 ## Data Insight
-- 'ORD0001' is the most frequent value in 'order_id'. Imbalanced categories may skew aggregates and require stratified analysis.
+- The distribution chart for 'scholarship' shows that approximately 100,000 records do not have a scholarship (value 0), while around 12,000 records have a scholarship (value 1).
 
 ## Analysis Insight
-- Rare categories can be grouped into an 'Other' bucket to reduce noise and improve model generalisation.
+- The vast majority of patients in this dataset do not receive a scholarship. This suggests that scholarship recipients represent a small minority within the patient population studied.
 
 ## Caveat
-- Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.
+- The chart displays a binary distribution. It's unclear if 'scholarship' is a boolean indicator or represents different scholarship tiers, and the reasons for receiving or not receiving a scholarship are not provided.
 
-### Category Product Name
+### Distribution Hipertension
 
-# Insights: Category Product Name
+# Insights: Distribution Hipertension
 
-![category_product_name.png](../images/category_product_name.png)
+![distribution_hipertension.png](../images/distribution_hipertension.png)
 
 ## Data Insight
-- 'Monitor' is the most frequent value in 'product_name'. Imbalanced categories may skew aggregates and require stratified analysis.
+- The distribution of hypertension shows a significant imbalance. Approximately 85,000 individuals in the dataset do not have hypertension (value 0), while only about 20,000 have it (value 1).
 
 ## Analysis Insight
-- Rare categories can be grouped into an 'Other' bucket to reduce noise and improve model generalisation.
+- A large majority of the patients do not have hypertension. This suggests that hypertension is not a prevalent condition within this specific patient cohort. Further investigation into the characteristics of hypertensive patients could be beneficial.
 
 ## Caveat
-- Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.
+- The chart displays raw counts and does not account for potential confounding factors like age or other health conditions. The binary nature of the 'hipertension' column may also oversimplify the condition's severity or diagnosis criteria.
 
-### Category City
+### Distribution Diabetes
 
-# Insights: Category City
+# Insights: Distribution Diabetes
 
-![category_city.png](../images/category_city.png)
+![distribution_diabetes.png](../images/distribution_diabetes.png)
 
 ## Data Insight
-- 'Los Angeles' is the most frequent value in 'city'. Imbalanced categories may skew aggregates and require stratified analysis.
+- The distribution of diabetes shows a vastly imbalanced dataset. Approximately 100,000 patients do not have diabetes (value 0), while only around 10,000 patients have diabetes (value 1).
 
 ## Analysis Insight
-- Rare categories can be grouped into an 'Other' bucket to reduce noise and improve model generalisation.
+- The 'diabetes' column is a binary variable, indicating the presence or absence of the condition. The visualization highlights a significant majority of non-diabetic patients within the dataset, suggesting a potential bias if not handled properly in subsequent analyses.
 
 ## Caveat
-- Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.
+- The chart displays raw counts. It's unclear if the dataset represents a general population sample or a specific patient cohort, which could influence the observed diabetes prevalence. The resolution of the chart limits precise count extraction.
 
-### Time Series Unit Price
+### Category Gender
 
-# Insights: Time Series Unit Price
+# Insights: Category Gender
 
-![time_series_unit_price.png](../images/time_series_unit_price.png)
+![category_gender.png](../images/category_gender.png)
 
 ## Data Insight
-- The monthly trend for 'unit price' highlights seasonality, growth, or decline patterns over time.
+- The chart displays the distribution of patients by gender, showing that there are significantly more female patients (F) than male patients (M) in the dataset. The count for females is approximately 70,000, while for males it is around 40,000.
 
 ## Analysis Insight
-- Decompose the series into trend, seasonality, and residual components to improve forecasting accuracy.
+- The visualization highlights a notable gender imbalance in the patient population represented in the dataset. This disparity could influence findings when analyzing other variables, as trends might be skewed by the larger number of female patients.
 
 ## Caveat
-- Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.
+- The chart only presents gender distribution. It does not account for potential demographic factors that might influence healthcare-seeking behavior or data recording practices, which could confound the observed gender distribution.
 
-### Time Series Quantity
+### Category Appointmentday
 
-# Insights: Time Series Quantity
+# Insights: Category Appointmentday
 
-![time_series_quantity.png](../images/time_series_quantity.png)
+![category_appointmentday.png](../images/category_appointmentday.png)
 
 ## Data Insight
-- The monthly trend for 'quantity' highlights seasonality, growth, or decline patterns over time.
+- The number of appointments is relatively consistent across the observed dates, with slight peaks on May 8th, 2016, and June 5th. Most days show counts around 4,300 to 4,500.
 
 ## Analysis Insight
-- Decompose the series into trend, seasonality, and residual components to improve forecasting accuracy.
+- Appointment volume exhibits a stable pattern across the sampled days within May and early June 2016. The distribution suggests no major seasonal or event-driven fluctuations in appointment scheduling during this period.
 
 ## Caveat
-- Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.
+- This analysis only considers specific dates and does not account for all appointment days. Trends might differ across other months or years, and external factors influencing scheduling are not included.
 
-### Time Series Total Price
+### Category No Show
 
-# Insights: Time Series Total Price
+# Insights: Category No Show
 
-![time_series_total_price.png](../images/time_series_total_price.png)
+![category_no_show.png](../images/category_no_show.png)
 
 ## Data Insight
-- The monthly trend for 'total price' highlights seasonality, growth, or decline patterns over time.
+- The vast majority of appointments, approximately 82,000, had patients show up. Only about 22,000 appointments resulted in a no-show.
 
 ## Analysis Insight
-- Decompose the series into trend, seasonality, and residual components to improve forecasting accuracy.
+- The chart indicates a significant difference in the frequency of patients attending appointments versus not showing up. The number of no-shows is considerably lower than the number of attendees.
 
 ## Caveat
-- Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.
+- The data does not provide reasons for no-shows, nor does it account for factors like appointment rescheduling or cancellations. This analysis is based solely on the provided 'no_show' column.
 
-### Overview Scatter Unit Price Vs Total Price
+### Overview Scatter Age Vs Hipertension
 
-# Insights: Overview Scatter Unit Price Vs Total Price
+# Insights: Overview Scatter Age Vs Hipertension
 
-![overview_scatter_unit_price_vs_total_price.png](../images/overview_scatter_unit_price_vs_total_price.png)
+![overview_scatter_age_vs_hipertension.png](../images/overview_scatter_age_vs_hipertension.png)
 
 ## Data Insight
-- This scatter plot reveals the relationship between two numeric columns. Clusters or linear trends can motivate correlation and regression analyses.
+- The scatter plot shows a clear separation of data points. Individuals with hypertension (hipertension=1) are predominantly older, clustered around ages 50-80. Patients without hypertension (hipertension=0) are spread across a wider age range, from very young to older individuals.
 
 ## Analysis Insight
-- The bivariate structure can motivate interaction terms and subgroup analyses in regression models.
+- Hypertension appears to be more prevalent in older age groups. The data suggests a strong association between advanced age and the presence of hypertension, with few younger individuals exhibiting this condition.
 
 ## Caveat
-- Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.
+- This analysis is based on observational data. Other factors like lifestyle, genetics, or concurrent conditions (not visualized) could influence hypertension. The data does not confirm causality, only correlation, and may not represent all age groups equally.
 

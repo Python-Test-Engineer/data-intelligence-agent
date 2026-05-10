@@ -3,10 +3,10 @@
 ![correlation_heatmap.png](../images/correlation_heatmap.png)
 
 ## Data Insight
-- The strongest correlation is between 'unit_price' and 'total_price' (r ≈ 0.94), suggesting these columns move together and may be related.
+- The heatmap shows moderate positive correlations between hypertension and diabetes (0.43), and between age and hypertension (0.50). 'Sms_received' exhibits a notable negative correlation with 'appointmentid' (-0.26). Most other variable pairs show very weak correlations, close to zero.
 
 ## Analysis Insight
-- Use this map to reduce collinearity in downstream models and prioritise orthogonal feature subsets.
+- Age is moderately correlated with hypertension, suggesting older individuals may have higher rates of this condition. The negative correlation between 'sms_received' and 'appointmentid' is intriguing and warrants further investigation into appointment scheduling nuances.
 
 ## Caveat
-- Insights are exploratory and non-causal. Missing cells in source data: 0. Sample size, data quality, and unmeasured variables may affect conclusions.
+- Correlation does not imply causation. The heatmap displays linear relationships; non-linear associations may exist. Unseen confounding variables could influence observed correlations between different health conditions and appointment-related factors.

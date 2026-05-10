@@ -1,5 +1,5 @@
 # SQL Query Catalog
-<!-- source: data.csv | table: data | generated: 2026-05-09 | queries: 40 -->
+<!-- source: data.csv | table: data | generated: 2026-05-10 | queries: 44 -->
 
 ---
 
@@ -19,7 +19,7 @@ FROM data;
 
 | row_count |
 | --- |
-| 20 |
+| 110527 |
 ---
 
 ## Column Sample
@@ -35,31 +35,31 @@ LIMIT 10;
 
 **Rows returned:** 10
 
-| order_id | date | product_name | unit_price | quantity | total_price | city |
-| --- | --- | --- | --- | --- | --- | --- |
-| ORD0001 | 2025-04-28 | Monitor | 349.99 | 10 | 3499.9 | New York |
-| ORD0002 | 2025-09-29 | Mouse | 29.99 | 5 | 149.95 | New York |
-| ORD0003 | 2025-08-04 | Headphones | 149.99 | 8 | 1199.92 | Chicago |
-| ORD0004 | 2025-12-16 | Headphones | 149.99 | 6 | 899.94 | New York |
-| ORD0005 | 2025-02-12 | Mouse | 29.99 | 3 | 89.97 | Los Angeles |
-| ORD0008 | 2025-11-07 | Headphones | 149.99 | 9 | 1349.91 | Los Angeles |
-| ORD0009 | 2025-03-24 | Monitor | 349.99 | 3 | 1049.97 | Los Angeles |
-| ORD0011 | 2025-02-11 | Laptop | 999.99 | 8 | 7999.92 | New York |
-| ORD0012 | 2025-07-15 | Monitor | 349.99 | 5 | 1749.95 | New York |
-| ORD0013 | 2025-01-29 | Keyboard | 79.99 | 7 | 559.93 | Chicago |
+| PatientId | AppointmentID | Gender | ScheduledDay | AppointmentDay | Age | Neighbourhood | Scholarship | Hipertension | Diabetes | Alcoholism | Handcap | SMS_received | No-show |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 29872499824296.0 | 5642903 | F | 2016-04-29T18:38:08Z | 2016-04-29T00:00:00Z | 62 | JARDIM DA PENHA | 0 | 1 | 0 | 0 | 0 | 0 | No |
+| 558997776694438.0 | 5642503 | M | 2016-04-29T16:08:27Z | 2016-04-29T00:00:00Z | 56 | JARDIM DA PENHA | 0 | 0 | 0 | 0 | 0 | 0 | No |
+| 4262962299951.0 | 5642549 | F | 2016-04-29T16:19:04Z | 2016-04-29T00:00:00Z | 62 | MATA DA PRAIA | 0 | 0 | 0 | 0 | 0 | 0 | No |
+| 867951213174.0 | 5642828 | F | 2016-04-29T17:29:31Z | 2016-04-29T00:00:00Z | 8 | PONTAL DE CAMBURI | 0 | 0 | 0 | 0 | 0 | 0 | No |
+| 8841186448183.0 | 5642494 | F | 2016-04-29T16:07:23Z | 2016-04-29T00:00:00Z | 56 | JARDIM DA PENHA | 0 | 1 | 1 | 0 | 0 | 0 | No |
+| 95985133231274.0 | 5626772 | F | 2016-04-27T08:36:51Z | 2016-04-29T00:00:00Z | 76 | REPÚBLICA | 0 | 1 | 0 | 0 | 0 | 0 | No |
+| 733688164476661.0 | 5630279 | F | 2016-04-27T15:05:12Z | 2016-04-29T00:00:00Z | 23 | GOIABEIRAS | 0 | 0 | 0 | 0 | 0 | 0 | Yes |
+| 3449833394123.0 | 5630575 | F | 2016-04-27T15:39:58Z | 2016-04-29T00:00:00Z | 39 | GOIABEIRAS | 0 | 0 | 0 | 0 | 0 | 0 | Yes |
+| 56394729949972.0 | 5638447 | F | 2016-04-29T08:02:16Z | 2016-04-29T00:00:00Z | 21 | ANDORINHAS | 0 | 0 | 0 | 0 | 0 | 0 | No |
+| 78124564369297.0 | 5629123 | F | 2016-04-27T12:48:25Z | 2016-04-29T00:00:00Z | 19 | CONQUISTA | 0 | 0 | 0 | 0 | 0 | 0 | No |
 ---
 
 ### Numeric Summaries
 
-## Summary Stats for unit_price
+## Summary Stats for PatientId
 **ARGS:** —
-**Description:** Returns min, max, average, and total for unit_price.
+**Description:** Returns min, max, average, and total for PatientId.
 ```sql
 SELECT
-    MIN(unit_price) AS min_val,
-    MAX(unit_price) AS max_val,
-    ROUND(AVG(unit_price), 2) AS avg_val,
-    SUM(unit_price) AS total
+    MIN(PatientId) AS min_val,
+    MAX(PatientId) AS max_val,
+    ROUND(AVG(PatientId), 2) AS avg_val,
+    SUM(PatientId) AS total
 FROM data;
 ```
 
@@ -69,18 +69,18 @@ FROM data;
 
 | min_val | max_val | avg_val | total |
 | --- | --- | --- | --- |
-| 29.99 | 999.99 | 403.49 | 8069.8 |
+| 39217.84439 | 999981631772427.0 | 147496265710394.1 | 1.6302319760172728e+19 |
 ---
 
-## Summary Stats for quantity
+## Summary Stats for AppointmentID
 **ARGS:** —
-**Description:** Returns min, max, average, and total for quantity.
+**Description:** Returns min, max, average, and total for AppointmentID.
 ```sql
 SELECT
-    MIN(quantity) AS min_val,
-    MAX(quantity) AS max_val,
-    ROUND(AVG(quantity), 2) AS avg_val,
-    SUM(quantity) AS total
+    MIN(AppointmentID) AS min_val,
+    MAX(AppointmentID) AS max_val,
+    ROUND(AVG(AppointmentID), 2) AS avg_val,
+    SUM(AppointmentID) AS total
 FROM data;
 ```
 
@@ -90,18 +90,18 @@ FROM data;
 
 | min_val | max_val | avg_val | total |
 | --- | --- | --- | --- |
-| 3 | 10 | 6.65 | 133 |
+| 5030230 | 5790484 | 5675305.12 | 627274449377 |
 ---
 
-## Summary Stats for total_price
+## Summary Stats for Age
 **ARGS:** —
-**Description:** Returns min, max, average, and total for total_price.
+**Description:** Returns min, max, average, and total for Age.
 ```sql
 SELECT
-    MIN(total_price) AS min_val,
-    MAX(total_price) AS max_val,
-    ROUND(AVG(total_price), 2) AS avg_val,
-    SUM(total_price) AS total
+    MIN(Age) AS min_val,
+    MAX(Age) AS max_val,
+    ROUND(AVG(Age), 2) AS avg_val,
+    SUM(Age) AS total
 FROM data;
 ```
 
@@ -111,547 +111,481 @@ FROM data;
 
 | min_val | max_val | avg_val | total |
 | --- | --- | --- | --- |
-| 89.97 | 7999.92 | 2695.93 | 53918.67 |
+| -1 | 115 | 37.09 | 4099322 |
 ---
 
-## Total unit_price by date
+## Summary Stats for Scholarship
 **ARGS:** —
-**Description:** Ranks each date by total unit_price, highest first.
+**Description:** Returns min, max, average, and total for Scholarship.
 ```sql
-SELECT date, SUM(unit_price) AS total_unit_price
-FROM data
-GROUP BY date
-ORDER BY total_unit_price DESC;
+SELECT
+    MIN(Scholarship) AS min_val,
+    MAX(Scholarship) AS max_val,
+    ROUND(AVG(Scholarship), 2) AS avg_val,
+    SUM(Scholarship) AS total
+FROM data;
 ```
 
 **Status:** OK
 
-**Rows returned:** 18
+**Rows returned:** 1
 
-| date | total_unit_price |
-| --- | --- |
-| 2025-04-28 | 1349.98 |
-| 2025-09-25 | 999.99 |
-| 2025-06-22 | 999.99 |
-| 2025-03-26 | 999.99 |
-| 2025-02-11 | 999.99 |
-| 2025-04-10 | 499.98 |
-| 2025-07-15 | 349.99 |
-| 2025-03-24 | 349.99 |
-| 2025-02-05 | 349.99 |
-| 2025-01-02 | 349.99 |
-| 2025-12-16 | 149.99 |
-| 2025-11-07 | 149.99 |
-| 2025-10-01 | 149.99 |
-| 2025-08-04 | 149.99 |
-| 2025-03-23 | 79.99 |
-| 2025-01-29 | 79.99 |
-| 2025-09-29 | 29.99 |
-| 2025-02-12 | 29.99 |
+| min_val | max_val | avg_val | total |
+| --- | --- | --- | --- |
+| 0 | 1 | 0.1 | 10861 |
 ---
 
-## Average unit_price by date
+## Summary Stats for Hipertension
 **ARGS:** —
-**Description:** Compares average unit_price across each date.
+**Description:** Returns min, max, average, and total for Hipertension.
 ```sql
-SELECT date, ROUND(AVG(unit_price), 2) AS avg_unit_price
-FROM data
-GROUP BY date
-ORDER BY avg_unit_price DESC;
+SELECT
+    MIN(Hipertension) AS min_val,
+    MAX(Hipertension) AS max_val,
+    ROUND(AVG(Hipertension), 2) AS avg_val,
+    SUM(Hipertension) AS total
+FROM data;
 ```
 
 **Status:** OK
 
-**Rows returned:** 18
+**Rows returned:** 1
 
-| date | avg_unit_price |
-| --- | --- |
-| 2025-09-25 | 999.99 |
-| 2025-06-22 | 999.99 |
-| 2025-03-26 | 999.99 |
-| 2025-02-11 | 999.99 |
-| 2025-04-28 | 674.99 |
-| 2025-07-15 | 349.99 |
-| 2025-03-24 | 349.99 |
-| 2025-02-05 | 349.99 |
-| 2025-01-02 | 349.99 |
-| 2025-04-10 | 249.99 |
-| 2025-12-16 | 149.99 |
-| 2025-11-07 | 149.99 |
-| 2025-10-01 | 149.99 |
-| 2025-08-04 | 149.99 |
-| 2025-03-23 | 79.99 |
-| 2025-01-29 | 79.99 |
-| 2025-09-29 | 29.99 |
-| 2025-02-12 | 29.99 |
+| min_val | max_val | avg_val | total |
+| --- | --- | --- | --- |
+| 0 | 1 | 0.2 | 21801 |
 ---
 
-## Total quantity by date
+## Summary Stats for Diabetes
 **ARGS:** —
-**Description:** Ranks each date by total quantity, highest first.
+**Description:** Returns min, max, average, and total for Diabetes.
 ```sql
-SELECT date, SUM(quantity) AS total_quantity
-FROM data
-GROUP BY date
-ORDER BY total_quantity DESC;
+SELECT
+    MIN(Diabetes) AS min_val,
+    MAX(Diabetes) AS max_val,
+    ROUND(AVG(Diabetes), 2) AS avg_val,
+    SUM(Diabetes) AS total
+FROM data;
 ```
 
 **Status:** OK
 
-**Rows returned:** 18
+**Rows returned:** 1
 
-| date | total_quantity |
+| min_val | max_val | avg_val | total |
+| --- | --- | --- | --- |
+| 0 | 1 | 0.07 | 7943 |
+---
+
+## Total PatientId by Gender
+**ARGS:** —
+**Description:** Ranks each Gender by total PatientId, highest first.
+```sql
+SELECT Gender, SUM(PatientId) AS total_PatientId
+FROM data
+GROUP BY Gender
+ORDER BY total_PatientId DESC;
+```
+
+**Status:** OK
+
+**Rows returned:** 2
+
+| Gender | total_PatientId |
 | --- | --- |
-| 2025-04-28 | 17 |
-| 2025-04-10 | 16 |
-| 2025-11-07 | 9 |
-| 2025-03-23 | 9 |
-| 2025-08-04 | 8 |
-| 2025-02-11 | 8 |
-| 2025-06-22 | 7 |
-| 2025-03-26 | 7 |
-| 2025-02-05 | 7 |
-| 2025-01-29 | 7 |
-| 2025-12-16 | 6 |
-| 2025-10-01 | 6 |
-| 2025-01-02 | 6 |
-| 2025-09-29 | 5 |
-| 2025-07-15 | 5 |
-| 2025-09-25 | 4 |
-| 2025-03-24 | 3 |
-| 2025-02-12 | 3 |
+| F | 1.0489614877018673e+19 |
+| M | 5.812704883154054e+18 |
+---
+
+## Average PatientId by Gender
+**ARGS:** —
+**Description:** Compares average PatientId across each Gender.
+```sql
+SELECT Gender, ROUND(AVG(PatientId), 2) AS avg_PatientId
+FROM data
+GROUP BY Gender
+ORDER BY avg_PatientId DESC;
+```
+
+**Status:** OK
+
+**Rows returned:** 2
+
+| Gender | avg_PatientId |
+| --- | --- |
+| M | 150249564017733.47 |
+| F | 146013570114402.47 |
+---
+
+## Total AppointmentID by Gender
+**ARGS:** —
+**Description:** Ranks each Gender by total AppointmentID, highest first.
+```sql
+SELECT Gender, SUM(AppointmentID) AS total_AppointmentID
+FROM data
+GROUP BY Gender
+ORDER BY total_AppointmentID DESC;
+```
+
+**Status:** OK
+
+**Rows returned:** 2
+
+| Gender | total_AppointmentID |
+| --- | --- |
+| F | 407644400697 |
+| M | 219630048680 |
 ---
 
 ### Categorical Distributions
 
-## Distribution of date
+## Distribution of Gender
 **ARGS:** —
-**Description:** Counts rows for each distinct value of date, ordered by frequency.
+**Description:** Counts rows for each distinct value of Gender, ordered by frequency.
 ```sql
-SELECT date, COUNT(*) AS row_count
+SELECT Gender, COUNT(*) AS row_count
 FROM data
-GROUP BY date
+GROUP BY Gender
 ORDER BY row_count DESC;
 ```
 
 **Status:** OK
 
-**Rows returned:** 18
+**Rows returned:** 2
 
-| date | row_count |
+| Gender | row_count |
 | --- | --- |
-| 2025-04-28 | 2 |
-| 2025-04-10 | 2 |
-| 2025-12-16 | 1 |
-| 2025-11-07 | 1 |
-| 2025-10-01 | 1 |
-| 2025-09-29 | 1 |
-| 2025-09-25 | 1 |
-| 2025-08-04 | 1 |
-| 2025-07-15 | 1 |
-| 2025-06-22 | 1 |
-| 2025-03-26 | 1 |
-| 2025-03-24 | 1 |
-| 2025-03-23 | 1 |
-| 2025-02-12 | 1 |
-| 2025-02-11 | 1 |
-| 2025-02-05 | 1 |
-| 2025-01-29 | 1 |
-| 2025-01-02 | 1 |
+| F | 71840 |
+| M | 38687 |
 ---
 
-## Distribution of product_name
+## Distribution of AppointmentDay
 **ARGS:** —
-**Description:** Counts rows for each distinct value of product_name, ordered by frequency.
+**Description:** Counts rows for each distinct value of AppointmentDay, ordered by frequency.
 ```sql
-SELECT product_name, COUNT(*) AS row_count
+SELECT AppointmentDay, COUNT(*) AS row_count
 FROM data
-GROUP BY product_name
+GROUP BY AppointmentDay
 ORDER BY row_count DESC;
 ```
 
 **Status:** OK
 
-**Rows returned:** 5
+**Rows returned:** 27
 
-| product_name | row_count |
+| AppointmentDay | row_count |
 | --- | --- |
-| Monitor | 6 |
-| Laptop | 5 |
-| Headphones | 5 |
-| Mouse | 2 |
-| Keyboard | 2 |
+| 2016-06-06T00:00:00Z | 4692 |
+| 2016-05-16T00:00:00Z | 4613 |
+| 2016-05-09T00:00:00Z | 4520 |
+| 2016-05-30T00:00:00Z | 4514 |
+| 2016-06-08T00:00:00Z | 4479 |
+| 2016-05-11T00:00:00Z | 4474 |
+| 2016-06-01T00:00:00Z | 4464 |
+| 2016-06-07T00:00:00Z | 4416 |
+| 2016-05-12T00:00:00Z | 4394 |
+| 2016-05-02T00:00:00Z | 4376 |
+| 2016-05-18T00:00:00Z | 4373 |
+| 2016-05-17T00:00:00Z | 4372 |
+| 2016-06-02T00:00:00Z | 4310 |
+| 2016-05-10T00:00:00Z | 4308 |
+| 2016-05-31T00:00:00Z | 4279 |
+| 2016-05-05T00:00:00Z | 4273 |
+| 2016-05-19T00:00:00Z | 4270 |
+| 2016-05-03T00:00:00Z | 4256 |
+| 2016-05-04T00:00:00Z | 4168 |
+| 2016-06-03T00:00:00Z | 4090 |
+
+*…7 more rows not shown*
 ---
 
-## Distribution of city
+## Distribution of No-show
 **ARGS:** —
-**Description:** Counts rows for each distinct value of city, ordered by frequency.
+**Description:** Counts rows for each distinct value of No-show, ordered by frequency.
 ```sql
-SELECT city, COUNT(*) AS row_count
+SELECT No-show, COUNT(*) AS row_count
 FROM data
-GROUP BY city
+GROUP BY No-show
 ORDER BY row_count DESC;
 ```
 
-**Status:** OK
+**Status:** ERROR
 
-**Rows returned:** 3
-
-| city | row_count |
-| --- | --- |
-| Los Angeles | 8 |
-| New York | 7 |
-| Chicago | 5 |
+**Error:** `no such column: No`
 ---
 
 ### Rankings
 
-## date Ranked by Total quantity
+## Top 10 Gender by PatientId
 **ARGS:** —
-**Description:** Ranks each date by total quantity, highest first.
+**Description:** Lists the 10 Gender values with the highest total PatientId.
 ```sql
-SELECT
-    date,
-    COUNT(*) AS transaction_count,
-    ROUND(SUM(quantity), 2) AS total_quantity
+SELECT Gender, SUM(PatientId) AS total_PatientId
 FROM data
-GROUP BY date
-ORDER BY total_quantity DESC;
+GROUP BY Gender
+ORDER BY total_PatientId DESC
+LIMIT 10;
 ```
 
 **Status:** OK
 
-**Rows returned:** 18
+**Rows returned:** 2
 
-| date | transaction_count | total_quantity |
-| --- | --- | --- |
-| 2025-04-28 | 2 | 17.0 |
-| 2025-04-10 | 2 | 16.0 |
-| 2025-11-07 | 1 | 9.0 |
-| 2025-03-23 | 1 | 9.0 |
-| 2025-08-04 | 1 | 8.0 |
-| 2025-02-11 | 1 | 8.0 |
-| 2025-06-22 | 1 | 7.0 |
-| 2025-03-26 | 1 | 7.0 |
-| 2025-02-05 | 1 | 7.0 |
-| 2025-01-29 | 1 | 7.0 |
-| 2025-12-16 | 1 | 6.0 |
-| 2025-10-01 | 1 | 6.0 |
-| 2025-01-02 | 1 | 6.0 |
-| 2025-09-29 | 1 | 5.0 |
-| 2025-07-15 | 1 | 5.0 |
-| 2025-09-25 | 1 | 4.0 |
-| 2025-03-24 | 1 | 3.0 |
-| 2025-02-12 | 1 | 3.0 |
+| Gender | total_PatientId |
+| --- | --- |
+| F | 1.0489614877018673e+19 |
+| M | 5.812704883154054e+18 |
 ---
 
-## product_name Ranked by Total quantity
+## Bottom 10 Gender by PatientId
 **ARGS:** —
-**Description:** Ranks each product_name by total quantity, highest first.
+**Description:** Lists the 10 Gender values with the lowest total PatientId.
 ```sql
-SELECT
-    product_name,
-    COUNT(*) AS transaction_count,
-    ROUND(SUM(quantity), 2) AS total_quantity
+SELECT Gender, SUM(PatientId) AS total_PatientId
 FROM data
-GROUP BY product_name
-ORDER BY total_quantity DESC;
+GROUP BY Gender
+ORDER BY total_PatientId ASC
+LIMIT 10;
 ```
 
 **Status:** OK
 
-**Rows returned:** 5
+**Rows returned:** 2
 
-| product_name | transaction_count | total_quantity |
-| --- | --- | --- |
-| Monitor | 6 | 40.0 |
-| Headphones | 5 | 36.0 |
-| Laptop | 5 | 33.0 |
-| Keyboard | 2 | 16.0 |
-| Mouse | 2 | 8.0 |
+| Gender | total_PatientId |
+| --- | --- |
+| M | 5.812704883154054e+18 |
+| F | 1.0489614877018673e+19 |
 ---
 
-## city Ranked by Total quantity
+## Top 10 AppointmentDay by PatientId
 **ARGS:** —
-**Description:** Ranks each city by total quantity, highest first.
+**Description:** Lists the 10 AppointmentDay values with the highest total PatientId.
 ```sql
-SELECT
-    city,
-    COUNT(*) AS transaction_count,
-    ROUND(SUM(quantity), 2) AS total_quantity
+SELECT AppointmentDay, SUM(PatientId) AS total_PatientId
 FROM data
-GROUP BY city
-ORDER BY total_quantity DESC;
+GROUP BY AppointmentDay
+ORDER BY total_PatientId DESC
+LIMIT 10;
 ```
 
 **Status:** OK
 
-**Rows returned:** 3
+**Rows returned:** 10
 
-| city | transaction_count | total_quantity |
-| --- | --- | --- |
-| Los Angeles | 8 | 51.0 |
-| New York | 7 | 50.0 |
-| Chicago | 5 | 32.0 |
+| AppointmentDay | total_PatientId |
+| --- | --- |
+| 2016-06-06T00:00:00Z | 7.107293509750629e+17 |
+| 2016-05-16T00:00:00Z | 7.061621546159485e+17 |
+| 2016-05-09T00:00:00Z | 6.65720181853728e+17 |
+| 2016-06-08T00:00:00Z | 6.63666086826516e+17 |
+| 2016-05-30T00:00:00Z | 6.619145168620172e+17 |
+| 2016-06-01T00:00:00Z | 6.585851729358166e+17 |
+| 2016-05-17T00:00:00Z | 6.547708904932524e+17 |
+| 2016-05-18T00:00:00Z | 6.468900114449965e+17 |
+| 2016-05-11T00:00:00Z | 6.468128273114216e+17 |
+| 2016-06-07T00:00:00Z | 6.460275099605478e+17 |
 ---
 
 ### Multi-Dimensional
 
-## unit_price by date and product_name
+## PatientId by Gender and AppointmentDay
 **ARGS:** —
-**Description:** Shows total unit_price broken down by both date and product_name.
+**Description:** Shows total PatientId broken down by both Gender and AppointmentDay.
 ```sql
-SELECT date, product_name, SUM(unit_price) AS total_unit_price
+SELECT Gender, AppointmentDay, SUM(PatientId) AS total_PatientId
 FROM data
-GROUP BY date, product_name
-ORDER BY total_unit_price DESC;
+GROUP BY Gender, AppointmentDay
+ORDER BY total_PatientId DESC;
 ```
 
 **Status:** OK
 
-**Rows returned:** 20
+**Rows returned:** 54
 
-| date | product_name | total_unit_price |
+| Gender | AppointmentDay | total_PatientId |
 | --- | --- | --- |
-| 2025-02-11 | Laptop | 999.99 |
-| 2025-03-26 | Laptop | 999.99 |
-| 2025-04-28 | Laptop | 999.99 |
-| 2025-06-22 | Laptop | 999.99 |
-| 2025-09-25 | Laptop | 999.99 |
-| 2025-01-02 | Monitor | 349.99 |
-| 2025-02-05 | Monitor | 349.99 |
-| 2025-03-24 | Monitor | 349.99 |
-| 2025-04-10 | Monitor | 349.99 |
-| 2025-04-28 | Monitor | 349.99 |
-| 2025-07-15 | Monitor | 349.99 |
-| 2025-04-10 | Headphones | 149.99 |
-| 2025-08-04 | Headphones | 149.99 |
-| 2025-10-01 | Headphones | 149.99 |
-| 2025-11-07 | Headphones | 149.99 |
-| 2025-12-16 | Headphones | 149.99 |
-| 2025-01-29 | Keyboard | 79.99 |
-| 2025-03-23 | Keyboard | 79.99 |
-| 2025-02-12 | Mouse | 29.99 |
-| 2025-09-29 | Mouse | 29.99 |
+| F | 2016-06-06T00:00:00Z | 4.689961862397386e+17 |
+| F | 2016-06-07T00:00:00Z | 4.446413656838629e+17 |
+| F | 2016-05-16T00:00:00Z | 4.379365812733394e+17 |
+| F | 2016-05-09T00:00:00Z | 4.3283704339695405e+17 |
+| F | 2016-05-30T00:00:00Z | 4.319143003611394e+17 |
+| F | 2016-06-08T00:00:00Z | 4.30510830767661e+17 |
+| F | 2016-05-18T00:00:00Z | 4.287612937821349e+17 |
+| F | 2016-05-17T00:00:00Z | 4.2136027096515603e+17 |
+| F | 2016-05-31T00:00:00Z | 4.201052371580796e+17 |
+| F | 2016-05-10T00:00:00Z | 4.1906461252241235e+17 |
+| F | 2016-06-01T00:00:00Z | 4.175149603704715e+17 |
+| F | 2016-05-02T00:00:00Z | 4.171169193961334e+17 |
+| F | 2016-05-11T00:00:00Z | 4.0791650542555616e+17 |
+| F | 2016-05-03T00:00:00Z | 4.013178239656257e+17 |
+| F | 2016-06-02T00:00:00Z | 3.9942756187667757e+17 |
+| F | 2016-05-05T00:00:00Z | 3.942479036584985e+17 |
+| F | 2016-05-19T00:00:00Z | 3.932875609948182e+17 |
+| F | 2016-05-12T00:00:00Z | 3.91394937572044e+17 |
+| F | 2016-05-24T00:00:00Z | 3.913774392300557e+17 |
+| F | 2016-05-13T00:00:00Z | 3.803295442015638e+17 |
+
+*…34 more rows not shown*
 ---
 
 ### Multi-Metric Analysis
 
-## Performance Breakdown by date
+## Performance Breakdown by Gender
 **ARGS:** —
-**Description:** Aggregates transaction count and all key metrics (revenue, cost, profit, margins) grouped by date.
+**Description:** Aggregates transaction count and all key metrics (revenue, cost, profit, margins) grouped by Gender.
 ```sql
 SELECT
-    date,
+    Gender,
     COUNT(*) AS transaction_count,
-    SUM(unit_price) AS total_unit_price,
-    SUM(quantity) AS total_quantity,
-    SUM(total_price) AS total_total_price
+    SUM(PatientId) AS total_PatientId,
+    SUM(AppointmentID) AS total_AppointmentID,
+    SUM(Age) AS total_Age,
+    SUM(Scholarship) AS total_Scholarship,
+    SUM(Hipertension) AS total_Hipertension,
+    SUM(Diabetes) AS total_Diabetes
 FROM data
-GROUP BY date
-ORDER BY total_unit_price DESC;
+GROUP BY Gender
+ORDER BY total_PatientId DESC;
 ```
 
 **Status:** OK
 
-**Rows returned:** 18
+**Rows returned:** 2
 
-| date | transaction_count | total_unit_price | total_quantity | total_total_price |
-| --- | --- | --- | --- | --- |
-| 2025-04-28 | 2 | 1349.98 | 17 | 10499.83 |
-| 2025-09-25 | 1 | 999.99 | 4 | 3999.96 |
-| 2025-06-22 | 1 | 999.99 | 7 | 6999.93 |
-| 2025-03-26 | 1 | 999.99 | 7 | 6999.93 |
-| 2025-02-11 | 1 | 999.99 | 8 | 7999.92 |
-| 2025-04-10 | 2 | 499.98 | 16 | 4199.84 |
-| 2025-07-15 | 1 | 349.99 | 5 | 1749.95 |
-| 2025-03-24 | 1 | 349.99 | 3 | 1049.97 |
-| 2025-02-05 | 1 | 349.99 | 7 | 2449.93 |
-| 2025-01-02 | 1 | 349.99 | 6 | 2099.94 |
-| 2025-12-16 | 1 | 149.99 | 6 | 899.94 |
-| 2025-11-07 | 1 | 149.99 | 9 | 1349.91 |
-| 2025-10-01 | 1 | 149.99 | 6 | 899.94 |
-| 2025-08-04 | 1 | 149.99 | 8 | 1199.92 |
-| 2025-03-23 | 1 | 79.99 | 9 | 719.91 |
-| 2025-01-29 | 1 | 79.99 | 7 | 559.93 |
-| 2025-09-29 | 1 | 29.99 | 5 | 149.95 |
-| 2025-02-12 | 1 | 29.99 | 3 | 89.97 |
+| Gender | transaction_count | total_PatientId | total_AppointmentID | total_Age | total_Scholarship | total_Hipertension | total_Diabetes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| F | 71840 | 1.0489614877018673e+19 | 407644400697 | 2794144 | 8853 | 15339 | 5606 |
+| M | 38687 | 5.812704883154054e+18 | 219630048680 | 1305178 | 2008 | 6462 | 2337 |
 ---
 
-## Performance Breakdown by product_name
+## Performance Breakdown by AppointmentDay
 **ARGS:** —
-**Description:** Aggregates transaction count and all key metrics (revenue, cost, profit, margins) grouped by product_name.
+**Description:** Aggregates transaction count and all key metrics (revenue, cost, profit, margins) grouped by AppointmentDay.
 ```sql
 SELECT
-    product_name,
+    AppointmentDay,
     COUNT(*) AS transaction_count,
-    SUM(unit_price) AS total_unit_price,
-    SUM(quantity) AS total_quantity,
-    SUM(total_price) AS total_total_price
+    SUM(PatientId) AS total_PatientId,
+    SUM(AppointmentID) AS total_AppointmentID,
+    SUM(Age) AS total_Age,
+    SUM(Scholarship) AS total_Scholarship,
+    SUM(Hipertension) AS total_Hipertension,
+    SUM(Diabetes) AS total_Diabetes
 FROM data
-GROUP BY product_name
-ORDER BY total_unit_price DESC;
+GROUP BY AppointmentDay
+ORDER BY total_PatientId DESC;
 ```
 
 **Status:** OK
 
-**Rows returned:** 5
+**Rows returned:** 27
 
-| product_name | transaction_count | total_unit_price | total_quantity | total_total_price |
-| --- | --- | --- | --- | --- |
-| Laptop | 5 | 4999.95 | 33 | 32999.67 |
-| Monitor | 6 | 2099.94 | 40 | 13999.6 |
-| Headphones | 5 | 749.95 | 36 | 5399.64 |
-| Keyboard | 2 | 159.98 | 16 | 1279.84 |
-| Mouse | 2 | 59.98 | 8 | 239.92 |
+| AppointmentDay | transaction_count | total_PatientId | total_AppointmentID | total_Age | total_Scholarship | total_Hipertension | total_Diabetes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 2016-06-06T00:00:00Z | 4692 | 7.107293509750629e+17 | 26922870225 | 172478 | 458 | 849 | 309 |
+| 2016-05-16T00:00:00Z | 4613 | 7.061621546159485e+17 | 26125671383 | 167682 | 461 | 870 | 313 |
+| 2016-05-09T00:00:00Z | 4520 | 6.65720181853728e+17 | 25490244728 | 167632 | 403 | 896 | 312 |
+| 2016-06-08T00:00:00Z | 4479 | 6.63666086826516e+17 | 25748963124 | 166911 | 458 | 900 | 317 |
+| 2016-05-30T00:00:00Z | 4514 | 6.619145168620172e+17 | 25726843927 | 167559 | 482 | 868 | 315 |
+| 2016-06-01T00:00:00Z | 4464 | 6.585851729358166e+17 | 25533932037 | 170123 | 433 | 880 | 330 |
+| 2016-05-17T00:00:00Z | 4372 | 6.547708904932524e+17 | 24798385463 | 161495 | 401 | 812 | 291 |
+| 2016-05-18T00:00:00Z | 4373 | 6.468900114449965e+17 | 24812864108 | 159536 | 427 | 838 | 317 |
+| 2016-05-11T00:00:00Z | 4474 | 6.468128273114216e+17 | 25269760048 | 164058 | 423 | 840 | 311 |
+| 2016-06-07T00:00:00Z | 4416 | 6.460275099605478e+17 | 25371834575 | 162629 | 411 | 875 | 340 |
+| 2016-05-10T00:00:00Z | 4308 | 6.403347623085932e+17 | 24324249015 | 158843 | 436 | 855 | 340 |
+| 2016-05-31T00:00:00Z | 4279 | 6.390073683098787e+17 | 24422394356 | 161793 | 434 | 887 | 300 |
+| 2016-05-12T00:00:00Z | 4394 | 6.378221432404353e+17 | 24842042934 | 161067 | 432 | 866 | 306 |
+| 2016-05-02T00:00:00Z | 4376 | 6.361482195341268e+17 | 24555484960 | 161149 | 416 | 907 | 322 |
+| 2016-05-19T00:00:00Z | 4270 | 6.300627228750563e+17 | 24245996161 | 157928 | 381 | 832 | 272 |
+| 2016-06-02T00:00:00Z | 4310 | 6.274775062425944e+17 | 24680269029 | 164647 | 398 | 897 | 321 |
+| 2016-05-03T00:00:00Z | 4256 | 6.244184188086084e+17 | 23913201543 | 159051 | 468 | 889 | 315 |
+| 2016-06-03T00:00:00Z | 4090 | 6.135990429157101e+17 | 23426852327 | 157375 | 403 | 874 | 343 |
+| 2016-05-05T00:00:00Z | 4273 | 6.048848400776709e+17 | 24046880798 | 158640 | 447 | 873 | 304 |
+| 2016-05-13T00:00:00Z | 3987 | 5.914162140897514e+17 | 22550835091 | 146413 | 414 | 812 | 311 |
+
+*…7 more rows not shown*
 ---
 
-## Performance Breakdown by city
+## Performance Breakdown by No-show
 **ARGS:** —
-**Description:** Aggregates transaction count and all key metrics (revenue, cost, profit, margins) grouped by city.
+**Description:** Aggregates transaction count and all key metrics (revenue, cost, profit, margins) grouped by No-show.
 ```sql
 SELECT
-    city,
+    No-show,
     COUNT(*) AS transaction_count,
-    SUM(unit_price) AS total_unit_price,
-    SUM(quantity) AS total_quantity,
-    SUM(total_price) AS total_total_price
+    SUM(PatientId) AS total_PatientId,
+    SUM(AppointmentID) AS total_AppointmentID,
+    SUM(Age) AS total_Age,
+    SUM(Scholarship) AS total_Scholarship,
+    SUM(Hipertension) AS total_Hipertension,
+    SUM(Diabetes) AS total_Diabetes
 FROM data
-GROUP BY city
-ORDER BY total_unit_price DESC;
+GROUP BY No-show
+ORDER BY total_PatientId DESC;
 ```
 
-**Status:** OK
+**Status:** ERROR
 
-**Rows returned:** 3
-
-| city | transaction_count | total_unit_price | total_quantity | total_total_price |
-| --- | --- | --- | --- | --- |
-| New York | 7 | 2959.93 | 50 | 22019.5 |
-| Los Angeles | 8 | 2729.92 | 51 | 18239.49 |
-| Chicago | 5 | 2379.95 | 32 | 13659.68 |
+**Error:** `no such column: No`
 ---
 
-## date × product_name Performance Matrix
+## Gender × AppointmentDay Performance Matrix
 **ARGS:** —
-**Description:** Shows performance metrics for every date and product_name combination, ordered by profitability.
+**Description:** Shows performance metrics for every Gender and AppointmentDay combination, ordered by profitability.
 ```sql
 SELECT
-    date,
-    product_name,
+    Gender,
+    AppointmentDay,
     COUNT(*) AS transaction_count,
-    SUM(unit_price) AS total_unit_price,
-    SUM(quantity) AS total_quantity,
-    SUM(total_price) AS total_total_price
+    SUM(PatientId) AS total_PatientId,
+    SUM(AppointmentID) AS total_AppointmentID,
+    SUM(Age) AS total_Age,
+    SUM(Scholarship) AS total_Scholarship
 FROM data
-GROUP BY date, product_name
-ORDER BY total_unit_price DESC;
+GROUP BY Gender, AppointmentDay
+ORDER BY total_PatientId DESC;
 ```
 
 **Status:** OK
 
-**Rows returned:** 20
+**Rows returned:** 54
 
-| date | product_name | transaction_count | total_unit_price | total_quantity | total_total_price |
-| --- | --- | --- | --- | --- | --- |
-| 2025-02-11 | Laptop | 1 | 999.99 | 8 | 7999.92 |
-| 2025-03-26 | Laptop | 1 | 999.99 | 7 | 6999.93 |
-| 2025-04-28 | Laptop | 1 | 999.99 | 7 | 6999.93 |
-| 2025-06-22 | Laptop | 1 | 999.99 | 7 | 6999.93 |
-| 2025-09-25 | Laptop | 1 | 999.99 | 4 | 3999.96 |
-| 2025-01-02 | Monitor | 1 | 349.99 | 6 | 2099.94 |
-| 2025-02-05 | Monitor | 1 | 349.99 | 7 | 2449.93 |
-| 2025-03-24 | Monitor | 1 | 349.99 | 3 | 1049.97 |
-| 2025-04-10 | Monitor | 1 | 349.99 | 9 | 3149.91 |
-| 2025-04-28 | Monitor | 1 | 349.99 | 10 | 3499.9 |
-| 2025-07-15 | Monitor | 1 | 349.99 | 5 | 1749.95 |
-| 2025-04-10 | Headphones | 1 | 149.99 | 7 | 1049.93 |
-| 2025-08-04 | Headphones | 1 | 149.99 | 8 | 1199.92 |
-| 2025-10-01 | Headphones | 1 | 149.99 | 6 | 899.94 |
-| 2025-11-07 | Headphones | 1 | 149.99 | 9 | 1349.91 |
-| 2025-12-16 | Headphones | 1 | 149.99 | 6 | 899.94 |
-| 2025-01-29 | Keyboard | 1 | 79.99 | 7 | 559.93 |
-| 2025-03-23 | Keyboard | 1 | 79.99 | 9 | 719.91 |
-| 2025-02-12 | Mouse | 1 | 29.99 | 3 | 89.97 |
-| 2025-09-29 | Mouse | 1 | 29.99 | 5 | 149.95 |
----
+| Gender | AppointmentDay | transaction_count | total_PatientId | total_AppointmentID | total_Age | total_Scholarship |
+| --- | --- | --- | --- | --- | --- | --- |
+| F | 2016-06-06T00:00:00Z | 3087 | 4.689961862397386e+17 | 17711210078 | 119853 | 355 |
+| F | 2016-06-07T00:00:00Z | 2951 | 4.446413656838629e+17 | 16951524765 | 114751 | 330 |
+| F | 2016-05-16T00:00:00Z | 2948 | 4.379365812733394e+17 | 16688131992 | 111995 | 375 |
+| F | 2016-05-09T00:00:00Z | 2901 | 4.3283704339695405e+17 | 16358059478 | 112945 | 333 |
+| F | 2016-05-30T00:00:00Z | 2922 | 4.319143003611394e+17 | 16648708668 | 113988 | 389 |
+| F | 2016-06-08T00:00:00Z | 2967 | 4.30510830767661e+17 | 17053659579 | 116695 | 369 |
+| F | 2016-05-18T00:00:00Z | 2841 | 4.287612937821349e+17 | 16119247938 | 107879 | 348 |
+| F | 2016-05-17T00:00:00Z | 2919 | 4.2136027096515603e+17 | 16553795149 | 113966 | 330 |
+| F | 2016-05-31T00:00:00Z | 2798 | 4.201052371580796e+17 | 15964597720 | 109735 | 366 |
+| F | 2016-05-10T00:00:00Z | 2803 | 4.1906461252241235e+17 | 15822825074 | 108866 | 361 |
+| F | 2016-06-01T00:00:00Z | 2905 | 4.175149603704715e+17 | 16613639349 | 115006 | 353 |
+| F | 2016-05-02T00:00:00Z | 2819 | 4.171169193961334e+17 | 15815654548 | 108936 | 347 |
+| F | 2016-05-11T00:00:00Z | 2905 | 4.0791650542555616e+17 | 16404103774 | 112960 | 342 |
+| F | 2016-05-03T00:00:00Z | 2766 | 4.013178239656257e+17 | 15536760556 | 108206 | 384 |
+| F | 2016-06-02T00:00:00Z | 2746 | 3.9942756187667757e+17 | 15721610971 | 109376 | 322 |
+| F | 2016-05-05T00:00:00Z | 2808 | 3.942479036584985e+17 | 15799624973 | 109951 | 366 |
+| F | 2016-05-19T00:00:00Z | 2743 | 3.932875609948182e+17 | 15569493484 | 107321 | 316 |
+| F | 2016-05-12T00:00:00Z | 2821 | 3.91394937572044e+17 | 15949387153 | 109345 | 351 |
+| F | 2016-05-24T00:00:00Z | 2637 | 3.913774392300557e+17 | 15025118793 | 104096 | 328 |
+| F | 2016-05-13T00:00:00Z | 2574 | 3.803295442015638e+17 | 14553279372 | 99615 | 324 |
 
-## Unique order_id Count by date
-**ARGS:** —
-**Description:** Counts distinct order_id values and key metrics per date to reveal concentration.
-```sql
-SELECT
-    date,
-    COUNT(DISTINCT order_id) AS unique_order_id,
-    COUNT(*) AS transaction_count,
-    SUM(unit_price) AS total_unit_price
-FROM data
-GROUP BY date
-ORDER BY unique_order_id DESC;
-```
-
-**Status:** OK
-
-**Rows returned:** 18
-
-| date | unique_order_id | transaction_count | total_unit_price |
-| --- | --- | --- | --- |
-| 2025-04-28 | 2 | 2 | 1349.98 |
-| 2025-04-10 | 2 | 2 | 499.98 |
-| 2025-12-16 | 1 | 1 | 149.99 |
-| 2025-11-07 | 1 | 1 | 149.99 |
-| 2025-10-01 | 1 | 1 | 149.99 |
-| 2025-09-29 | 1 | 1 | 29.99 |
-| 2025-09-25 | 1 | 1 | 999.99 |
-| 2025-08-04 | 1 | 1 | 149.99 |
-| 2025-07-15 | 1 | 1 | 349.99 |
-| 2025-06-22 | 1 | 1 | 999.99 |
-| 2025-03-26 | 1 | 1 | 999.99 |
-| 2025-03-24 | 1 | 1 | 349.99 |
-| 2025-03-23 | 1 | 1 | 79.99 |
-| 2025-02-12 | 1 | 1 | 29.99 |
-| 2025-02-11 | 1 | 1 | 999.99 |
-| 2025-02-05 | 1 | 1 | 349.99 |
-| 2025-01-29 | 1 | 1 | 79.99 |
-| 2025-01-02 | 1 | 1 | 349.99 |
----
-
-## Unique order_id Count by product_name
-**ARGS:** —
-**Description:** Counts distinct order_id values and key metrics per product_name to reveal concentration.
-```sql
-SELECT
-    product_name,
-    COUNT(DISTINCT order_id) AS unique_order_id,
-    COUNT(*) AS transaction_count,
-    SUM(unit_price) AS total_unit_price
-FROM data
-GROUP BY product_name
-ORDER BY unique_order_id DESC;
-```
-
-**Status:** OK
-
-**Rows returned:** 5
-
-| product_name | unique_order_id | transaction_count | total_unit_price |
-| --- | --- | --- | --- |
-| Monitor | 6 | 6 | 2099.94 |
-| Laptop | 5 | 5 | 4999.95 |
-| Headphones | 5 | 5 | 749.95 |
-| Mouse | 2 | 2 | 59.98 |
-| Keyboard | 2 | 2 | 159.98 |
+*…34 more rows not shown*
 ---
 
 ### Parametric Lookups
 
-## Filter by date
-**ARGS:** date
-**Description:** Returns all rows where date matches a given value.
+## Filter by Gender
+**ARGS:** Gender
+**Description:** Returns all rows where Gender matches a given value.
 ```sql
 SELECT *
 FROM data
-WHERE date = :date;
+WHERE Gender = :Gender;
 ```
 
 **Status:** SKIPPED
@@ -659,17 +593,18 @@ WHERE date = :date;
 **Skipped:** Query requires runtime arguments (:param)
 ---
 
-## Performance Summary for a Specific date
-**ARGS:** date
-**Description:** Returns transaction count and all key metrics for a single date value.
+## Performance Summary for a Specific Gender
+**ARGS:** Gender
+**Description:** Returns transaction count and all key metrics for a single Gender value.
 ```sql
 SELECT
-    date,
+    Gender,
     COUNT(*) AS transaction_count,
-    SUM(quantity) AS total_quantity
+    ROUND(SUM(PatientId), 2) AS total_PatientId,
+    ROUND(SUM(AppointmentID), 2) AS total_AppointmentID
 FROM data
-WHERE date = :date
-GROUP BY date;
+WHERE Gender = :Gender
+GROUP BY Gender;
 ```
 
 **Status:** SKIPPED
@@ -677,18 +612,18 @@ GROUP BY date;
 **Skipped:** Query requires runtime arguments (:param)
 ---
 
-## product_name Breakdown for date = :date
-**ARGS:** date
-**Description:** Ranks each product_name by total unit_price filtered to a single date value.
+## AppointmentDay Breakdown for Gender = :Gender
+**ARGS:** Gender
+**Description:** Ranks each AppointmentDay by total PatientId filtered to a single Gender value.
 ```sql
 SELECT
-    product_name,
+    AppointmentDay,
     COUNT(*) AS transaction_count,
-    ROUND(SUM(unit_price), 2) AS total_unit_price
+    ROUND(SUM(PatientId), 2) AS total_PatientId
 FROM data
-WHERE date = :date
-GROUP BY product_name
-ORDER BY total_unit_price DESC;
+WHERE Gender = :Gender
+GROUP BY AppointmentDay
+ORDER BY total_PatientId DESC;
 ```
 
 **Status:** SKIPPED
@@ -696,18 +631,18 @@ ORDER BY total_unit_price DESC;
 **Skipped:** Query requires runtime arguments (:param)
 ---
 
-## city Breakdown for date = :date
-**ARGS:** date
-**Description:** Ranks each city by total unit_price filtered to a single date value.
+## Neighbourhood Breakdown for Gender = :Gender
+**ARGS:** Gender
+**Description:** Ranks each Neighbourhood by total PatientId filtered to a single Gender value.
 ```sql
 SELECT
-    city,
+    Neighbourhood,
     COUNT(*) AS transaction_count,
-    ROUND(SUM(unit_price), 2) AS total_unit_price
+    ROUND(SUM(PatientId), 2) AS total_PatientId
 FROM data
-WHERE date = :date
-GROUP BY city
-ORDER BY total_unit_price DESC;
+WHERE Gender = :Gender
+GROUP BY Neighbourhood
+ORDER BY total_PatientId DESC;
 ```
 
 **Status:** SKIPPED
@@ -715,13 +650,13 @@ ORDER BY total_unit_price DESC;
 **Skipped:** Query requires runtime arguments (:param)
 ---
 
-## Filter by product_name
-**ARGS:** product_name
-**Description:** Returns all rows where product_name matches a given value.
+## Filter by AppointmentDay
+**ARGS:** AppointmentDay
+**Description:** Returns all rows where AppointmentDay matches a given value.
 ```sql
 SELECT *
 FROM data
-WHERE product_name = :product_name;
+WHERE AppointmentDay = :AppointmentDay;
 ```
 
 **Status:** SKIPPED
@@ -729,17 +664,18 @@ WHERE product_name = :product_name;
 **Skipped:** Query requires runtime arguments (:param)
 ---
 
-## Performance Summary for a Specific product_name
-**ARGS:** product_name
-**Description:** Returns transaction count and all key metrics for a single product_name value.
+## Performance Summary for a Specific AppointmentDay
+**ARGS:** AppointmentDay
+**Description:** Returns transaction count and all key metrics for a single AppointmentDay value.
 ```sql
 SELECT
-    product_name,
+    AppointmentDay,
     COUNT(*) AS transaction_count,
-    SUM(quantity) AS total_quantity
+    ROUND(SUM(PatientId), 2) AS total_PatientId,
+    ROUND(SUM(AppointmentID), 2) AS total_AppointmentID
 FROM data
-WHERE product_name = :product_name
-GROUP BY product_name;
+WHERE AppointmentDay = :AppointmentDay
+GROUP BY AppointmentDay;
 ```
 
 **Status:** SKIPPED
@@ -747,18 +683,18 @@ GROUP BY product_name;
 **Skipped:** Query requires runtime arguments (:param)
 ---
 
-## date Breakdown for product_name = :product_name
-**ARGS:** product_name
-**Description:** Ranks each date by total unit_price filtered to a single product_name value.
+## Gender Breakdown for AppointmentDay = :AppointmentDay
+**ARGS:** AppointmentDay
+**Description:** Ranks each Gender by total PatientId filtered to a single AppointmentDay value.
 ```sql
 SELECT
-    date,
+    Gender,
     COUNT(*) AS transaction_count,
-    ROUND(SUM(unit_price), 2) AS total_unit_price
+    ROUND(SUM(PatientId), 2) AS total_PatientId
 FROM data
-WHERE product_name = :product_name
-GROUP BY date
-ORDER BY total_unit_price DESC;
+WHERE AppointmentDay = :AppointmentDay
+GROUP BY Gender
+ORDER BY total_PatientId DESC;
 ```
 
 **Status:** SKIPPED
@@ -766,18 +702,18 @@ ORDER BY total_unit_price DESC;
 **Skipped:** Query requires runtime arguments (:param)
 ---
 
-## city Breakdown for product_name = :product_name
-**ARGS:** product_name
-**Description:** Ranks each city by total unit_price filtered to a single product_name value.
+## Neighbourhood Breakdown for AppointmentDay = :AppointmentDay
+**ARGS:** AppointmentDay
+**Description:** Ranks each Neighbourhood by total PatientId filtered to a single AppointmentDay value.
 ```sql
 SELECT
-    city,
+    Neighbourhood,
     COUNT(*) AS transaction_count,
-    ROUND(SUM(unit_price), 2) AS total_unit_price
+    ROUND(SUM(PatientId), 2) AS total_PatientId
 FROM data
-WHERE product_name = :product_name
-GROUP BY city
-ORDER BY total_unit_price DESC;
+WHERE AppointmentDay = :AppointmentDay
+GROUP BY Neighbourhood
+ORDER BY total_PatientId DESC;
 ```
 
 **Status:** SKIPPED
@@ -785,13 +721,13 @@ ORDER BY total_unit_price DESC;
 **Skipped:** Query requires runtime arguments (:param)
 ---
 
-## Filter by city
-**ARGS:** city
-**Description:** Returns all rows where city matches a given value.
+## Filter by Neighbourhood
+**ARGS:** Neighbourhood
+**Description:** Returns all rows where Neighbourhood matches a given value.
 ```sql
 SELECT *
 FROM data
-WHERE city = :city;
+WHERE Neighbourhood = :Neighbourhood;
 ```
 
 **Status:** SKIPPED
@@ -799,17 +735,18 @@ WHERE city = :city;
 **Skipped:** Query requires runtime arguments (:param)
 ---
 
-## Performance Summary for a Specific city
-**ARGS:** city
-**Description:** Returns transaction count and all key metrics for a single city value.
+## Performance Summary for a Specific Neighbourhood
+**ARGS:** Neighbourhood
+**Description:** Returns transaction count and all key metrics for a single Neighbourhood value.
 ```sql
 SELECT
-    city,
+    Neighbourhood,
     COUNT(*) AS transaction_count,
-    SUM(quantity) AS total_quantity
+    ROUND(SUM(PatientId), 2) AS total_PatientId,
+    ROUND(SUM(AppointmentID), 2) AS total_AppointmentID
 FROM data
-WHERE city = :city
-GROUP BY city;
+WHERE Neighbourhood = :Neighbourhood
+GROUP BY Neighbourhood;
 ```
 
 **Status:** SKIPPED
@@ -817,18 +754,18 @@ GROUP BY city;
 **Skipped:** Query requires runtime arguments (:param)
 ---
 
-## date Breakdown for city = :city
-**ARGS:** city
-**Description:** Ranks each date by total unit_price filtered to a single city value.
+## Gender Breakdown for Neighbourhood = :Neighbourhood
+**ARGS:** Neighbourhood
+**Description:** Ranks each Gender by total PatientId filtered to a single Neighbourhood value.
 ```sql
 SELECT
-    date,
+    Gender,
     COUNT(*) AS transaction_count,
-    ROUND(SUM(unit_price), 2) AS total_unit_price
+    ROUND(SUM(PatientId), 2) AS total_PatientId
 FROM data
-WHERE city = :city
-GROUP BY date
-ORDER BY total_unit_price DESC;
+WHERE Neighbourhood = :Neighbourhood
+GROUP BY Gender
+ORDER BY total_PatientId DESC;
 ```
 
 **Status:** SKIPPED
@@ -836,18 +773,18 @@ ORDER BY total_unit_price DESC;
 **Skipped:** Query requires runtime arguments (:param)
 ---
 
-## product_name Breakdown for city = :city
-**ARGS:** city
-**Description:** Ranks each product_name by total unit_price filtered to a single city value.
+## AppointmentDay Breakdown for Neighbourhood = :Neighbourhood
+**ARGS:** Neighbourhood
+**Description:** Ranks each AppointmentDay by total PatientId filtered to a single Neighbourhood value.
 ```sql
 SELECT
-    product_name,
+    AppointmentDay,
     COUNT(*) AS transaction_count,
-    ROUND(SUM(unit_price), 2) AS total_unit_price
+    ROUND(SUM(PatientId), 2) AS total_PatientId
 FROM data
-WHERE city = :city
-GROUP BY product_name
-ORDER BY total_unit_price DESC;
+WHERE Neighbourhood = :Neighbourhood
+GROUP BY AppointmentDay
+ORDER BY total_PatientId DESC;
 ```
 
 **Status:** SKIPPED
@@ -855,14 +792,85 @@ ORDER BY total_unit_price DESC;
 **Skipped:** Query requires runtime arguments (:param)
 ---
 
-## Rows Where unit_price Exceeds :min_value
+## Filter by No-show
+**ARGS:** No-show
+**Description:** Returns all rows where No-show matches a given value.
+```sql
+SELECT *
+FROM data
+WHERE No-show = :No-show;
+```
+
+**Status:** SKIPPED
+
+**Skipped:** Query requires runtime arguments (:param)
+---
+
+## Performance Summary for a Specific No-show
+**ARGS:** No-show
+**Description:** Returns transaction count and all key metrics for a single No-show value.
+```sql
+SELECT
+    No-show,
+    COUNT(*) AS transaction_count,
+    ROUND(SUM(PatientId), 2) AS total_PatientId,
+    ROUND(SUM(AppointmentID), 2) AS total_AppointmentID
+FROM data
+WHERE No-show = :No-show
+GROUP BY No-show;
+```
+
+**Status:** SKIPPED
+
+**Skipped:** Query requires runtime arguments (:param)
+---
+
+## Gender Breakdown for No-show = :No-show
+**ARGS:** No-show
+**Description:** Ranks each Gender by total PatientId filtered to a single No-show value.
+```sql
+SELECT
+    Gender,
+    COUNT(*) AS transaction_count,
+    ROUND(SUM(PatientId), 2) AS total_PatientId
+FROM data
+WHERE No-show = :No-show
+GROUP BY Gender
+ORDER BY total_PatientId DESC;
+```
+
+**Status:** SKIPPED
+
+**Skipped:** Query requires runtime arguments (:param)
+---
+
+## AppointmentDay Breakdown for No-show = :No-show
+**ARGS:** No-show
+**Description:** Ranks each AppointmentDay by total PatientId filtered to a single No-show value.
+```sql
+SELECT
+    AppointmentDay,
+    COUNT(*) AS transaction_count,
+    ROUND(SUM(PatientId), 2) AS total_PatientId
+FROM data
+WHERE No-show = :No-show
+GROUP BY AppointmentDay
+ORDER BY total_PatientId DESC;
+```
+
+**Status:** SKIPPED
+
+**Skipped:** Query requires runtime arguments (:param)
+---
+
+## Rows Where PatientId Exceeds :min_value
 **ARGS:** min_value
-**Description:** Returns all rows where unit_price is above a given threshold.
+**Description:** Returns all rows where PatientId is above a given threshold.
 ```sql
 SELECT *
 FROM data
-WHERE unit_price > :min_value
-ORDER BY unit_price DESC;
+WHERE PatientId > :min_value
+ORDER BY PatientId DESC;
 ```
 
 **Status:** SKIPPED
@@ -870,18 +878,18 @@ ORDER BY unit_price DESC;
 **Skipped:** Query requires runtime arguments (:param)
 ---
 
-## date with Total unit_price Above :threshold
+## Gender with Total PatientId Above :threshold
 **ARGS:** threshold
-**Description:** Lists date values whose total unit_price exceeds a given threshold.
+**Description:** Lists Gender values whose total PatientId exceeds a given threshold.
 ```sql
 SELECT
-    date,
+    Gender,
     COUNT(*) AS transaction_count,
-    ROUND(SUM(unit_price), 2) AS total_unit_price
+    ROUND(SUM(PatientId), 2) AS total_PatientId
 FROM data
-GROUP BY date
-HAVING SUM(unit_price) > :threshold
-ORDER BY total_unit_price DESC;
+GROUP BY Gender
+HAVING SUM(PatientId) > :threshold
+ORDER BY total_PatientId DESC;
 ```
 
 **Status:** SKIPPED
@@ -895,63 +903,60 @@ ORDER BY total_unit_price DESC;
 **ARGS:** —
 **Description:** Counts NULL values in each column to identify data gaps.
 ```sql
-SELECT 'order_id' AS column_name, COUNT(*) AS null_count FROM data WHERE order_id IS NULL
+SELECT 'PatientId' AS column_name, COUNT(*) AS null_count FROM data WHERE PatientId IS NULL
 UNION ALL
-SELECT 'date' AS column_name, COUNT(*) AS null_count FROM data WHERE date IS NULL
+SELECT 'AppointmentID' AS column_name, COUNT(*) AS null_count FROM data WHERE AppointmentID IS NULL
 UNION ALL
-SELECT 'product_name' AS column_name, COUNT(*) AS null_count FROM data WHERE product_name IS NULL
+SELECT 'Gender' AS column_name, COUNT(*) AS null_count FROM data WHERE Gender IS NULL
 UNION ALL
-SELECT 'unit_price' AS column_name, COUNT(*) AS null_count FROM data WHERE unit_price IS NULL
+SELECT 'ScheduledDay' AS column_name, COUNT(*) AS null_count FROM data WHERE ScheduledDay IS NULL
 UNION ALL
-SELECT 'quantity' AS column_name, COUNT(*) AS null_count FROM data WHERE quantity IS NULL
+SELECT 'AppointmentDay' AS column_name, COUNT(*) AS null_count FROM data WHERE AppointmentDay IS NULL
 UNION ALL
-SELECT 'total_price' AS column_name, COUNT(*) AS null_count FROM data WHERE total_price IS NULL
+SELECT 'Age' AS column_name, COUNT(*) AS null_count FROM data WHERE Age IS NULL
 UNION ALL
-SELECT 'city' AS column_name, COUNT(*) AS null_count FROM data WHERE city IS NULL
+SELECT 'Neighbourhood' AS column_name, COUNT(*) AS null_count FROM data WHERE Neighbourhood IS NULL
+UNION ALL
+SELECT 'Scholarship' AS column_name, COUNT(*) AS null_count FROM data WHERE Scholarship IS NULL
+UNION ALL
+SELECT 'Hipertension' AS column_name, COUNT(*) AS null_count FROM data WHERE Hipertension IS NULL
+UNION ALL
+SELECT 'Diabetes' AS column_name, COUNT(*) AS null_count FROM data WHERE Diabetes IS NULL
+UNION ALL
+SELECT 'Alcoholism' AS column_name, COUNT(*) AS null_count FROM data WHERE Alcoholism IS NULL
+UNION ALL
+SELECT 'Handcap' AS column_name, COUNT(*) AS null_count FROM data WHERE Handcap IS NULL
 ORDER BY null_count DESC;
 ```
 
 **Status:** OK
 
-**Rows returned:** 7
+**Rows returned:** 12
 
 | column_name | null_count |
 | --- | --- |
-| order_id | 0 |
-| date | 0 |
-| product_name | 0 |
-| unit_price | 0 |
-| quantity | 0 |
-| total_price | 0 |
-| city | 0 |
+| PatientId | 0 |
+| AppointmentID | 0 |
+| Gender | 0 |
+| ScheduledDay | 0 |
+| AppointmentDay | 0 |
+| Age | 0 |
+| Neighbourhood | 0 |
+| Scholarship | 0 |
+| Hipertension | 0 |
+| Diabetes | 0 |
+| Alcoholism | 0 |
+| Handcap | 0 |
 ---
 
-## Duplicate order_id Values
+## Negative PatientId Values
 **ARGS:** —
-**Description:** Flags any order_id that appears more than once in the dataset.
-```sql
-SELECT order_id, COUNT(*) AS occurrences
-FROM data
-GROUP BY order_id
-HAVING COUNT(*) > 1
-ORDER BY occurrences DESC;
-```
-
-**Status:** OK
-
-**Rows returned:** 0
-
-*(no rows returned)*
----
-
-## Negative unit_price Values
-**ARGS:** —
-**Description:** Flags rows where unit_price is negative, which may indicate data errors.
+**Description:** Flags rows where PatientId is negative, which may indicate data errors.
 ```sql
 SELECT *
 FROM data
-WHERE unit_price < 0
-ORDER BY unit_price;
+WHERE PatientId < 0
+ORDER BY PatientId;
 ```
 
 **Status:** OK
@@ -961,14 +966,14 @@ ORDER BY unit_price;
 *(no rows returned)*
 ---
 
-## Negative quantity Values
+## Negative AppointmentID Values
 **ARGS:** —
-**Description:** Flags rows where quantity is negative, which may indicate data errors.
+**Description:** Flags rows where AppointmentID is negative, which may indicate data errors.
 ```sql
 SELECT *
 FROM data
-WHERE quantity < 0
-ORDER BY quantity;
+WHERE AppointmentID < 0
+ORDER BY AppointmentID;
 ```
 
 **Status:** OK
@@ -978,19 +983,21 @@ ORDER BY quantity;
 *(no rows returned)*
 ---
 
-## Negative total_price Values
+## Negative Age Values
 **ARGS:** —
-**Description:** Flags rows where total_price is negative, which may indicate data errors.
+**Description:** Flags rows where Age is negative, which may indicate data errors.
 ```sql
 SELECT *
 FROM data
-WHERE total_price < 0
-ORDER BY total_price;
+WHERE Age < 0
+ORDER BY Age;
 ```
 
 **Status:** OK
 
-**Rows returned:** 0
+**Rows returned:** 1
 
-*(no rows returned)*
+| PatientId | AppointmentID | Gender | ScheduledDay | AppointmentDay | Age | Neighbourhood | Scholarship | Hipertension | Diabetes | Alcoholism | Handcap | SMS_received | No-show |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 465943158731293.0 | 5775010 | F | 2016-06-06T08:58:13Z | 2016-06-06T00:00:00Z | -1 | ROMÃO | 0 | 0 | 0 | 0 | 0 | 0 | No |
 ---
