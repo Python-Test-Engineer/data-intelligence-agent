@@ -3,10 +3,10 @@
 ![distribution_patientid.png](../images/distribution_patientid.png)
 
 ## Data Insight
-- The histogram shows a highly skewed distribution of patient IDs. The vast majority of observations have patient IDs clustered near zero, with a sharp decline in counts as patient ID values increase. Few patients have very large patient ID values.
+- The histogram displays the distribution of patient IDs. A large number of patient IDs fall within the 0 to 20,000 range, with a sharp decrease in counts for higher patient ID values. This indicates a skewed distribution, with most counts concentrated at lower patient ID values.
 
 ## Analysis Insight
-- Most appointments are associated with a small number of patients, indicated by the high frequency of low patient IDs. The long tail suggests some patients may have very large IDs, which could be due to data entry, system changes, or a small number of chronically ill patients.
+- The distribution shows a highly right-skewed pattern for patient IDs, suggesting that many appointments are associated with patients having lower IDs. The majority of patient IDs are clustered in the initial bins, with very few instances observed for larger patient IDs.
 
 ## Caveat
-- The patient ID distribution might be an artifact of the ID generation system rather than reflecting patient behavior. Without knowing the ID assignment logic, it's difficult to interpret the meaning of the skew or the presence of very large IDs.
+- The patient IDs are very large numerical values, making it difficult to interpret their inherent meaning or any potential patterns without additional context on how they were generated or assigned. The observed distribution might be an artifact of the ID generation process rather than reflecting patient behavior.

@@ -3,10 +3,10 @@
 ![distribution_appointmentid.png](../images/distribution_appointmentid.png)
 
 ## Data Insight
-- The histogram shows the distribution of 'appointmentid'. The majority of appointment IDs are concentrated in the higher range, specifically in bins around 5.6M to 5.8M, with a peak count exceeding 30,000. There are very few appointments with IDs below 5.4M.
+- The histogram shows that the majority of appointment IDs are concentrated between 5.6M and 5.8M. There is a sharp increase in count around 5.6M, indicating a significant number of appointments in that range.
 
 ## Analysis Insight
-- The distribution of 'appointmentid' appears to be right-skewed, with a long tail of lower counts at the lower end of the ID range. The mode is located in the 5.7M to 5.8M range, indicating most appointments fall within this identifier group.
+- The distribution of appointment IDs is skewed towards higher values, with a peak occurring in the 5.7M to 5.8M range. This pattern suggests that appointment IDs are assigned sequentially or in batches, with recent appointments having larger IDs.
 
 ## Caveat
-- The 'appointmentid' is likely an arbitrary numerical identifier. Its distribution may not reflect any meaningful underlying trend or characteristic of the appointments themselves. The observed structure could be an artifact of how these IDs were generated or assigned sequentially.
+- The chart displays a distribution of appointment IDs, which may not directly reflect appointment frequency or patient behavior. ID assignment logic and potential duplicates could influence the observed distribution.

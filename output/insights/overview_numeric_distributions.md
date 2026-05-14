@@ -3,10 +3,10 @@
 ![overview_numeric_distributions.png](../images/overview_numeric_distributions.png)
 
 ## Data Insight
-- The 'patientid' column exhibits extreme variability in its values, with a mean around 1.47e15 and a very large standard deviation. The other numeric columns ('appointmentid', 'age', 'scholarship', 'hipertension', 'diabetes', 'alcoholism', 'handcap', 'sms_received') show much smaller and more concentrated distributions, with 'age' having the largest spread among them.
+- The box plot reveals that 'patientid' has an extremely wide range of values, with a median close to zero and a very high upper whisker. All other numeric columns show very small, tightly clustered distributions, with medians at or near zero.
 
 ## Analysis Insight
-- The box plot clearly highlights that 'patientid' and 'appointmentid' are identifiers with very large numerical ranges, while 'age' and binary/categorical features like 'scholarship', 'hipertension', 'diabetes', 'alcoholism', 'handcap', and 'sms_received' have small, near-zero values when represented numerically. This suggests distinct data types and scales within the dataset.
+- The 'patientid' column's distribution is drastically different from all others. This suggests 'patientid' and 'appointmentid' are likely identifiers, not quantitative variables, while 'age', 'scholarship', 'hipertension', 'diabetes', 'alcoholism', 'handcap', and 'sms_received' are binary or categorical, represented numerically.
 
 ## Caveat
-- The box plot for 'patientid' appears truncated on the y-axis, potentially obscuring extreme outliers or the full range of its distribution. The extremely large values in 'patientid' and 'appointmentid' are likely identifiers and not intended for direct quantitative analysis or comparison with other features.
+- The 'patientid' and 'appointmentid' columns are extremely large and likely contain IDs rather than measurable quantities. Their distributions distort the overall view. Analysis should focus on the other columns, treating them as categorical or binary indicators.

@@ -3,10 +3,10 @@
 ![distribution_hipertension.png](../images/distribution_hipertension.png)
 
 ## Data Insight
-- The distribution of hypertension shows a significant imbalance. Approximately 85,000 individuals in the dataset do not have hypertension (value 0), while only about 20,000 have it (value 1).
+- The histogram shows a clear bimodal distribution for hypertension status. Approximately 85,000 individuals have a hypertension value of 0 (likely indicating no hypertension), and around 21,000 individuals have a hypertension value of 1 (likely indicating hypertension).
 
 ## Analysis Insight
-- A large majority of the patients do not have hypertension. This suggests that hypertension is not a prevalent condition within this specific patient cohort. Further investigation into the characteristics of hypertensive patients could be beneficial.
+- The majority of the patient population in this dataset does not have hypertension. The prevalence of hypertension appears to be significantly lower than the absence of it, with a ratio of roughly 4:1.
 
 ## Caveat
-- The chart displays raw counts and does not account for potential confounding factors like age or other health conditions. The binary nature of the 'hipertension' column may also oversimplify the condition's severity or diagnosis criteria.
+- The chart uses binary categories (0 and 1) for hypertension, which may oversimplify a complex medical condition. The dataset doesn't provide information on the source or accuracy of this hypertension data, nor does it account for potential confounding factors.

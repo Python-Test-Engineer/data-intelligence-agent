@@ -3,10 +3,10 @@
 ![distribution_diabetes.png](../images/distribution_diabetes.png)
 
 ## Data Insight
-- The distribution of diabetes shows a vastly imbalanced dataset. Approximately 100,000 patients do not have diabetes (value 0), while only around 10,000 patients have diabetes (value 1).
+- The distribution of diabetes shows that the vast majority of patients in the dataset do not have diabetes (count close to 100k). Only a small fraction of patients have been diagnosed with diabetes (count around 10k).
 
 ## Analysis Insight
-- The 'diabetes' column is a binary variable, indicating the presence or absence of the condition. The visualization highlights a significant majority of non-diabetic patients within the dataset, suggesting a potential bias if not handled properly in subsequent analyses.
+- The dataset is heavily imbalanced concerning diabetes status. The number of patients without diabetes is significantly higher than those with diabetes, which is a crucial factor for any subsequent analysis or modeling.
 
 ## Caveat
-- The chart displays raw counts. It's unclear if the dataset represents a general population sample or a specific patient cohort, which could influence the observed diabetes prevalence. The resolution of the chart limits precise count extraction.
+- The chart only shows the distribution of diabetes based on the recorded data. It does not account for undiagnosed cases or potential data entry errors, which could affect the true prevalence of diabetes in the population.

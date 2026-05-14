@@ -3,10 +3,10 @@
 ![category_gender.png](../images/category_gender.png)
 
 ## Data Insight
-- The chart displays the distribution of patients by gender, showing that there are significantly more female patients (F) than male patients (M) in the dataset. The count for females is approximately 70,000, while for males it is around 40,000.
+- The dataset contains a significantly higher number of female patients (approximately 70,000) compared to male patients (approximately 39,000).
 
 ## Analysis Insight
-- The visualization highlights a notable gender imbalance in the patient population represented in the dataset. This disparity could influence findings when analyzing other variables, as trends might be skewed by the larger number of female patients.
+- The distribution of patients by gender is uneven, with females being the predominant gender in the dataset. This could influence any subsequent analysis related to patient demographics.
 
 ## Caveat
-- The chart only presents gender distribution. It does not account for potential demographic factors that might influence healthcare-seeking behavior or data recording practices, which could confound the observed gender distribution.
+- The chart only shows counts for 'F' and 'M' genders. Other gender identities might be present but excluded or not captured in this dataset, leading to an incomplete representation.

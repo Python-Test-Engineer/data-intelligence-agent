@@ -3,10 +3,10 @@
 ![distribution_age.png](../images/distribution_age.png)
 
 ## Data Insight
-- The histogram shows the distribution of patient ages, representing the count of patients within specific age ranges. The highest counts are observed for the youngest age groups, with a noticeable decline in patient numbers as age increases, particularly after age 60.
+- The distribution of patient ages shows a peak for ages between 0 and 10, with another substantial peak around 50-60 years old. The counts decrease significantly for older age groups, with very few patients above 90.
 
 ## Analysis Insight
-- The age distribution is right-skewed, indicating that the majority of patients are younger. There are smaller, but still significant, counts of older patients. The distribution suggests a broad range of patient ages, with a concentration in the younger to middle-aged demographics.
+- The histogram reveals a bimodal distribution of age, suggesting two primary patient groups. The high frequency of younger patients and a secondary peak in middle age might indicate different healthcare needs or access patterns. Further investigation into these groups is warranted.
 
 ## Caveat
-- The chart displays counts per age bin, not the exact age of each patient. This aggregation may obscure finer patterns within age groups. The dataset's scope (e.g., specific clinic or region) could influence the observed age distribution.
+- The age data might be skewed by how ages are recorded (e.g., rounded, or collected at different points). The distribution does not account for factors like appointment scheduling biases or specific health conditions influencing age representation.

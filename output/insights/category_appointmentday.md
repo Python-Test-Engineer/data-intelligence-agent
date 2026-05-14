@@ -3,10 +3,10 @@
 ![category_appointmentday.png](../images/category_appointmentday.png)
 
 ## Data Insight
-- The number of appointments is relatively consistent across the observed dates, with slight peaks on May 8th, 2016, and June 5th. Most days show counts around 4,300 to 4,500.
+- The chart displays appointment counts for several days in May and early June 2016. May 8th has the lowest count (around 2500) and May 29th has the highest (around 4500), with other days showing similar counts in the 4000-4400 range.
 
 ## Analysis Insight
-- Appointment volume exhibits a stable pattern across the sampled days within May and early June 2016. The distribution suggests no major seasonal or event-driven fluctuations in appointment scheduling during this period.
+- Appointment volume appears relatively stable across most days shown, with a slight dip on May 8th and a peak on May 29th. This suggests consistent demand for appointments throughout this period, barring potential weekend or holiday effects not explicitly shown.
 
 ## Caveat
-- This analysis only considers specific dates and does not account for all appointment days. Trends might differ across other months or years, and external factors influencing scheduling are not included.
+- The chart only shows a limited number of specific appointment days. It does not account for the day of the week or potential external factors, such as holidays, that could influence appointment scheduling and no-show rates.

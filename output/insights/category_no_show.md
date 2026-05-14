@@ -3,10 +3,10 @@
 ![category_no_show.png](../images/category_no_show.png)
 
 ## Data Insight
-- The vast majority of appointments, approximately 82,000, had patients show up. Only about 22,000 appointments resulted in a no-show.
+- The bar chart displays the counts of appointments where patients showed up ('No') versus those who did not ('Yes'). The 'No' category has a significantly higher count, approximately 85,000, while the 'Yes' category shows a count of around 22,000, indicating more patients attended their appointments than missed them.
 
 ## Analysis Insight
-- The chart indicates a significant difference in the frequency of patients attending appointments versus not showing up. The number of no-shows is considerably lower than the number of attendees.
+- The data shows a clear imbalance in appointment attendance, with a majority of patients attending. This suggests that while missed appointments are a concern, the overall attendance rate is robust. Further analysis could explore factors influencing no-shows.
 
 ## Caveat
-- The data does not provide reasons for no-shows, nor does it account for factors like appointment rescheduling or cancellations. This analysis is based solely on the provided 'no_show' column.
+- This chart presents raw counts and does not account for potential confounding factors such as appointment scheduling issues, patient demographics, or other external influences that might affect show-up rates. The data's representativeness and accuracy are also assumed.

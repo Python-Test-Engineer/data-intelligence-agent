@@ -3,10 +3,10 @@
 ![overview_scatter_age_vs_hipertension.png](../images/overview_scatter_age_vs_hipertension.png)
 
 ## Data Insight
-- The scatter plot shows a clear separation of data points. Individuals with hypertension (hipertension=1) are predominantly older, clustered around ages 50-80. Patients without hypertension (hipertension=0) are spread across a wider age range, from very young to older individuals.
+- The scatter plot shows a distinct pattern: individuals with hypertension (hipertension=1) are clustered at higher ages, generally above 40. Conversely, those without hypertension (hipertension=0) are spread across a wider age range, including younger individuals.
 
 ## Analysis Insight
-- Hypertension appears to be more prevalent in older age groups. The data suggests a strong association between advanced age and the presence of hypertension, with few younger individuals exhibiting this condition.
+- There appears to be a strong association between older age and the presence of hypertension. Most individuals in the dataset across various ages do not have hypertension, while hypertension cases are predominantly observed in older age groups.
 
 ## Caveat
-- This analysis is based on observational data. Other factors like lifestyle, genetics, or concurrent conditions (not visualized) could influence hypertension. The data does not confirm causality, only correlation, and may not represent all age groups equally.
+- This visualization does not account for other factors that could influence hypertension, such as lifestyle or pre-existing conditions. The data may also have limitations in capturing the full spectrum of health conditions across all age groups.

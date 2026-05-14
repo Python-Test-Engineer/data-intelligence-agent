@@ -3,10 +3,10 @@
 ![correlation_heatmap.png](../images/correlation_heatmap.png)
 
 ## Data Insight
-- The heatmap shows moderate positive correlations between hypertension and diabetes (0.43), and between age and hypertension (0.50). 'Sms_received' exhibits a notable negative correlation with 'appointmentid' (-0.26). Most other variable pairs show very weak correlations, close to zero.
+- Age shows a moderate positive correlation with hypertension (0.50) and diabetes (0.29). There's a weaker positive correlation between hypertension and diabetes (0.43). SMS received has a notable negative correlation with appointmentid (-0.26).
 
 ## Analysis Insight
-- Age is moderately correlated with hypertension, suggesting older individuals may have higher rates of this condition. The negative correlation between 'sms_received' and 'appointmentid' is intriguing and warrants further investigation into appointment scheduling nuances.
+- The heatmap reveals moderate correlations between age and chronic conditions like hypertension and diabetes, suggesting potential links. The negative correlation between SMS received and appointmentid could indicate SMS reminders are associated with fewer missed appointments.
 
 ## Caveat
-- Correlation does not imply causation. The heatmap displays linear relationships; non-linear associations may exist. Unseen confounding variables could influence observed correlations between different health conditions and appointment-related factors.
+- Correlation does not imply causation. Other unmeasured factors may influence these relationships, and the data might have missing or miscoded values for certain conditions or demographics.

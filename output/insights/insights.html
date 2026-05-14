@@ -55,7 +55,7 @@
     </div>
     <h1>Final Data Insights</h1>
 <ul>
-<li>Generated: 2026-05-10 12:38 UTC</li>
+<li>Generated: 2026-05-14 13:07 UTC</li>
 <li>Model setting: google/gemini-2.5-flash-lite</li>
 <li>LLM-enabled: yes</li>
 <li>Individual insight files: 12</li>
@@ -75,180 +75,180 @@
 <p><img src="../images/overview_numeric_distributions.png" alt="overview_numeric_distributions.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
 <h2>Data Insight</h2>
 <ul>
-<li>The &#x27;patientid&#x27; column exhibits extreme variability in its values, with a mean around 1.47e15 and a very large standard deviation. The other numeric columns (&#x27;appointmentid&#x27;, &#x27;age&#x27;, &#x27;scholarship&#x27;, &#x27;hipertension&#x27;, &#x27;diabetes&#x27;, &#x27;alcoholism&#x27;, &#x27;handcap&#x27;, &#x27;sms_received&#x27;) show much smaller and more concentrated distributions, with &#x27;age&#x27; having the largest spread among them.</li>
+<li>The box plot reveals that &#x27;patientid&#x27; has an extremely wide range of values, with a median close to zero and a very high upper whisker. All other numeric columns show very small, tightly clustered distributions, with medians at or near zero.</li>
 </ul>
 <h2>Analysis Insight</h2>
 <ul>
-<li>The box plot clearly highlights that &#x27;patientid&#x27; and &#x27;appointmentid&#x27; are identifiers with very large numerical ranges, while &#x27;age&#x27; and binary/categorical features like &#x27;scholarship&#x27;, &#x27;hipertension&#x27;, &#x27;diabetes&#x27;, &#x27;alcoholism&#x27;, &#x27;handcap&#x27;, and &#x27;sms_received&#x27; have small, near-zero values when represented numerically. This suggests distinct data types and scales within the dataset.</li>
+<li>The &#x27;patientid&#x27; column&#x27;s distribution is drastically different from all others. This suggests &#x27;patientid&#x27; and &#x27;appointmentid&#x27; are likely identifiers, not quantitative variables, while &#x27;age&#x27;, &#x27;scholarship&#x27;, &#x27;hipertension&#x27;, &#x27;diabetes&#x27;, &#x27;alcoholism&#x27;, &#x27;handcap&#x27;, and &#x27;sms_received&#x27; are binary or categorical, represented numerically.</li>
 </ul>
 <h2>Caveat</h2>
 <ul>
-<li>The box plot for &#x27;patientid&#x27; appears truncated on the y-axis, potentially obscuring extreme outliers or the full range of its distribution. The extremely large values in &#x27;patientid&#x27; and &#x27;appointmentid&#x27; are likely identifiers and not intended for direct quantitative analysis or comparison with other features.</li>
+<li>The &#x27;patientid&#x27; and &#x27;appointmentid&#x27; columns are extremely large and likely contain IDs rather than measurable quantities. Their distributions distort the overall view. Analysis should focus on the other columns, treating them as categorical or binary indicators.</li>
 </ul>
 <h3>Correlation Heatmap</h3>
 <h1>Insights: Correlation Heatmap</h1>
 <p><img src="../images/correlation_heatmap.png" alt="correlation_heatmap.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
 <h2>Data Insight</h2>
 <ul>
-<li>The heatmap shows moderate positive correlations between hypertension and diabetes (0.43), and between age and hypertension (0.50). &#x27;Sms_received&#x27; exhibits a notable negative correlation with &#x27;appointmentid&#x27; (-0.26). Most other variable pairs show very weak correlations, close to zero.</li>
+<li>Age shows a moderate positive correlation with hypertension (0.50) and diabetes (0.29). There&#x27;s a weaker positive correlation between hypertension and diabetes (0.43). SMS received has a notable negative correlation with appointmentid (-0.26).</li>
 </ul>
 <h2>Analysis Insight</h2>
 <ul>
-<li>Age is moderately correlated with hypertension, suggesting older individuals may have higher rates of this condition. The negative correlation between &#x27;sms_received&#x27; and &#x27;appointmentid&#x27; is intriguing and warrants further investigation into appointment scheduling nuances.</li>
+<li>The heatmap reveals moderate correlations between age and chronic conditions like hypertension and diabetes, suggesting potential links. The negative correlation between SMS received and appointmentid could indicate SMS reminders are associated with fewer missed appointments.</li>
 </ul>
 <h2>Caveat</h2>
 <ul>
-<li>Correlation does not imply causation. The heatmap displays linear relationships; non-linear associations may exist. Unseen confounding variables could influence observed correlations between different health conditions and appointment-related factors.</li>
+<li>Correlation does not imply causation. Other unmeasured factors may influence these relationships, and the data might have missing or miscoded values for certain conditions or demographics.</li>
 </ul>
 <h3>Distribution Patientid</h3>
 <h1>Insights: Distribution Patientid</h1>
 <p><img src="../images/distribution_patientid.png" alt="distribution_patientid.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
 <h2>Data Insight</h2>
 <ul>
-<li>The histogram shows a highly skewed distribution of patient IDs. The vast majority of observations have patient IDs clustered near zero, with a sharp decline in counts as patient ID values increase. Few patients have very large patient ID values.</li>
+<li>The histogram displays the distribution of patient IDs. A large number of patient IDs fall within the 0 to 20,000 range, with a sharp decrease in counts for higher patient ID values. This indicates a skewed distribution, with most counts concentrated at lower patient ID values.</li>
 </ul>
 <h2>Analysis Insight</h2>
 <ul>
-<li>Most appointments are associated with a small number of patients, indicated by the high frequency of low patient IDs. The long tail suggests some patients may have very large IDs, which could be due to data entry, system changes, or a small number of chronically ill patients.</li>
+<li>The distribution shows a highly right-skewed pattern for patient IDs, suggesting that many appointments are associated with patients having lower IDs. The majority of patient IDs are clustered in the initial bins, with very few instances observed for larger patient IDs.</li>
 </ul>
 <h2>Caveat</h2>
 <ul>
-<li>The patient ID distribution might be an artifact of the ID generation system rather than reflecting patient behavior. Without knowing the ID assignment logic, it&#x27;s difficult to interpret the meaning of the skew or the presence of very large IDs.</li>
+<li>The patient IDs are very large numerical values, making it difficult to interpret their inherent meaning or any potential patterns without additional context on how they were generated or assigned. The observed distribution might be an artifact of the ID generation process rather than reflecting patient behavior.</li>
 </ul>
 <h3>Distribution Appointmentid</h3>
 <h1>Insights: Distribution Appointmentid</h1>
 <p><img src="../images/distribution_appointmentid.png" alt="distribution_appointmentid.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
 <h2>Data Insight</h2>
 <ul>
-<li>The histogram shows the distribution of &#x27;appointmentid&#x27;. The majority of appointment IDs are concentrated in the higher range, specifically in bins around 5.6M to 5.8M, with a peak count exceeding 30,000. There are very few appointments with IDs below 5.4M.</li>
+<li>The histogram shows that the majority of appointment IDs are concentrated between 5.6M and 5.8M. There is a sharp increase in count around 5.6M, indicating a significant number of appointments in that range.</li>
 </ul>
 <h2>Analysis Insight</h2>
 <ul>
-<li>The distribution of &#x27;appointmentid&#x27; appears to be right-skewed, with a long tail of lower counts at the lower end of the ID range. The mode is located in the 5.7M to 5.8M range, indicating most appointments fall within this identifier group.</li>
+<li>The distribution of appointment IDs is skewed towards higher values, with a peak occurring in the 5.7M to 5.8M range. This pattern suggests that appointment IDs are assigned sequentially or in batches, with recent appointments having larger IDs.</li>
 </ul>
 <h2>Caveat</h2>
 <ul>
-<li>The &#x27;appointmentid&#x27; is likely an arbitrary numerical identifier. Its distribution may not reflect any meaningful underlying trend or characteristic of the appointments themselves. The observed structure could be an artifact of how these IDs were generated or assigned sequentially.</li>
+<li>The chart displays a distribution of appointment IDs, which may not directly reflect appointment frequency or patient behavior. ID assignment logic and potential duplicates could influence the observed distribution.</li>
 </ul>
 <h3>Distribution Age</h3>
 <h1>Insights: Distribution Age</h1>
 <p><img src="../images/distribution_age.png" alt="distribution_age.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
 <h2>Data Insight</h2>
 <ul>
-<li>The histogram shows the distribution of patient ages, representing the count of patients within specific age ranges. The highest counts are observed for the youngest age groups, with a noticeable decline in patient numbers as age increases, particularly after age 60.</li>
+<li>The distribution of patient ages shows a peak for ages between 0 and 10, with another substantial peak around 50-60 years old. The counts decrease significantly for older age groups, with very few patients above 90.</li>
 </ul>
 <h2>Analysis Insight</h2>
 <ul>
-<li>The age distribution is right-skewed, indicating that the majority of patients are younger. There are smaller, but still significant, counts of older patients. The distribution suggests a broad range of patient ages, with a concentration in the younger to middle-aged demographics.</li>
+<li>The histogram reveals a bimodal distribution of age, suggesting two primary patient groups. The high frequency of younger patients and a secondary peak in middle age might indicate different healthcare needs or access patterns. Further investigation into these groups is warranted.</li>
 </ul>
 <h2>Caveat</h2>
 <ul>
-<li>The chart displays counts per age bin, not the exact age of each patient. This aggregation may obscure finer patterns within age groups. The dataset&#x27;s scope (e.g., specific clinic or region) could influence the observed age distribution.</li>
+<li>The age data might be skewed by how ages are recorded (e.g., rounded, or collected at different points). The distribution does not account for factors like appointment scheduling biases or specific health conditions influencing age representation.</li>
 </ul>
 <h3>Distribution Scholarship</h3>
 <h1>Insights: Distribution Scholarship</h1>
 <p><img src="../images/distribution_scholarship.png" alt="distribution_scholarship.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
 <h2>Data Insight</h2>
 <ul>
-<li>The distribution chart for &#x27;scholarship&#x27; shows that approximately 100,000 records do not have a scholarship (value 0), while around 12,000 records have a scholarship (value 1).</li>
+<li>The histogram shows a highly imbalanced distribution for the &#x27;scholarship&#x27; variable. Approximately 100,000 records have a scholarship value of 0, while only around 12,000 records have a value of 1, indicating that most patients in the dataset do not have a scholarship.</li>
 </ul>
 <h2>Analysis Insight</h2>
 <ul>
-<li>The vast majority of patients in this dataset do not receive a scholarship. This suggests that scholarship recipients represent a small minority within the patient population studied.</li>
+<li>The &#x27;scholarship&#x27; variable appears to be binary, likely representing &#x27;no scholarship&#x27; (0) and &#x27;has scholarship&#x27; (1). The overwhelming majority of patients are in the &#x27;no scholarship&#x27; category, suggesting that financial aid is not a common attribute among this patient population.</li>
 </ul>
 <h2>Caveat</h2>
 <ul>
-<li>The chart displays a binary distribution. It&#x27;s unclear if &#x27;scholarship&#x27; is a boolean indicator or represents different scholarship tiers, and the reasons for receiving or not receiving a scholarship are not provided.</li>
+<li>The chart displays raw counts and does not account for potential data quality issues or the definition of &#x27;scholarship&#x27;. It&#x27;s unclear if the value &#x27;1&#x27; represents all types of scholarships or a specific program, and the data&#x27;s recency is unknown.</li>
 </ul>
 <h3>Distribution Hipertension</h3>
 <h1>Insights: Distribution Hipertension</h1>
 <p><img src="../images/distribution_hipertension.png" alt="distribution_hipertension.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
 <h2>Data Insight</h2>
 <ul>
-<li>The distribution of hypertension shows a significant imbalance. Approximately 85,000 individuals in the dataset do not have hypertension (value 0), while only about 20,000 have it (value 1).</li>
+<li>The histogram shows a clear bimodal distribution for hypertension status. Approximately 85,000 individuals have a hypertension value of 0 (likely indicating no hypertension), and around 21,000 individuals have a hypertension value of 1 (likely indicating hypertension).</li>
 </ul>
 <h2>Analysis Insight</h2>
 <ul>
-<li>A large majority of the patients do not have hypertension. This suggests that hypertension is not a prevalent condition within this specific patient cohort. Further investigation into the characteristics of hypertensive patients could be beneficial.</li>
+<li>The majority of the patient population in this dataset does not have hypertension. The prevalence of hypertension appears to be significantly lower than the absence of it, with a ratio of roughly 4:1.</li>
 </ul>
 <h2>Caveat</h2>
 <ul>
-<li>The chart displays raw counts and does not account for potential confounding factors like age or other health conditions. The binary nature of the &#x27;hipertension&#x27; column may also oversimplify the condition&#x27;s severity or diagnosis criteria.</li>
+<li>The chart uses binary categories (0 and 1) for hypertension, which may oversimplify a complex medical condition. The dataset doesn&#x27;t provide information on the source or accuracy of this hypertension data, nor does it account for potential confounding factors.</li>
 </ul>
 <h3>Distribution Diabetes</h3>
 <h1>Insights: Distribution Diabetes</h1>
 <p><img src="../images/distribution_diabetes.png" alt="distribution_diabetes.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
 <h2>Data Insight</h2>
 <ul>
-<li>The distribution of diabetes shows a vastly imbalanced dataset. Approximately 100,000 patients do not have diabetes (value 0), while only around 10,000 patients have diabetes (value 1).</li>
+<li>The distribution of diabetes shows that the vast majority of patients in the dataset do not have diabetes (count close to 100k). Only a small fraction of patients have been diagnosed with diabetes (count around 10k).</li>
 </ul>
 <h2>Analysis Insight</h2>
 <ul>
-<li>The &#x27;diabetes&#x27; column is a binary variable, indicating the presence or absence of the condition. The visualization highlights a significant majority of non-diabetic patients within the dataset, suggesting a potential bias if not handled properly in subsequent analyses.</li>
+<li>The dataset is heavily imbalanced concerning diabetes status. The number of patients without diabetes is significantly higher than those with diabetes, which is a crucial factor for any subsequent analysis or modeling.</li>
 </ul>
 <h2>Caveat</h2>
 <ul>
-<li>The chart displays raw counts. It&#x27;s unclear if the dataset represents a general population sample or a specific patient cohort, which could influence the observed diabetes prevalence. The resolution of the chart limits precise count extraction.</li>
+<li>The chart only shows the distribution of diabetes based on the recorded data. It does not account for undiagnosed cases or potential data entry errors, which could affect the true prevalence of diabetes in the population.</li>
 </ul>
 <h3>Category Gender</h3>
 <h1>Insights: Category Gender</h1>
 <p><img src="../images/category_gender.png" alt="category_gender.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
 <h2>Data Insight</h2>
 <ul>
-<li>The chart displays the distribution of patients by gender, showing that there are significantly more female patients (F) than male patients (M) in the dataset. The count for females is approximately 70,000, while for males it is around 40,000.</li>
+<li>The dataset contains a significantly higher number of female patients (approximately 70,000) compared to male patients (approximately 39,000).</li>
 </ul>
 <h2>Analysis Insight</h2>
 <ul>
-<li>The visualization highlights a notable gender imbalance in the patient population represented in the dataset. This disparity could influence findings when analyzing other variables, as trends might be skewed by the larger number of female patients.</li>
+<li>The distribution of patients by gender is uneven, with females being the predominant gender in the dataset. This could influence any subsequent analysis related to patient demographics.</li>
 </ul>
 <h2>Caveat</h2>
 <ul>
-<li>The chart only presents gender distribution. It does not account for potential demographic factors that might influence healthcare-seeking behavior or data recording practices, which could confound the observed gender distribution.</li>
+<li>The chart only shows counts for &#x27;F&#x27; and &#x27;M&#x27; genders. Other gender identities might be present but excluded or not captured in this dataset, leading to an incomplete representation.</li>
 </ul>
 <h3>Category Appointmentday</h3>
 <h1>Insights: Category Appointmentday</h1>
 <p><img src="../images/category_appointmentday.png" alt="category_appointmentday.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
 <h2>Data Insight</h2>
 <ul>
-<li>The number of appointments is relatively consistent across the observed dates, with slight peaks on May 8th, 2016, and June 5th. Most days show counts around 4,300 to 4,500.</li>
+<li>The chart displays appointment counts for several days in May and early June 2016. May 8th has the lowest count (around 2500) and May 29th has the highest (around 4500), with other days showing similar counts in the 4000-4400 range.</li>
 </ul>
 <h2>Analysis Insight</h2>
 <ul>
-<li>Appointment volume exhibits a stable pattern across the sampled days within May and early June 2016. The distribution suggests no major seasonal or event-driven fluctuations in appointment scheduling during this period.</li>
+<li>Appointment volume appears relatively stable across most days shown, with a slight dip on May 8th and a peak on May 29th. This suggests consistent demand for appointments throughout this period, barring potential weekend or holiday effects not explicitly shown.</li>
 </ul>
 <h2>Caveat</h2>
 <ul>
-<li>This analysis only considers specific dates and does not account for all appointment days. Trends might differ across other months or years, and external factors influencing scheduling are not included.</li>
+<li>The chart only shows a limited number of specific appointment days. It does not account for the day of the week or potential external factors, such as holidays, that could influence appointment scheduling and no-show rates.</li>
 </ul>
 <h3>Category No Show</h3>
 <h1>Insights: Category No Show</h1>
 <p><img src="../images/category_no_show.png" alt="category_no_show.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
 <h2>Data Insight</h2>
 <ul>
-<li>The vast majority of appointments, approximately 82,000, had patients show up. Only about 22,000 appointments resulted in a no-show.</li>
+<li>The bar chart displays the counts of appointments where patients showed up (&#x27;No&#x27;) versus those who did not (&#x27;Yes&#x27;). The &#x27;No&#x27; category has a significantly higher count, approximately 85,000, while the &#x27;Yes&#x27; category shows a count of around 22,000, indicating more patients attended their appointments than missed them.</li>
 </ul>
 <h2>Analysis Insight</h2>
 <ul>
-<li>The chart indicates a significant difference in the frequency of patients attending appointments versus not showing up. The number of no-shows is considerably lower than the number of attendees.</li>
+<li>The data shows a clear imbalance in appointment attendance, with a majority of patients attending. This suggests that while missed appointments are a concern, the overall attendance rate is robust. Further analysis could explore factors influencing no-shows.</li>
 </ul>
 <h2>Caveat</h2>
 <ul>
-<li>The data does not provide reasons for no-shows, nor does it account for factors like appointment rescheduling or cancellations. This analysis is based solely on the provided &#x27;no_show&#x27; column.</li>
+<li>This chart presents raw counts and does not account for potential confounding factors such as appointment scheduling issues, patient demographics, or other external influences that might affect show-up rates. The data&#x27;s representativeness and accuracy are also assumed.</li>
 </ul>
 <h3>Overview Scatter Age Vs Hipertension</h3>
 <h1>Insights: Overview Scatter Age Vs Hipertension</h1>
 <p><img src="../images/overview_scatter_age_vs_hipertension.png" alt="overview_scatter_age_vs_hipertension.png" style="max-width: 100%; border: 1px solid #d0d6dd; border-radius: 10px;" /></p>
 <h2>Data Insight</h2>
 <ul>
-<li>The scatter plot shows a clear separation of data points. Individuals with hypertension (hipertension=1) are predominantly older, clustered around ages 50-80. Patients without hypertension (hipertension=0) are spread across a wider age range, from very young to older individuals.</li>
+<li>The scatter plot shows a distinct pattern: individuals with hypertension (hipertension=1) are clustered at higher ages, generally above 40. Conversely, those without hypertension (hipertension=0) are spread across a wider age range, including younger individuals.</li>
 </ul>
 <h2>Analysis Insight</h2>
 <ul>
-<li>Hypertension appears to be more prevalent in older age groups. The data suggests a strong association between advanced age and the presence of hypertension, with few younger individuals exhibiting this condition.</li>
+<li>There appears to be a strong association between older age and the presence of hypertension. Most individuals in the dataset across various ages do not have hypertension, while hypertension cases are predominantly observed in older age groups.</li>
 </ul>
 <h2>Caveat</h2>
 <ul>
-<li>This analysis is based on observational data. Other factors like lifestyle, genetics, or concurrent conditions (not visualized) could influence hypertension. The data does not confirm causality, only correlation, and may not represent all age groups equally.</li>
+<li>This visualization does not account for other factors that could influence hypertension, such as lifestyle or pre-existing conditions. The data may also have limitations in capturing the full spectrum of health conditions across all age groups.</li>
 </ul>
   </main>
 </body>
