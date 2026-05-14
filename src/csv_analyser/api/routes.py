@@ -741,7 +741,7 @@ def gallery(request: Request) -> HTMLResponse:
     )
 
 
-_ADVERSARIAL_MODEL = "deepseek/deepseek-v4-pro"
+_ADVERSARIAL_MODEL = "google/gemini-2.5-pro"
 _ADVERSARIAL_OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 
@@ -776,41 +776,45 @@ async def adversarial_review() -> AdversarialReviewResponse:
         )
 
     system_prompt = """\
-You are a rigorous adversarial reviewer for a data analytics pipeline.
-Your role is to stress-test the pipeline's outputs — not summarise them.
-You must identify weaknesses, gaps, and questionable claims, then propose concrete improvements.
+You are a senior data analytics reviewer providing a balanced peer review of a data analytics pipeline.
+Your response must follow a clear arc: open with genuine strengths, then transition into progressively deeper critique.
+This structure ensures the audience understands the value already delivered before hearing what to improve next.
 
 Structure your response as follows:
 
-## Verdict
-One paragraph: overall quality of the analysis, headline strengths and fatal flaws.
+## Overall Verdict
+One upbeat but honest paragraph: lead with what the analysis gets right and why it provides real value.
+Close the paragraph with a single sentence that flags the most important area to strengthen.
+
+## Strengths
+- Highlight 3–5 specific things the pipeline does well (chart choices, SQL coverage, insight quality, objectives alignment).
+- Be concrete — reference actual findings, not generic praise.
 
 ## Methodology
 - Are the right statistical methods and chart types used?
 - Are there unjustified assumptions or missing controls?
-- Flag any p-hacking risk, cherry-picking, or correlation-causation confusion.
+- Note any correlation-causation confusion or unquantified claims.
 
-## Coverage
-- Which columns, segments, or business questions are unexplored?
-- What distributions, outliers, or time-based patterns were missed?
+## Coverage Gaps
+- Which columns, segments, or business questions are underexplored?
+- What distributions, outliers, or patterns deserve a closer look?
 
 ## Claim Quality
-- List any claims that lack supporting evidence.
 - Flag vague language ("appears to", "seems to") that should be quantified.
-- Identify any fabricated or hallucinated figures.
+- Call out any finding that lacks clear supporting evidence.
 
 ## Actionability
-- Do the insights lead to concrete decisions?
-- Which findings are purely descriptive and need a "so what"?
+- Which insights lead to a concrete decision, and which are purely descriptive?
+- Suggest the "so what" for any finding that stops short of a recommendation.
 
 ## Objectives Fit
-- Does the output directly and completely address each stated objective?
-- Call out any objective that was sidestepped or only partially answered.
+- Does the output directly address each stated objective?
+- Note any objective that was only partially answered.
 
 ## Top 5 Improvements
-A numbered list — highest-impact, most specific improvements the analyst should make next.
+A numbered list of the highest-impact, most specific improvements — framed as opportunities, not failures.
 
-Be direct. Do not soften criticism. Your value is proportional to the problems you surface.\
+Lead with value, follow with rigour. Be direct but constructive throughout.\
 """
 
     user_message = f"""\
